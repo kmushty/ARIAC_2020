@@ -4,6 +4,44 @@ sensors:
     pose:
       xyz: [3.082385, 1.750927, 1.82]
       rpy: [0, 'pi/2', 0]
+  
+  logical_camera_bin_1:
+    type: logical_camera
+    pose:
+      xyz: [5, 1.750927, 1.82]
+      rpy: [0, 'pi/2', 'pi/2']
+
+  logical_camera_bin_2:
+    type: logical_camera
+    pose:
+      xyz: [5, -1.76, 1.82]
+      rpy: [0, 'pi/2', 'pi/2']
+
+  logical_camera_bin_3: #bin 1
+    type: logical_camera
+    pose:
+      xyz: [3.082385, -1.750927, 1.82]
+      rpy: [0, 'pi/2', 0]
+
+
+  logical_camera_agv_1: #bin1 
+    type: logical_camera
+    pose:
+      xyz: [0, -7.46, 1.82]
+      rpy: [0, 'pi/2', 0]
+
+
+  logical_camera_agv_2: #bin2 
+    type: logical_camera
+    pose:
+      xyz: [0, 7.46, 1.82]
+      rpy: [0, 'pi/2', 0]
+
+  logical_camera_conveyor: 
+    type: logical_camera
+    pose:
+      xyz: [-0.14, -1.82, 1.96]
+      rpy: [0, 'pi/2', 0]
 
   laser_profiler_0:
     type: laser_profiler
