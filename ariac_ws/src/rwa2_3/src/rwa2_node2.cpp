@@ -29,7 +29,6 @@
 #include <tf2_ros/transform_listener.h>
 #include <geometry_msgs/TransformStamped.h>
 #include <tf2_geometry_msgs/tf2_geometry_msgs.h> //--needed for tf2::Matrix3x3
-#include "boost/bind.hpp"
 
 
 
@@ -120,7 +119,7 @@ public:
    * @param msg Message containing information on objects detected by the camera.
    */
   void logical_camera_callback(
-    const nist_gear::LogicalCameraImage::ConstPtr & msg,int index){
+    const nist_gear::LogicalCameraImage::ConstPtr & msg){
     ROS_INFO_STREAM_THROTTLE(10,
       "Logical camera: '" << msg->models.size() << "' objects.");
 
@@ -130,11 +129,12 @@ public:
     geometry_msgs::TransformStamped T_w_l;
     geometry_msgs::PoseStamped p_w, p_l;
 
+
     T_w_l = tfBuffer.lookupTransform("world", "logical_camera_13_frame",
                                                  ros::Time(0), timeout);
-
+    
     for(int i=0; i<msg->models.size(); i++){
-      p_l.header.frame_id = "logical_camera_13_frame"; //+ std::to_string(index) + "_frame";
+      p_l.header.frame_id = "logical_camera_13_frame";
       p_l.pose = msg->models[i].pose;
       tf2::doTransform(p_l,p_w,T_w_l);
       ROS_INFO_STREAM(p_w);
@@ -220,20 +220,9 @@ int main(int argc, char ** argv) {
   **/
 
   // Subscribe to the '/ariac/logical_camera_12' Topic.
-
-  //ros::Subscriber logical_camera_subscriber[17];
-  std::ostringstream otopic;
-  std::string topic;
-
-  for(int index=16;index<17;index++) {
-    otopic.str(""); otopic.clear();
-    otopic << "/ariac/logical_camera_" << (index + 1);
-    topic = otopic.str();
-    
-    logical_camera_subscriber[index]= node.subscribe<nist_gear::LogicalCameraImage>(
-       topic, 10,
-       boost::bind(&MyCompetitionClass::logical_camera_callback, &comp_class, _1, index));
-  }
+  ros::Subscriber logical_camera_subscriber = node.subscribe(
+    "/ariac/logical_camera_13", 10,
+    &MyCompetitionClass::logical_camera_callback, &comp_class);
 
 
   ROS_INFO("Setup complete.");
