@@ -1,43 +1,43 @@
 sensors:
-  logical_camera_bin_0: #bin 1
+  logical_camera_1: #bin 1
     type: logical_camera #depth_camera
     pose:
       xyz: [3.082385, 1.750927, 1.82]
       rpy: [0, 'pi/2', 0]
   
-  logical_camera_bin_1:
+  logical_camera_2:
     type: logical_camera
     pose:
       xyz: [5, 1.750927, 1.82]
       rpy: [0, 'pi/2', 'pi/2']
 
-  logical_camera_bin_2:
+  logical_camera_3:
     type: logical_camera
     pose:
       xyz: [5, -1.76, 1.82]
       rpy: [0, 'pi/2', 'pi/2']
 
-  logical_camera_bin_3: #bin 1
+  logical_camera_4: #bin 1
     type: logical_camera
     pose:
       xyz: [3.082385, -1.750927, 1.82]
       rpy: [0, 'pi/2', 0]
 
 
-  logical_camera_agv_1: #bin1 
+  logical_camera_5: #bin1 
     type: logical_camera
     pose:
       xyz: [0, -7.46, 1.82]
       rpy: [0, 'pi/2', 0]
 
 
-  logical_camera_agv_2: #bin2 
+  logical_camera_6: #bin2 
     type: logical_camera
     pose:
       xyz: [0, 7.46, 1.82]
       rpy: [0, 'pi/2', 0]
 
-  logical_camera_conveyor: 
+  logical_camera_7: 
     type: logical_camera
     pose:
       xyz: [-0.14, -1.82, 1.96]
@@ -61,66 +61,66 @@ sensors:
       xyz: [-0.004795, 4.492549, 0.879306]
       rpy: [0, 0, -1.557900]
 
-  logical_camera_12: # middle shelf l over shelf
+  logical_camera_8: # middle shelf l over shelf
     type: logical_camera
     pose:
       xyz: [-3.25 - 6*2.04, 0, 2.49]
       rpy: [0, 'pi/2', 'pi/2']
   
 
-  logical_camera_13: #middle shelf r
+  logical_camera_9: #middle shelf r
     type: logical_camera
     pose:
       xyz: [-13.54, 0, 2.49]
       rpy: [0, 'pi/2', 'pi/2']
 
-  logical_camera_14: #front shelf l
+  logical_camera_10: #front shelf l
     type: logical_camera
     pose:
       xyz: [-13.54, 3.01, 2.49]
       rpy: [0, 'pi/2', 'pi/2']
 
-  logical_camera_15: #front shelf r
+  logical_camera_11: #front shelf r
     type: logical_camera
     pose:
       xyz: [-15.44, 3.01, 2.49]
       rpy: [0, 'pi/2', 'pi/2']
  
-  logical_camera_16: #back shelf l
+  logical_camera_12: #back shelf l
     type: logical_camera
     pose:
       xyz: [-13.54, -3.01, 2.49]
       rpy: [0, 'pi/2', 'pi/2']
 
-  logical_camera_17: #back shelf r
+  logical_camera_13: #back shelf r
     type: logical_camera
     pose:
       xyz: [-15.44, -3.01, 2.49]
       rpy: [0, 'pi/2', 'pi/2']
 
 
-  logical_camera_18: #back shelf l
+  logical_camera_14: #back shelf l
     type: logical_camera
     pose:
       xyz: [3.05, -3.55, 2.49]
       rpy: [0, 'pi/2', 'pi/2']
 
 
-  logical_camera_19: #back shelf r
+  logical_camera_15: #back shelf r
     type: logical_camera
     pose:
       xyz: [4.95, -3.55, 2.49]
       rpy: [0, 'pi/2', 'pi/2']
 
 
-  logical_camera_20: #opp back shelf r
+  logical_camera_16: #opp back shelf r
     type: logical_camera
     pose:
       xyz: [4.95, 3.66, 2.49]
       rpy: [0, 'pi/2', 'pi/2']
 
 
-  logical_camera_21: #opp back shelf r
+  logical_camera_17: #opp back shelf r
     type: logical_camera
     pose:
       xyz: [3.05, 3.66, 2.49]
