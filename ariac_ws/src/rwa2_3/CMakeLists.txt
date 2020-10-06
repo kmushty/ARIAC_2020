@@ -154,7 +154,7 @@ include_directories(
 # target_link_libraries(${PROJECT_NAME}_node
 #   ${catkin_LIBRARIES}
 # )
-add_executable(ariac_example_node src/rwa2_node2.cpp)
+add_executable(ariac_example_node src/rwa2_node.cpp)
 target_link_libraries(ariac_example_node ${catkin_LIBRARIES})
 #add_dependencies(ariac_example_node rwa2_3_generate_messages_cpp)
 #############
