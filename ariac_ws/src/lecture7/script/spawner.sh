@@ -1,0 +1,3 @@
+rosrun gazebo_ros spawn_model -sdf -x -0.013853 -y -6.874716 -z 0.734291 -R 0 -P 0 -Y 0 -file `rospack find nist_gear`/models/disk_part_green_ariac/model.sdf -model disk_part_green_1
+rosrun gazebo_ros spawn_model -sdf -x 0.057247 -y -7.249820 -z 0.734291 -R 0 -P 0 -Y 0 -file `rospack find nist_gear`/models/pulley_part_red_ariac/model.sdf -model pulley_part_red_1
+rosrun gazebo_ros spawn_model -sdf -x 0.057247 -y -7.249820 -z 0.734291 -R 0 -P 0 -Y 0 -file `rospack find nist_gear`/models/pulley_part_blue_ariac/model.sdf -model pulley_part_blue_1
