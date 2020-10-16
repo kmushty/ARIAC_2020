@@ -38,3 +38,5 @@ logs/
 .catkin_tools
 .idea
 .ccls
+
+cmake-build-debug/
