@@ -31,7 +31,12 @@ const nist_gear::LogicalCameraImage::ConstPtr &msg, int index) {
             p_l.pose = msg->models[i].pose;
             tf2::doTransform(p_l, p_w, T_w_l);
 //            ROS_INFO_STREAM(p_w);
-            std::string partName = msg->models[i].type;
+//
+            part mypart;
+            mypart.type = msg->models[i].type;
+            mypart.pose = p_w.pose;
+            mypart.frame = "world";
+
             //ROS_INFO("%s in world frame:\n\n"
                      //"Position: [x,y,z] = [%f,%f,%f]\n"
                      //"Orientation: [x,y,z,w] = [%f,%f,%f,%f]\n",
@@ -45,7 +50,7 @@ const nist_gear::LogicalCameraImage::ConstPtr &msg, int index) {
                      //p_w.pose.orientation.w);
             
            std::string key = "logical_camera_" + std::to_string(index); 
-           detected_parts[key].push_back(p_w);
+           detected_parts[key].push_back(mypart);
         }
     }
 }
@@ -89,7 +94,7 @@ void Camera::init(ros::NodeHandle & node){
 }
 
 
-std::map<std::string,std::vector<geometry_msgs::PoseStamped>>  Camera::get_detected_parts(){
+std::map<std::string,std::vector<part>>  Camera::get_detected_parts(){
     return detected_parts;
 }
 

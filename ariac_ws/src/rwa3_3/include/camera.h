@@ -14,6 +14,7 @@
 #include <tf2_geometry_msgs/tf2_geometry_msgs.h> //--needed for tf2::Matrix3x3
 #include <map>
 #include "boost/bind.hpp"
+#include "utils.h"
 
 
 
@@ -31,7 +32,7 @@ class Camera{
     
     void init(ros::NodeHandle & node);
 
-    std::map<std::string,std::vector<geometry_msgs::PoseStamped>> get_detected_parts();
+    std::map<std::string,std::vector<part>> get_detected_parts();
 
     Camera();
  
@@ -41,7 +42,9 @@ class Camera{
 
   private:
     ros::Subscriber logical_camera_subscriber[NUM_LOGICAL_CAMERAS];
-    std::map<std::string,std::vector<geometry_msgs::PoseStamped>> detected_parts;
+    //std::map<std::string,std::vector<geometry_msgs::PoseStamped>> detected_parts;
+    std::map<std::string,std::vector<part>> detected_parts;
+    
 
 };
 
