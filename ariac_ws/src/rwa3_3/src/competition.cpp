@@ -35,6 +35,7 @@ void Competition::init() {
 }
 
 
+
 /// Called when a new message is received.
 void Competition::competition_state_callback(const std_msgs::String::ConstPtr & msg) {
   if (msg->data == "done" && competition_state_ != "done")
@@ -118,3 +119,11 @@ double Competition::getClock() {
 std::string Competition::getCompetitionState() {
   return competition_state_;
 }
+
+
+
+std::vector<nist_gear::Order> Competition::getOrders(){
+   return received_orders_;
+}
+
+

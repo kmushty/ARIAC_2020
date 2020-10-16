@@ -111,8 +111,10 @@ public:
 };
 
 
+
+
 class OrderSubscriberClass {
-public:
+ public:
     // create order variable
     nist_gear::Order::ConstPtr order;
     part mypart1;
@@ -131,11 +133,12 @@ public:
 
     }
 
-
     nist_gear::Order::ConstPtr returnOrderMessage(){
         return orderDetails;
     }
+
 };
+
 
 int main(int argc, char ** argv) {
     ros::init(argc, argv, "rwa3_node");
@@ -163,6 +166,7 @@ int main(int argc, char ** argv) {
     part part_in_tray;
     std::string quaSenName;
     LogicalCameraSubscriberClass logi;
+
 //    ROS_INFO("%s",orderDetails->order_id.c_str());
     //--1-Read order
     // Pre-kitting -
@@ -177,15 +181,15 @@ int main(int argc, char ** argv) {
     ROS_INFO("Checkpoint - 2");
 
 
-
-
-
-    ros::Subscriber logicalCameraSub = node.subscribe("/ariac/logical_camera_11", 10, &LogicalCameraSubscriberClass::logical_camera_callback, &logi);
+    ros::Subscriber logicalCameraSub = node.subscribe("/ariac/logical_camera_11", 10, 
+                                       &LogicalCameraSubscriberClass::logical_camera_callback, &logi);
     ros::spin();
     ROS_INFO("Checkpoint - 3");
     ROS_INFO("%f", logi.my_part1.pose.position.x);
     ROS_INFO("%f", logi.my_part1.pose.position.y);
     ROS_INFO("%f", logi.my_part1.pose.position.z);
+
+
 
     //--1-Read order
     //--2-Look for parts in this order
@@ -225,3 +229,6 @@ int main(int argc, char ** argv) {
     ros::shutdown();
     return 0;
 }
+
+
+
