@@ -45,7 +45,7 @@ const nist_gear::LogicalCameraImage::ConstPtr &msg, int index) {
                      //p_w.pose.orientation.w);
             
            std::string key = "logical_camera_" + std::to_string(index); 
-           detected_parts[key].push_back(p_l);
+           detected_parts[key].push_back(p_w);
         }
     }
 }
