@@ -92,7 +92,7 @@ int main(int argc, char ** argv) {
            ROS_INFO_STREAM("Logical Camera Name: " << parts.first);
 
            for(auto part: parts.second)
-             ROS_INFO_STREAM("Part Metrics" << part);
+             ROS_INFO_STREAM(part.type.c_str());
         }
 
         ROS_INFO_STREAM("here");
