@@ -77,7 +77,7 @@ int main(int argc, char ** argv) {
     
     //gantry.goToPresetLocation(gantry.bin3_);
 
-    for(auto order: orders){ // @TODO May need to modify here
+    for(auto order: orders){  // @TODO May need to modify here
 
         ROS_INFO_STREAM("begin");
         ROS_INFO_STREAM(order);
@@ -98,16 +98,16 @@ int main(int argc, char ** argv) {
         ROS_INFO_STREAM("here");
 
             
-           // @TODO May need to modify here
+        // @TODO May need to modify here
 
-            //part_in_tray.type = sm.products[0].type;
-            //part_in_tray.pose.position.x = sm.products[0].pose.position.x;
-            //part_in_tray.pose.position.x = sm.products[0].pose.position.y;
-            //part_in_tray.pose.position.x = sm.products[0].pose.position.z;
-            //part_in_tray.pose.orientation.x = sm.products[0].pose.orientation.x;
-            //part_in_tray.pose.orientation.y = sm.products[0].pose.orientation.y;
-            //part_in_tray.pose.orientation.z = sm.products[0].pose.orientation.z;
-            //part_in_tray.pose.orientation.w = sm.products[0].pose.orientation.w;
+        //part_in_tray.type = sm.products[0].type;
+        //part_in_tray.pose.position.x = sm.products[0].pose.position.x;
+        //part_in_tray.pose.position.x = sm.products[0].pose.position.y;
+        //part_in_tray.pose.position.x = sm.products[0].pose.position.z;
+        //part_in_tray.pose.orientation.x = sm.products[0].pose.orientation.x;
+        //part_in_tray.pose.orientation.y = sm.products[0].pose.orientation.y;
+        //part_in_tray.pose.orientation.z = sm.products[0].pose.orientation.z;
+        //part_in_tray.pose.orientation.w = sm.products[0].pose.orientation.w;
 
           
         //auto agv = sm.agvid;
