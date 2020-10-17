@@ -54,20 +54,24 @@ void GantryControl::init() {
     agv2_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
 
    //--bin13
-    bin13_.gantry = {1.98, -1.51, 2.10};
+    bin13_.gantry = {2.43, 1.54, 0.63};//, 2.10};
     bin13_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
     bin13_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
 
    //--bin16
-    bin16_.gantry = {6.25, -1.01, 1.68};
+    bin16_.gantry = {6.25, 1.68, -1.01};
     bin16_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
     bin16_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
 
-    //--shelf5
-    shelf5_.gantry = {-14.0, -0.13, 4.20};
-    shelf5_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
-    shelf5_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+    //--shelf5 - waypoint 1
+    shelf5_1_.gantry = {0.0, -4.76, 0};
+    shelf5_1_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
+    shelf5_1_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
 
+    //--shelf5 - waypoint 2
+    shelf5_2_.gantry = {-14.0, -4.20, -0.13};
+    shelf5_2_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
+    shelf5_2_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
 
 //    tf2_ros::Buffer tfBuffer;
 //    tf2_ros::TransformListener tfListener(tfBuffer);

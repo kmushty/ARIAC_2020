@@ -68,7 +68,9 @@ class GantryControl {
     agv2 agv2_;
     bin13 bin13_;
     bin16 bin16_;
-    shelf5 shelf5_;
+    shelf5_1 shelf5_1_;
+    shelf5_2 shelf5_2_;
+
 
   private:
     std::vector<double> joint_group_positions_;

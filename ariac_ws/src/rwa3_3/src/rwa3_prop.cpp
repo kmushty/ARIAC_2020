@@ -123,6 +123,8 @@ int main(int argc, char ** argv) {
         //part_in_tray.pose.orientation.z = sm.products[0].pose.orientation.z;
         //part_in_tray.pose.orientation.w = sm.products[0].pose.orientation.w;
 
+        gantry.goToPresetLocation(gantry.shelf5_1_);
+        gantry.goToPresetLocation(gantry.shelf5_2_);
 
         //--Go pick the part
         //gantry.pickPart(my_part);

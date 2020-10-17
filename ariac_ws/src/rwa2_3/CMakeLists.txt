@@ -111,7 +111,7 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES rwa2_3
-#  CATKIN_DEPENDS geometry_msgs nist_gear roscpp sensor_msgs std_msgs std_srvs tf2_geometry_msgs tf2_ros
+   CATKIN_DEPENDS geometry_msgs nist_gear roscpp sensor_msgs std_msgs std_srvs tf2_geometry_msgs tf2_ros
 #  DEPENDS system_lib
 )
 
