@@ -53,6 +53,20 @@ void GantryControl::init() {
     agv2_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
     agv2_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
 
+   //--bin13
+    bin13_.gantry = {1.98, -1.51, 2.10};
+    bin13_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
+    bin13_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+   //--bin16
+    bin16_.gantry = {6.25, -1.01, 1.68};
+    bin16_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
+    bin16_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+    //--shelf5
+    shelf5_.gantry = {-14.0, -0.13, 4.20};
+    shelf5_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
+    shelf5_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
 
 
 //    tf2_ros::Buffer tfBuffer;
