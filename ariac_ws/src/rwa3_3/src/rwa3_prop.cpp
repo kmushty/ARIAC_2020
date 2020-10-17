@@ -54,15 +54,15 @@ int main(int argc, char ** argv) {
     GantryControl gantry(node);
     gantry.init();
     gantry.goToPresetLocation(gantry.start_);
-    
-    
+
+
     /***************************************
      ************New Modifications *********
     ****************************************/
     //--2-Look for parts in this order
     //--We go to this bin because a camera above
     //--this bin found one of the parts in the order
-    
+
     //--1-Read order
     auto orders = comp.getOrders();   //Polling for order
     while(orders.size()<=0)  
@@ -72,6 +72,19 @@ int main(int argc, char ** argv) {
     Camera camera;
     camera.init(node);
 
+    // Parameters
+    std::string agvId;
+    std::string productType;
+    geometry_msgs::Pose productPose;
+    bool foundPart = false;
+    part my_part;
+    std::map<std::string,PresetLocation> presetLoc;
+    presetLoc["logical_camera_2"] = gantry.bin16_;
+    presetLoc["logical_camera_6"] = gantry.bin13_;
+    part my_part_in_tray;
+//    presetLoc["logical_camera_11"] = gantry.bin16_;
+//    presetLoc["logical_camera_14"] = gantry.shelf5_2_;
+
     
     //--You should receive the following information from a camera
     
@@ -79,23 +92,46 @@ int main(int argc, char ** argv) {
 
     for(auto order: orders){  // @TODO May need to modify here
 
-        ROS_INFO_STREAM("begin");
-        ROS_INFO_STREAM(order);
-        ROS_INFO_STREAM("end");
+        for(auto ship : order.shipments){
+            agvId = ship.agv_id;
 
-        
-        auto detected_parts = camera.get_detected_parts();
-        while(detected_parts.size()<=0)                    //Polling for detected_part
-              detected_parts = camera.get_detected_parts();
-        
-        for(auto const& parts: detected_parts){
-           ROS_INFO_STREAM("Logical Camera Name: " << parts.first);
+            for (auto product : ship.products){
+                productType = product.type;
+                productPose = product.pose;
 
-           for(auto part: parts.second)
-             ROS_INFO_STREAM(part.type.c_str());
+//                auto detected_parts = camera.get_detected_parts();
+//                while(detected_parts.size()<=0)                    //Polling for detected_part
+//                    detected_parts = camera.get_detected_parts();
+                foundPart = false;
+                while(foundPart != true){
+                    for(auto const& parts: camera.get_detected_parts()){
+
+                        for(auto part: parts.second)
+                            if(productType == part.type.c_str()){
+                                my_part = part;
+                                foundPart = true;
+                                gantry.goToPresetLocation(presetLoc[productType]);
+                                gantry.pickPart(my_part);
+                                gantry.goToPresetLocation(gantry.start_);
+//                                if(agvId == "any" || agvId == "agv2") {
+//                                    gantry.placePart(part_in_tray, "agv2");
+//                                }
+//                                else {
+//                                    gantry.placePart(part_in_tray, "agv1");
+//                                }
+                                my_part_in_tray.type = productType;
+                                my_part_in_tray.pose = product.pose;
+                                gantry.placePart(my_part_in_tray, "agv2");
+                            }
+                    }
+                }
+            }
+
         }
 
-        ROS_INFO_STREAM("here");
+        
+
+
 
             
         // @TODO May need to modify here
