@@ -59,7 +59,7 @@ void GantryControl::init() {
     bin13_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
 
    //--bin16
-    bin16_.gantry = {6.25, 1.68, -1.01};
+    bin16_.gantry = {5.80, 1.61, -1.51};
     bin16_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
     bin16_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
 
