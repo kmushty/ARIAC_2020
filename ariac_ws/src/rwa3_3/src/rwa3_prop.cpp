@@ -38,11 +38,20 @@
 
 
 // @TODO may be modified in future
-void set_preset_loc(std::map<std::string,PresetLocation> &presetLoc, GantryControl &gantry){
-    presetLoc["logical_camera_2"] = gantry.bin16_;
-    presetLoc["logical_camera_6"] = gantry.bin13_;
-//    presetLoc["logical_camera_11"] = gantry.bin16_;
-//    presetLoc["logical_camera_14"] = gantry.shelf5_2_;
+void set_preset_loc(std::map<std::string,std::vector<PresetLocation>> &presetLoc, GantryControl &gantry){
+    presetLoc["logical_camera_2"] = {gantry.bin16_};
+    presetLoc["logical_camera_6"] = {gantry.bin13_};
+    presetLoc["logical_camera_11"] = {gantry.shelf5_1_, gantry.shelf5_2_};
+    presetLoc["logical_camera_14"] = {gantry.shelf5_1_, gantry.shelf5_2_};
+}
+
+
+// @TODO may be modified in future
+void moveToPresetLocation(std::map<std::string,std::vector<PresetLocation>> &presetLoc, std::string location,GantryControl &gantry){
+  auto vec = presetLoc[location];
+  for(auto waypoint :vec){
+      gantry.goToPresetLocation(waypoint);
+  }
 }
 
 
@@ -82,8 +91,10 @@ int main(int argc, char ** argv) {
     // Parameters
     std::string agvId;
     bool foundPart = false;
+    int index = 0;
     part my_part, my_part_in_tray;
-    std::map<std::string,PresetLocation> presetLoc;
+    std::map<std::string,std::vector<part>> detected_parts;
+    std::map<std::string,std::vector<PresetLocation>> presetLoc;
     set_preset_loc(presetLoc, gantry);
 
     
@@ -98,8 +109,13 @@ int main(int argc, char ** argv) {
 
                 foundPart = false;
                 while(foundPart != true){
-                    for(auto const& parts: camera.get_detected_parts()){
 
+                    detected_parts = camera.get_detected_parts();
+                    for(auto const& parts: detected_parts) {
+
+                        ROS_INFO_STREAM(parts.first);
+                        
+                        index = 0;
                         for(auto part: parts.second){
                             ROS_INFO_STREAM("I am heree");
                             if(product.type == part.type.c_str()){
@@ -110,17 +126,24 @@ int main(int argc, char ** argv) {
                                 ROS_INFO_STREAM("I am heree2");
                                 ROS_INFO_STREAM(parts.first);
 
-                                gantry.goToPresetLocation(presetLoc[parts.first]);
-                                gantry.pickPart(my_part);
-                                gantry.goToPresetLocation(gantry.start_);
-
                                 my_part_in_tray.type = product.type;
                                 my_part_in_tray.pose = product.pose;
+
+                                moveToPresetLocation(presetLoc,parts.first,gantry);
+
+                                gantry.pickPart(my_part);
                                 gantry.placePart(my_part_in_tray, "agv2");
+
+                                camera.remove_part(parts.first, index);
+                                index++;
+
+                                break;
                             }
                           
                         }
+                        
                     }
+                    ros::spinOnce();
                 }
 
              }

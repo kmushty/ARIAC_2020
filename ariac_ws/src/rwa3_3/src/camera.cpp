@@ -98,3 +98,8 @@ std::map<std::string,std::vector<part>>  Camera::get_detected_parts(){
     return detected_parts;
 }
 
+void Camera::remove_part(std::string logical_camera,  int index){
+    auto vec =  detected_parts[logical_camera];
+    vec.erase(vec.begin()+index);
+}
+
