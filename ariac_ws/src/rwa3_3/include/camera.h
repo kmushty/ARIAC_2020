@@ -35,6 +35,9 @@ class Camera{
     std::map<std::string,std::vector<part>> get_detected_parts();
 
     Camera();
+
+    void remove_part(std::string logical_camera, int index);
+
  
 
 
