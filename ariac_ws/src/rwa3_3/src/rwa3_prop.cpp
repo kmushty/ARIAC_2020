@@ -15,7 +15,6 @@
 
 #include <algorithm>
 #include <vector>
-
 #include <ros/ros.h>
 
 #include <nist_gear/LogicalCameraImage.h>
@@ -37,6 +36,14 @@
 
 #include <tf2/LinearMath/Quaternion.h>
 
+
+// @TODO may be modified in future
+void set_preset_loc(std::map<std::string,PresetLocation> &presetLoc, GantryControl &gantry){
+    presetLoc["logical_camera_2"] = gantry.bin16_;
+    presetLoc["logical_camera_6"] = gantry.bin13_;
+//    presetLoc["logical_camera_11"] = gantry.bin16_;
+//    presetLoc["logical_camera_14"] = gantry.shelf5_2_;
+}
 
 
 int main(int argc, char ** argv) {
@@ -74,100 +81,52 @@ int main(int argc, char ** argv) {
 
     // Parameters
     std::string agvId;
-    std::string productType;
-    geometry_msgs::Pose productPose;
     bool foundPart = false;
-    part my_part;
+    part my_part, my_part_in_tray;
     std::map<std::string,PresetLocation> presetLoc;
-    presetLoc["logical_camera_2"] = gantry.bin16_;
-    presetLoc["logical_camera_6"] = gantry.bin13_;
-    part my_part_in_tray;
-//    presetLoc["logical_camera_11"] = gantry.bin16_;
-//    presetLoc["logical_camera_14"] = gantry.shelf5_2_;
+    set_preset_loc(presetLoc, gantry);
 
     
-    //--You should receive the following information from a camera
-    
-    //gantry.goToPresetLocation(gantry.bin3_);
-
     for(auto order: orders){  // @TODO May need to modify here
 
         for(auto ship : order.shipments){
             agvId = ship.agv_id;
 
-            for (auto product : ship.products){
-                productType = product.type;
-                productPose = product.pose;
+            ROS_INFO_STREAM(agvId);
 
-//                auto detected_parts = camera.get_detected_parts();
-//                while(detected_parts.size()<=0)                    //Polling for detected_part
-//                    detected_parts = camera.get_detected_parts();
+            for (auto product : ship.products){
+
                 foundPart = false;
                 while(foundPart != true){
                     for(auto const& parts: camera.get_detected_parts()){
 
-                        for(auto part: parts.second)
-                            if(productType == part.type.c_str()){
+                        for(auto part: parts.second){
+                            ROS_INFO_STREAM("I am heree");
+                            if(product.type == part.type.c_str()){
                                 my_part = part;
                                 foundPart = true;
-                                gantry.goToPresetLocation(presetLoc[productType]);
+
+                                ROS_INFO_STREAM(product.type);
+                                ROS_INFO_STREAM("I am heree2");
+                                ROS_INFO_STREAM(parts.first);
+
+                                gantry.goToPresetLocation(presetLoc[parts.first]);
                                 gantry.pickPart(my_part);
                                 gantry.goToPresetLocation(gantry.start_);
-//                                if(agvId == "any" || agvId == "agv2") {
-//                                    gantry.placePart(part_in_tray, "agv2");
-//                                }
-//                                else {
-//                                    gantry.placePart(part_in_tray, "agv1");
-//                                }
-                                my_part_in_tray.type = productType;
+
+                                my_part_in_tray.type = product.type;
                                 my_part_in_tray.pose = product.pose;
                                 gantry.placePart(my_part_in_tray, "agv2");
                             }
+                          
+                        }
                     }
                 }
-            }
 
-        }
+             }
+         }
+     }
 
-        
-
-
-
-            
-        // @TODO May need to modify here
-
-        //part_in_tray.type = sm.products[0].type;
-        //part_in_tray.pose.position.x = sm.products[0].pose.position.x;
-        //part_in_tray.pose.position.x = sm.products[0].pose.position.y;
-        //part_in_tray.pose.position.x = sm.products[0].pose.position.z;
-        //part_in_tray.pose.orientation.x = sm.products[0].pose.orientation.x;
-        //part_in_tray.pose.orientation.y = sm.products[0].pose.orientation.y;
-        //part_in_tray.pose.orientation.z = sm.products[0].pose.orientation.z;
-        //part_in_tray.pose.orientation.w = sm.products[0].pose.orientation.w;
-
-          
-        //auto agv = sm.agvid;
-
-        //--get pose of part in tray from /ariac/orders
-        
-        //part_in_tray.type = sm.products[0].type;
-        //part_in_tray.pose.position.x = sm.products[0].pose.position.x;
-        //part_in_tray.pose.position.x = sm.products[0].pose.position.y;
-        //part_in_tray.pose.position.x = sm.products[0].pose.position.z;
-        //part_in_tray.pose.orientation.x = sm.products[0].pose.orientation.x;
-        //part_in_tray.pose.orientation.y = sm.products[0].pose.orientation.y;
-        //part_in_tray.pose.orientation.z = sm.products[0].pose.orientation.z;
-        //part_in_tray.pose.orientation.w = sm.products[0].pose.orientation.w;
-
-        gantry.goToPresetLocation(gantry.shelf5_1_);
-        gantry.goToPresetLocation(gantry.shelf5_2_);
-
-        //--Go pick the part
-        //gantry.pickPart(my_part);
-
-        //--Go place the part
-        //gantry.placePart(part_in_tray, "agv2");
-    }
 
     comp.endCompetition();
     spinner.stop();
@@ -175,4 +134,50 @@ int main(int argc, char ** argv) {
     return 0;
 }
 
+
+
+
+
+    //gantry.goToPresetLocation(gantry.bin3_);
+
+//                auto detected_parts = camera.get_detected_parts();
+//                while(detected_parts.size()<=0)                    //Polling for detected_part
+//                    detected_parts = camera.get_detected_parts();
+
+
+
+
+// @TODO May need to modify here
+
+//part_in_tray.type = sm.products[0].type;
+//part_in_tray.pose.position.x = sm.products[0].pose.position.x;
+//part_in_tray.pose.position.x = sm.products[0].pose.position.y;
+//part_in_tray.pose.position.x = sm.products[0].pose.position.z;
+//part_in_tray.pose.orientation.x = sm.products[0].pose.orientation.x;
+//part_in_tray.pose.orientation.y = sm.products[0].pose.orientation.y;
+//part_in_tray.pose.orientation.z = sm.products[0].pose.orientation.z;
+//part_in_tray.pose.orientation.w = sm.products[0].pose.orientation.w;
+
+
+//auto agv = sm.agvid;
+
+//--get pose of part in tray from /ariac/orders
+
+//part_in_tray.type = sm.products[0].type;
+//part_in_tray.pose.position.x = sm.products[0].pose.position.x;
+//part_in_tray.pose.position.x = sm.products[0].pose.position.y;
+//part_in_tray.pose.position.x = sm.products[0].pose.position.z;
+//part_in_tray.pose.orientation.x = sm.products[0].pose.orientation.x;
+//part_in_tray.pose.orientation.y = sm.products[0].pose.orientation.y;
+//part_in_tray.pose.orientation.z = sm.products[0].pose.orientation.z;
+//part_in_tray.pose.orientation.w = sm.products[0].pose.orientation.w;
+
+//gantry.goToPresetLocation(gantry.shelf5_1_);
+//gantry.goToPresetLocation(gantry.shelf5_2_);
+
+//--Go pick the part
+//gantry.pickPart(my_part);
+
+//--Go place the part
+//gantry.placePart(part_in_tray, "agv2");
 
