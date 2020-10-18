@@ -59,7 +59,7 @@ void GantryControl::init() {
     bin13_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
 
    //--bin16
-    bin16_.gantry = {5.80, 1.61, -1.51};
+    bin16_.gantry = {6.25, 1.96, -3.14};
     bin16_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
     bin16_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
 
@@ -252,6 +252,7 @@ geometry_msgs::Pose GantryControl::getTargetWorldPose(geometry_msgs::Pose target
 bool GantryControl::pickPart(part part){
     //--Activate gripper
     activateGripper("left_arm");
+
 //    ros::AsyncSpinner spinner(1);
 //    spinner.start();
 
