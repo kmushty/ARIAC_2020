@@ -30,6 +30,8 @@ class Camera{
 
     void laser_profiler_callback(const sensor_msgs::LaserScan::ConstPtr & msg);
     
+    // void quality_control_sensor_callback(const nist_gear::LogicalCameraImage &msg);
+
     void init(ros::NodeHandle & node);
 
     std::map<std::string,std::vector<part>> get_detected_parts();

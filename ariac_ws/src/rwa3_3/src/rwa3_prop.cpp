@@ -59,10 +59,10 @@ void moveToStartLocation(std::map<std::string,std::vector<PresetLocation>> &pres
     if(vec.size() == 1)
         gantry.goToPresetLocation(gantry.start_);
     else{
-        vec.pop_back();
-        std::reverse(vec.begin(), vec.end());
+        // vec.pop_back();
+        // std::reverse(vec.begin(), vec.end());
 //        vec.push_back(gantry.start_);
-        for(int i=0; i<vec.size();i++){
+        for(int i=vec.size()-2; i>=0;i--){
             gantry.goToPresetLocation(vec[i]);
         }
     }
@@ -127,7 +127,10 @@ int main(int argc, char ** argv) {
 
                     detected_parts = camera.get_detected_parts();
                     for(auto const& parts: detected_parts) {
-
+                        if (parts.first == "logical_camera_8" || parts.first == "logical_camera_10"){
+                            continue;
+                        }
+                        
                         ROS_INFO_STREAM(parts.first);
 
                         index = 0;
@@ -147,7 +150,7 @@ int main(int argc, char ** argv) {
                                 moveToPresetLocation(presetLoc,parts.first,gantry);
 
                                 gantry.pickPart(my_part);
-//                                moveToStartLocation(presetLoc,parts.first,gantry);
+                                moveToStartLocation(presetLoc,parts.first,gantry);
                                 gantry.placePart(my_part_in_tray, "agv2");
                                 camera.remove_part(parts.first, index);
                                 index++;

@@ -295,7 +295,7 @@ bool GantryControl::pickPart(part part){
             //--Move arm to previous position
             left_arm_group_.setPoseTarget(currentPose);
             left_arm_group_.move();
-            goToPresetLocation(start_);
+            /*goToPresetLocation(start_);*/
             return true;
         }
         else {
