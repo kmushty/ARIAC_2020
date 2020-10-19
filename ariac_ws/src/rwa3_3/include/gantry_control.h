@@ -70,6 +70,9 @@ class GantryControl {
     bin16 bin16_;
     shelf5_1 shelf5_1_;
     shelf5_2 shelf5_2_;
+    shelf5_3 shelf5_3_;
+    shelf5_4 shelf5_4_;
+    shelf5_5 shelf5_5_;
 
 
   private:

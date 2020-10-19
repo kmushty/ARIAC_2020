@@ -41,8 +41,8 @@
 void set_preset_loc(std::map<std::string,std::vector<PresetLocation>> &presetLoc, GantryControl &gantry){
     presetLoc["logical_camera_2"] = {gantry.bin16_};
     presetLoc["logical_camera_6"] = {gantry.bin13_};
-    presetLoc["logical_camera_11"] = {gantry.shelf5_1_, gantry.shelf5_2_};
-    presetLoc["logical_camera_14"] = {gantry.shelf5_1_, gantry.shelf5_2_};
+    presetLoc["logical_camera_11"] = {gantry.shelf5_1_, gantry.shelf5_2_, gantry.shelf5_3_};
+    presetLoc["logical_camera_14"] = {gantry.shelf5_1_, gantry.shelf5_2_, gantry.shelf5_4_};
 }
 
 
@@ -52,6 +52,21 @@ void moveToPresetLocation(std::map<std::string,std::vector<PresetLocation>> &pre
   for(auto waypoint :vec){
       gantry.goToPresetLocation(waypoint);
   }
+}
+
+void moveToStartLocation(std::map<std::string,std::vector<PresetLocation>> &presetLoc, std::string location,GantryControl &gantry){
+    auto vec = presetLoc[location];
+    if(vec.size() == 1)
+        gantry.goToPresetLocation(gantry.start_);
+    else{
+        vec.pop_back();
+        std::reverse(vec.begin(), vec.end());
+//        vec.push_back(gantry.start_);
+        for(int i=0; i<vec.size();i++){
+            gantry.goToPresetLocation(vec[i]);
+        }
+    }
+
 }
 
 
@@ -81,10 +96,10 @@ int main(int argc, char ** argv) {
 
     //--1-Read order
     auto orders = comp.getOrders();   //Polling for order
-    while(orders.size()<=0)  
+    while(orders.size()<=0)
            orders = comp.getOrders();
-     
-    
+
+
     Camera camera;
     camera.init(node);
 
@@ -97,7 +112,7 @@ int main(int argc, char ** argv) {
     std::map<std::string,std::vector<PresetLocation>> presetLoc;
     set_preset_loc(presetLoc, gantry);
 
-    
+
     for(auto order: orders){  // @TODO May need to modify here
 
         for(auto ship : order.shipments){
@@ -108,13 +123,13 @@ int main(int argc, char ** argv) {
             for (auto product : ship.products){
 
                 foundPart = false;
-                while(foundPart != true){
+                while(!foundPart){
 
                     detected_parts = camera.get_detected_parts();
                     for(auto const& parts: detected_parts) {
 
                         ROS_INFO_STREAM(parts.first);
-                        
+
                         index = 0;
                         for(auto part: parts.second){
                             ROS_INFO_STREAM("I am heree");
@@ -132,16 +147,16 @@ int main(int argc, char ** argv) {
                                 moveToPresetLocation(presetLoc,parts.first,gantry);
 
                                 gantry.pickPart(my_part);
+//                                moveToStartLocation(presetLoc,parts.first,gantry);
                                 gantry.placePart(my_part_in_tray, "agv2");
-
                                 camera.remove_part(parts.first, index);
                                 index++;
 
                                 break;
                             }
-                          
+
                         }
-                        
+
                     }
                     ros::spinOnce();
                 }
