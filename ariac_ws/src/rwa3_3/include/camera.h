@@ -2,7 +2,7 @@
 #include <vector>
 #include <string>
 #include <ros/ros.h>
-
+#include <geometry_msgs/Pose.h>
 #include <nist_gear/LogicalCameraImage.h>
 #include <nist_gear/Order.h>
 #include <nist_gear/Proximity.h>
@@ -42,7 +42,8 @@ class Camera{
     void reset_is_faulty();
 
     bool get_is_faulty();
-
+    
+    geometry_msgs::Pose get_faulty_pose();
 
 
  
@@ -53,6 +54,8 @@ class Camera{
 
     ros::Subscriber quality_sensor_subscriber;  
     bool is_faulty;
+    
+    geometry_msgs::Pose faulty_pose;
     
 
 };
