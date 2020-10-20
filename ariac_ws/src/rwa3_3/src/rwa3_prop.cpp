@@ -44,6 +44,7 @@ void set_preset_loc(std::map<std::string,std::vector<PresetLocation>> &presetLoc
     presetLoc["logical_camera_11"] = {gantry.shelf5_1_, gantry.shelf5_2_, gantry.shelf5_3_};
     presetLoc["logical_camera_14"] = {gantry.shelf5_1_, gantry.shelf5_2_, gantry.shelf5_4_};
     presetLoc["start"] = {gantry.start_};
+    // presetLoc["Drop"] = {gantry.drop_};
 }
 
 
@@ -154,15 +155,22 @@ int main(int argc, char ** argv) {
                                 moveToStartLocation(presetLoc,parts.first,gantry);
                                 gantry.placePart(my_part_in_tray, "agv2");
                                 
-                                
-                                ROS_INFO_STREAM("checking if camera is faulty");
-                                ROS_INFO_STREAM(camera.get_is_faulty());
-                                if(!camera.get_is_faulty())
-                                  ros::Duration(3.0).sleep();
-                                  camera.reset_is_faulty();
-                                  ROS_INFO_STREAM("Part is faulty");
-                                  gantry.pickPart(my_part_in_tray);
-
+                                // ros::spinOnce();
+                                // ROS_INFO_STREAM("checking if camera is faulty");
+                                // ROS_INFO_STREAM(camera.get_is_faulty());
+                                while(!camera.get_is_faulty()); //only exits if camera is faulty
+                                if(camera.get_is_faulty()) {
+                                    ROS_INFO_STREAM("i AM HERE CODING");
+                                    // ros::Duration(3.0).sleep();
+                                    camera.reset_is_faulty();
+                                    ROS_INFO_STREAM("Part is faulty");
+                                    gantry.presetArmLocation(gantry.start_);
+                                    // ROS_INFO_STREAM(camera.get_faulty_pose());
+                                    part temp;
+                                    temp.pose = camera.get_faulty_pose();
+                                    gantry.pickPart(temp);
+                                    
+                                }
                                 moveToStartLocation(presetLoc,"start",gantry);
 
 

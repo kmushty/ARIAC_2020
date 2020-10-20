@@ -62,6 +62,10 @@ class GantryControl {
     void deactivateGripper(std::string gripper_id);
     nist_gear::VacuumGripperState getGripperState(std::string arm_name);
     geometry_msgs::Pose getTargetWorldPose(geometry_msgs::Pose target, std::string agv);
+
+
+    void presetArmLocation(PresetLocation location);
+    
     //--preset locations;
     start start_;
     bin3 bin3_;
