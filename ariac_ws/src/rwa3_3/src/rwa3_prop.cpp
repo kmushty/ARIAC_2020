@@ -43,6 +43,7 @@ void set_preset_loc(std::map<std::string,std::vector<PresetLocation>> &presetLoc
     presetLoc["logical_camera_6"] = {gantry.bin13_};
     presetLoc["logical_camera_11"] = {gantry.shelf5_1_, gantry.shelf5_2_, gantry.shelf5_3_};
     presetLoc["logical_camera_14"] = {gantry.shelf5_1_, gantry.shelf5_2_, gantry.shelf5_4_};
+    presetLoc["start"] = {gantry.start_};
 }
 
 
@@ -152,6 +153,19 @@ int main(int argc, char ** argv) {
                                 gantry.pickPart(my_part);
                                 moveToStartLocation(presetLoc,parts.first,gantry);
                                 gantry.placePart(my_part_in_tray, "agv2");
+                                
+                                
+                                ROS_INFO_STREAM("checking if camera is faulty");
+                                ROS_INFO_STREAM(camera.get_is_faulty());
+                                if(!camera.get_is_faulty())
+                                  ros::Duration(3.0).sleep();
+                                  camera.reset_is_faulty();
+                                  ROS_INFO_STREAM("Part is faulty");
+                                  gantry.pickPart(my_part_in_tray);
+
+                                moveToStartLocation(presetLoc,"start",gantry);
+
+
                                 camera.remove_part(parts.first, index);
                                 index++;
 

@@ -360,8 +360,8 @@ void GantryControl::placePart(part part, std::string agv){
     left_arm_group_.move();
     deactivateGripper("left_arm");
     auto state = getGripperState("left_arm");
-    if (state.attached)
-        goToPresetLocation(start_);
+    //if (state.attached)
+        //goToPresetLocation(start_);
 }
 
 void GantryControl::goToPresetLocation(PresetLocation location) {

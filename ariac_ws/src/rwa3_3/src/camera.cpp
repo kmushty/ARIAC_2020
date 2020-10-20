@@ -91,6 +91,13 @@ void Camera::init(ros::NodeHandle & node){
       logical_camera_subscriber[index]= node.subscribe<nist_gear::LogicalCameraImage>(
         topic, 10, boost::bind(&Camera::logical_camera_callback, this, _1, index));
   }
+
+  
+  quality_sensor_subscriber = node.subscribe(
+       "/ariac/quality_control_sensor_1", 10, &Camera::quality_control_sensor_callback,this
+       );
+
+  is_faulty = false;
 }
 
 
@@ -98,8 +105,27 @@ std::map<std::string,std::vector<part>>  Camera::get_detected_parts(){
     return detected_parts;
 }
 
+
 void Camera::remove_part(std::string logical_camera,  int index){
     auto vec =  detected_parts[logical_camera];
     vec.erase(vec.begin()+index);
 }
+
+
+void Camera::quality_control_sensor_callback(const nist_gear::LogicalCameraImage &msg){
+    if(msg.models.size() > 0) 
+        is_faulty = true;
+}
+
+
+void Camera::reset_is_faulty(){
+   is_faulty = false;
+}
+
+
+bool Camera::get_is_faulty() {
+  return is_faulty;
+}
+
+
 

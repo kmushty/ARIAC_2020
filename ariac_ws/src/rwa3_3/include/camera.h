@@ -17,7 +17,6 @@
 #include "utils.h"
 
 
-
 const int NUM_LOGICAL_CAMERAS = 17;
 
 class Camera{
@@ -30,7 +29,7 @@ class Camera{
 
     void laser_profiler_callback(const sensor_msgs::LaserScan::ConstPtr & msg);
     
-    // void quality_control_sensor_callback(const nist_gear::LogicalCameraImage &msg);
+    void quality_control_sensor_callback(const nist_gear::LogicalCameraImage &msg);
 
     void init(ros::NodeHandle & node);
 
@@ -40,15 +39,20 @@ class Camera{
 
     void remove_part(std::string logical_camera, int index);
 
+    void reset_is_faulty();
+
+    bool get_is_faulty();
+
+
+
  
-
-
-            
-
   private:
     ros::Subscriber logical_camera_subscriber[NUM_LOGICAL_CAMERAS];
     //std::map<std::string,std::vector<geometry_msgs::PoseStamped>> detected_parts;
     std::map<std::string,std::vector<part>> detected_parts;
+
+    ros::Subscriber quality_sensor_subscriber;  
+    bool is_faulty;
     
 
 };
