@@ -100,50 +100,6 @@ void GantryControl::init() {
     agv2_flipped_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
     agv2_flipped_.right_arm = {1.57, -1.57, -2.26, 0.13, 0, 0.13};
 
-
-  void GantryControl::placePart(part part, std::string agv, std::string arm){
-     auto target_pose_in_tray = getTargetWorldPose(part.pose, agv, arm);
-      ros::Duration(3.0).sleep();
-      goToPresetLocation(agv2_);
-      target_pose_in_tray.position.z += (ABOVE_TARGET + 1.5*model_height[part.type]);
-
-      left_arm_group_.setPoseTarget(target_pose_in_tray);
-      left_arm_group_.move();
-      deactivateGripper("left_arm");
-      auto state = getGripperState("left_arm");
-      if (state.attached)
-          goToPresetLocation(start_);
-  }
-
-  void GantryControl::placeFlippedPart(part part, std::string agv, std::string arm){
-      ROS_INFO_STREAM("target Pose is"<< part.pose);
-      auto target_pose_in_tray = getTargetWorldPose(part.pose, agv, arm);
-
-      target_pose_in_tray.orientation.x = -0.710413;
-      target_pose_in_tray.orientation.y = 0.00131;
-      target_pose_in_tray.orientation.z = 0.7037;
-      target_pose_in_tray.orientation.w = -0.0018;
-
-      ROS_INFO_STREAM("target Pose in tray is"<< target_pose_in_tray);
-
-      ros::Duration(3.0).sleep();
-      goToPresetLocation(agv2_flipped1_);
-     // target_pose_in_tray.position.z += (ABOVE_TARGET + 1.5*model_height[part.type]);
-      
-      target_pose_in_tray.position.z += (ABOVE_TARGET + 1.5*model_height[part.type]);
-
-  //    target_pose_in_tray.orientation.x = 0;
-      ROS_INFO("Target orientation");
-      ROS_INFO_STREAM(target_pose_in_tray.orientation);
-      right_arm_group_.setPoseTarget(target_pose_in_tray);
-      right_arm_group_.move();
-      deactivateGripper("right_arm");
-      auto state = getGripperState("right_arm");
-      if (state.attached)
-          goToPresetLocation(start_);
-  }
-     
-
     /*
      //--start location
     start_.gantry = {0,0,0};
@@ -319,7 +275,7 @@ stats GantryControl::getStats(std::string function) {
 }
 
 geometry_msgs::Pose GantryControl::getTargetWorldPose(geometry_msgs::Pose target,
-                                                      std::string agv){
+                                                      std::string agv, std::string arm){
     static tf2_ros::StaticTransformBroadcaster br;
     geometry_msgs::TransformStamped transformStamped;
 
@@ -354,22 +310,34 @@ geometry_msgs::Pose GantryControl::getTargetWorldPose(geometry_msgs::Pose target
     for (int i=0; i< 10; i++) {
         try {
             world_target_tf = tfBuffer.lookupTransform("world", "target_frame",
+                                                       ros::Time(0), timeout);
+        }
+        catch (tf2::TransformException &ex) {
+            ROS_WARN("%s", ex.what());
+            ros::Duration(1.0).sleep();
+            continue;
+        }
+        if(arm == "right_arm") {
+            try {
+                ee_target_tf = tfBuffer.lookupTransform("target_frame", "right_ee_link",
                                                         ros::Time(0), timeout);
+            }
+            catch (tf2::TransformException &ex) {
+                ROS_WARN("%s", ex.what());
+                ros::Duration(1.0).sleep();
+                continue;
+            }
         }
-        catch (tf2::TransformException &ex) {
-            ROS_WARN("%s", ex.what());
-            ros::Duration(1.0).sleep();
-            continue;
-        }
-
-        try {
-            ee_target_tf = tfBuffer.lookupTransform("target_frame", "left_ee_link",
-                                                 ros::Time(0), timeout);
-        }
-        catch (tf2::TransformException &ex) {
-            ROS_WARN("%s", ex.what());
-            ros::Duration(1.0).sleep();
-            continue;
+        else{
+            try {
+                ee_target_tf = tfBuffer.lookupTransform("target_frame", "left_ee_link",
+                                                        ros::Time(0), timeout);
+            }
+            catch (tf2::TransformException &ex) {
+                ROS_WARN("%s", ex.what());
+                ros::Duration(1.0).sleep();
+                continue;
+            }
         }
     }
 
@@ -475,8 +443,9 @@ bool GantryControl::pickPart(part part){
 //    ros::waitForShutdown();
 }
 
-void GantryControl::placePart(part part, std::string agv){
-   auto target_pose_in_tray = getTargetWorldPose(part.pose, agv);
+
+void GantryControl::placePart(part part, std::string agv, std::string arm){
+    auto target_pose_in_tray = getTargetWorldPose(part.pose, agv, arm);
     ros::Duration(3.0).sleep();
     goToPresetLocation(agv2_);
     target_pose_in_tray.position.z += (ABOVE_TARGET + 1.5*model_height[part.type]);
@@ -485,8 +454,36 @@ void GantryControl::placePart(part part, std::string agv){
     left_arm_group_.move();
     deactivateGripper("left_arm");
     auto state = getGripperState("left_arm");
-    //if (state.attached)
-        //goToPresetLocation(start_);
+    if (state.attached)
+        goToPresetLocation(start_);
+}
+
+void GantryControl::placeFlippedPart(part part, std::string agv, std::string arm){
+    ROS_INFO_STREAM("target Pose is"<< part.pose);
+    auto target_pose_in_tray = getTargetWorldPose(part.pose, agv, arm);
+
+    target_pose_in_tray.orientation.x = -0.710413;
+    target_pose_in_tray.orientation.y = 0.00131;
+    target_pose_in_tray.orientation.z = 0.7037;
+    target_pose_in_tray.orientation.w = -0.0018;
+
+    ROS_INFO_STREAM("target Pose in tray is"<< target_pose_in_tray);
+
+    ros::Duration(3.0).sleep();
+    goToPresetLocation(agv2_flipped1_);
+    // target_pose_in_tray.position.z += (ABOVE_TARGET + 1.5*model_height[part.type]);
+
+    target_pose_in_tray.position.z += (ABOVE_TARGET + 1.5*model_height[part.type]);
+
+//    target_pose_in_tray.orientation.x = 0;
+    ROS_INFO("Target orientation");
+    ROS_INFO_STREAM(target_pose_in_tray.orientation);
+    right_arm_group_.setPoseTarget(target_pose_in_tray);
+    right_arm_group_.move();
+    deactivateGripper("right_arm");
+    auto state = getGripperState("right_arm");
+    if (state.attached)
+        goToPresetLocation(start_);
 }
 
 
