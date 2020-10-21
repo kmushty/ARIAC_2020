@@ -44,9 +44,15 @@ void GantryControl::init() {
     start_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
 
     //--bin3
-    bin3_.gantry = {4.0, -1.1, 0.};
-    bin3_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
-    bin3_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+    //--bin13
+    // bin13_.gantry = {3.32, 1.12, 3.77};//, 2.10};
+    // bin13_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
+    // bin13_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+
+    bin13_.gantry = {3.10, 1.68, 3.77};//, 2.10};
+    bin13_.left_arm = {0, -0.63, 1.26, -0.78, PI/2, 0};
+    bin13_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
 
     //--agv2
     agv2_.gantry = {0.6, 6.9, PI};
@@ -454,8 +460,8 @@ void GantryControl::placePart(part part, std::string agv, std::string arm){
     left_arm_group_.move();
     deactivateGripper("left_arm");
     auto state = getGripperState("left_arm");
-    if (state.attached)
-        goToPresetLocation(start_);
+    // if (state.attached)
+    //     goToPresetLocation(start_);
 }
 
 void GantryControl::placeFlippedPart(part part, std::string agv, std::string arm){
@@ -482,8 +488,8 @@ void GantryControl::placeFlippedPart(part part, std::string agv, std::string arm
     right_arm_group_.move();
     deactivateGripper("right_arm");
     auto state = getGripperState("right_arm");
-    if (state.attached)
-        goToPresetLocation(start_);
+    // if (state.attached)
+    //     goToPresetLocation(start_);
 }
 
 
