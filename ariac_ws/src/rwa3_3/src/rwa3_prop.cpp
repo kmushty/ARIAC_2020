@@ -76,6 +76,7 @@ int main(int argc, char ** argv) {
     ros::init(argc, argv, "rwa3_node");
     ros::NodeHandle node;
     ros::AsyncSpinner spinner(8);
+    part temp;
     spinner.start();
 
     Competition comp(node);
@@ -166,7 +167,6 @@ int main(int argc, char ** argv) {
                                     ROS_INFO_STREAM("Part is faulty");
                                     gantry.presetArmLocation(gantry.start_);
                                     // ROS_INFO_STREAM(camera.get_faulty_pose());
-                                    part temp;
                                     temp.pose = camera.get_faulty_pose();
                                     gantry.pickPart(temp);
                                     
