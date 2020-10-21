@@ -128,11 +128,13 @@ int main(int argc, char ** argv) {
             for (auto product : ship.products){
 
                 foundPart = false; 
-                while(!foundPart){                                                                      // poll until we find part
+
+                while(!foundPart){                                                                       // poll until we find part
 
                     detected_parts = camera.get_detected_parts();
+
                     for(auto const& parts: detected_parts) {
-                        if (parts.first == "logical_camera_8" || parts.first == "logical_camera_10" || parts.first == "logical_camera_11")    // agv cameras
+                        if (parts.first == "logical_camera_8" || parts.first == "logical_camera_10" )    // agv cameras
                             continue;
                         
                         index = 0;
@@ -148,8 +150,35 @@ int main(int argc, char ** argv) {
                               gantry.pickPart(my_part);
                               moveToStartLocation(presetLoc,parts.first,gantry);
                               gantry.placePart(my_part_in_tray, "agv2");
-                              
+                               
                               moveToStartLocation(presetLoc,"start",gantry);
+
+
+                              ros::spinOnce();
+                              ros::spinOnce();
+                              if(camera.get_is_faulty()) {
+                                  ROS_INFO_STREAM("removing faulty parts");
+                                  
+                                  part temp;
+
+                                  temp.pose = camera.get_faulty_pose();
+                                 // temp.type = "pulley_part_red";
+                                  temp.type = my_part.type;
+                                  ROS_INFO_STREAM(temp.pose);
+
+                                  moveToPresetLocation(presetLoc,"agv2",gantry);
+                                  ROS_INFO_STREAM("no nononononononoons");
+                                  gantry.pickPart(temp);
+                                  ROS_INFO_STREAM("Hahahahahahaha");
+                                  moveToStartLocation(presetLoc,"start",gantry);
+
+                                  //gantry.placePart(temp);
+                                  //gantry.dropPart(temp);
+                                  //gantry.presetArmLocation(gantry.start_);
+                                  foundPart = false;
+                                  camera.reset_is_faulty();
+                                  gantry.deactivateGripper("left_arm");
+                              }
 
                               //camera.remove_part(parts.first, index);
                               //index++;
@@ -166,38 +195,40 @@ int main(int argc, char ** argv) {
          }
      }
     
-     ROS_INFO_STREAM("pRINT I AM HERE");
+     //ROS_INFO_STREAM("pRINT I AM HERE");
        
-     ros::spinOnce();
-     while(camera.get_is_faulty()) {
-        ROS_INFO_STREAM("removing faulty parts");
+     //ros::spinOnce();
+     //while(camera.get_is_faulty()) {
+        //ROS_INFO_STREAM("removing faulty parts");
         
-        part temp;
+        //part temp;
 
-        temp.pose = camera.get_faulty_pose();
-       // temp.type = "pulley_part_red";
-        temp.type = "disk_part_blue";
-        ROS_INFO_STREAM(temp.pose);
+        //temp.pose = camera.get_faulty_pose();
+        //temp.type = "pulley_part_red";
+        //temp.type = "disk_part_blue";
+        //ROS_INFO_STREAM(temp.pose);
 
-        moveToPresetLocation(presetLoc,"agv2",gantry);
-        ROS_INFO_STREAM("no nononononononoons");
-        gantry.pickPart(temp);
-        ROS_INFO_STREAM("Hahahahahahaha");
-        moveToStartLocation(presetLoc,"start",gantry);
+        //moveToPresetLocation(presetLoc,"agv2",gantry);
+        //ROS_INFO_STREAM("no nononononononoons");
+        //gantry.pickPart(temp);
+        //ROS_INFO_STREAM("Hahahahahahaha");
+        //moveToStartLocation(presetLoc,"start",gantry);
 
         //gantry.placePart(temp);
         //gantry.dropPart(temp);
         //gantry.presetArmLocation(gantry.start_);
-        camera.reset_is_faulty();
-        gantry.deactivateGripper("left_arm");
-        ros::spinOnce();
-    }
+        //camera.reset_is_faulty();
+        //gantry.deactivateGripper("left_arm");
+        //ros::spinOnce();
+    //}
 
     comp.endCompetition();
     spinner.stop();
     ros::shutdown();
     return 0;
 }
+
+
 
 
 
