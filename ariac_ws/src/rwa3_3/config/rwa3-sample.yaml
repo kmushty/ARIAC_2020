@@ -48,12 +48,12 @@ orders:
        #pose:
           #xyz: [-0.12, -0.2, 0]
           #rpy: [0, 0, 0]
-      # part_1:
-      #   type: pulley_part_red
-      #   pose:
-      #     xyz: [0.12, 0.2, 0]
-      #     rpy: ['pi', 0, 0]
       #part_1:
+         #type: pulley_part_red
+         #pose:
+           #xyz: [0.12, 0.2, 0]
+           #rpy: ['pi', 0, 0]
+      #part_2:
         #type: disk_part_green
         #pose:
           #xyz: [0.0, 0.0, 0]
@@ -93,6 +93,7 @@ models_over_shelves:
         rpy: [0, 0, 0]
         num_models_x: 2
         num_models_y: 1
+
 
 #Faulty products
 faulty_products:

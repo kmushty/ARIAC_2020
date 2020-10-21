@@ -58,6 +58,10 @@ void GantryControl::init() {
     bin13_.left_arm = {0, -0.63, 1.26, -0.78, PI/2, -0.88};
     bin13_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
 
+    //bin13_.gantry = {3.10, 1.68, 3.77};//, 2.10};
+    //bin13_.left_arm = {0, -0.63, 1.26, -0.78, PI/2, 0};
+    //bin13_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
    //--bin16
     bin16_.gantry = {6.25, 1.96, -3.14};
     bin16_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
@@ -82,6 +86,69 @@ void GantryControl::init() {
     shelf5_4_.gantry = {-15.19, -4.25, 0};
     shelf5_4_.left_arm = {-1.39, -0.75, 1.26, 0, 0.28, 1.38};
     shelf5_4_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+     
+
+    /*
+     //--start location
+    start_.gantry = {0,0,0};
+    start_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
+    start_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+    //--bin3
+    bin3_.gantry = {4.0, -1.1, 0.};
+    bin3_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
+    bin3_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+    //--agv2
+    agv2_.gantry = {0.6, 6.9, PI};
+    agv2_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
+    agv2_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+//    agv2_.gantry = {0, 6.30, 0};
+//    agv2_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
+//    agv2_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+   //--bin13
+    bin13_.gantry = {3.10, 1.68, 3.77};//, 2.10};
+    bin13_.left_arm = {0, -0.63, 1.26, -0.78, PI/2, 0};
+    bin13_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+   //--bin16
+    bin16_.gantry = {6.25, 1.96, -3.14};
+    bin16_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
+    bin16_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+    //--shelf5 - waypoint 1
+    shelf5_1_.gantry = {0.0, -4.76, 0};
+    shelf5_1_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
+    shelf5_1_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+    //--shelf5 - waypoint 2
+    shelf5_2_.gantry = {-15.13, -5.46, 0};
+    shelf5_2_.left_arm = {-1.25, -PI/2, PI/2, 0, 0.25, 1.38};
+    shelf5_2_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+    //--shelf5 - waypoint 3
+    shelf5_3_.gantry = {-14.23, -4.25, 0};
+    shelf5_3_.left_arm = {-1.39, -0.75, 1.26, 0, 0.28, 1.38};
+    shelf5_3_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+    //--shelf5 - waypoint 4
+    shelf5_4_.gantry = {-15.19, -4.25, 0};
+    shelf5_4_.left_arm = {-1.39, -0.75, 1.26, 0, 0.28, 1.38};
+    shelf5_4_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};     
+
+
+  */   
+
+
+
+
+
+
+     
+
 
 //    //--shelf5 - waypoint 4
 //    shelf5_5_.gantry = {-15.13, -4.62, -0.13};
@@ -362,6 +429,26 @@ void GantryControl::placePart(part part, std::string agv){
     auto state = getGripperState("left_arm");
     //if (state.attached)
         //goToPresetLocation(start_);
+}
+
+
+
+void GantryControl::presetArmLocation(PresetLocation location) {
+    //--left arm
+    joint_group_positions_.at(3) = location.left_arm.at(0);
+    joint_group_positions_.at(4) = location.left_arm.at(1);
+    joint_group_positions_.at(5) = location.left_arm.at(2);
+    joint_group_positions_.at(6) = location.left_arm.at(3);
+    joint_group_positions_.at(7) = location.left_arm.at(4);
+    joint_group_positions_.at(8) = location.left_arm.at(5);
+
+    //--right arm
+    joint_group_positions_.at(9) = location.right_arm.at(0);
+    joint_group_positions_.at(10) = location.right_arm.at(1);
+    joint_group_positions_.at(11) = location.right_arm.at(2);
+    joint_group_positions_.at(12) = location.right_arm.at(3);
+    joint_group_positions_.at(13) = location.right_arm.at(4);
+    joint_group_positions_.at(14) = location.right_arm.at(5);
 }
 
 void GantryControl::goToPresetLocation(PresetLocation location) {
