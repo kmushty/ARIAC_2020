@@ -149,8 +149,19 @@ int main(int argc, char ** argv) {
 
                               gantry.pickPart(my_part);
                               moveToStartLocation(presetLoc,parts.first,gantry);
-                              gantry.placePart(my_part_in_tray, "agv2");
-                               
+
+                              if(int(my_part_in_tray.pose.orientation.x) == 1){
+                                  gantry.goToPresetLocation(gantry.go_to_flipped_pulley);
+                                  gantry.activateGripper("right_arm");
+                                  gantry.deactivateGripper("left_arm");
+                                  gantry.goToPresetLocation(gantry.agv2_flipped_);
+                                  my_part_in_tray.pose.orientation.x = 0;
+                                  my_part_in_tray.pose.orientation.w = 1;
+                                
+                                  gantry.placeFlippedPart(my_part_in_tray,"agv2","right_arm");
+                              }else
+                                  gantry.placePart(my_part_in_tray, "agv2");
+                            
                               moveToStartLocation(presetLoc,"start",gantry);
 
 
