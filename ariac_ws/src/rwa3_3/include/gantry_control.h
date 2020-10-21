@@ -77,6 +77,7 @@ class GantryControl {
     shelf5_2 shelf5_2_;
     shelf5_3 shelf5_3_;
     shelf5_4 shelf5_4_;
+    shelf5_5 shelf5_5_;
     go_to_flipped_pulley go_to_flipped_pulley_;
     agv2_flipped agv2_flipped_;
     agv2_flipped1 agv2_flipped1_;

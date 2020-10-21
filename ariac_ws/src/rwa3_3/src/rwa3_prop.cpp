@@ -42,7 +42,7 @@ void set_preset_loc(std::map<std::string,std::vector<PresetLocation>> &presetLoc
     presetLoc["logical_camera_2"] = {gantry.bin16_};
     presetLoc["logical_camera_6"] = {gantry.bin13_};
     presetLoc["logical_camera_11"] = {gantry.shelf5_1_, gantry.shelf5_2_, gantry.shelf5_3_};
-    presetLoc["logical_camera_14"] = {gantry.shelf5_1_, gantry.shelf5_2_, gantry.shelf5_4_};
+    presetLoc["logical_camera_14"] = {gantry.shelf5_1_, gantry.shelf5_4_, gantry.shelf5_5_};
     presetLoc["start"] = {gantry.start_};
     presetLoc["agv2"] = {gantry.agv2_};
     // presetLoc["Drop"] = {gantry.drop_};
