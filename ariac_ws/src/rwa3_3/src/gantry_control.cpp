@@ -63,9 +63,15 @@ void GantryControl::init() {
 //    agv2_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
 //    agv2_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
 
-   //--bin13
-    bin13_.gantry = {3.10, 1.68, 3.77};//, 2.10};
-    bin13_.left_arm = {0, -0.63, 1.26, -0.78, PI/2, 0};
+//    //--bin13
+//     bin13_.gantry = {3.10, 1.68, 3.77};//, 2.10};
+//     bin13_.left_arm = {0, -0.63, 1.26, -0.78, PI/2, 0};
+//     bin13_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+    //--bin13
+    bin13_.gantry = {1.85, 2.14,0};//, 2.10};
+    // bin13_.left_arm = {0, -1.45, 1.58, -0.13, PI/2, -0.88};
+    bin13_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
     bin13_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
 
 //   //--bin16
