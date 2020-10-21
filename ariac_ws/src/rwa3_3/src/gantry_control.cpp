@@ -407,9 +407,9 @@ bool GantryControl::pickPart(part part){
                 activateGripper("left_arm");
                 ROS_INFO_STREAM(state.attached);
                 state = getGripperState("left_arm");
-                // ros::spinOnce();
+              // ros::spinOnce();
         }
-    }
+     }
     }
     else {
         ROS_INFO_STREAM("[Gripper] = not enabled");

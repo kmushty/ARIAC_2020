@@ -84,11 +84,15 @@ void agvDeliveryService(ros::ServiceClient &agvDelivery){
     }
     ROS_INFO("[AGV][startAGV] Requesting AGV start...");
     nist_gear::AGVControl srv;
+    srv.request.shipment_type =  "order_0_shipment_0";
     agvDelivery.call(srv);
-    ROS_INFO("%s",srv.response.message.c_str());
+   
+    
     while(!srv.response.success) {
         ROS_INFO_ONCE("AGV delivering the parts");
     }
+    ROS_INFO("%s",srv.response.message.c_str());
+
     ROS_INFO("AGV delivery successful");
 }
 
@@ -108,8 +112,8 @@ int main(int argc, char ** argv) {
     GantryControl gantry(node);
     gantry.init();
     gantry.goToPresetLocation(gantry.start_);
-
-
+   
+     
     /***************************************
      ************New Modifications *********
     ****************************************/
@@ -118,6 +122,9 @@ int main(int argc, char ** argv) {
     //--this bin found one of the parts in the order
 
     //--1-Read order
+    
+    ros::ServiceClient agvDelivery = node.serviceClient<nist_gear::AGVControl>("/ariac/agv2");
+
     auto orders = comp.getOrders();   //Polling for order
     while(orders.size()<=0)
            orders = comp.getOrders();
@@ -125,6 +132,8 @@ int main(int argc, char ** argv) {
 
     Camera camera;
     camera.init(node);
+
+
 
     // Parameters
     std::string agvId;
@@ -152,14 +161,14 @@ int main(int argc, char ** argv) {
                     detected_parts = camera.get_detected_parts();
 
                     for(auto const& parts: detected_parts) {
-                        if (parts.first == "logical_camera_8" || parts.first == "logical_camera_10" )    // agv cameras
+                        if (parts.first == "logical_camera_8" || parts.first == "logical_camera_10")    // agv cameras
                             continue;
                         
                         index = 0;
                         if(product.type == parts.second.type.c_str()){
                               my_part = parts.second;
                               foundPart = true;
-
+                           
                               my_part_in_tray.type = product.type;
                               my_part_in_tray.pose = product.pose;
 
@@ -223,6 +232,10 @@ int main(int argc, char ** argv) {
              }
          }
      }
+    
+    agvDeliveryService(agvDelivery);
+    
+
     comp.endCompetition();
     spinner.stop();
     ros::shutdown();
