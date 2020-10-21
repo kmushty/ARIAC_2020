@@ -54,13 +54,14 @@ void GantryControl::init() {
     agv2_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
 
    //--bin13
-    bin13_.gantry = {3.10, 1.68, 3.77};//, 2.10};
-    bin13_.left_arm = {0, -0.63, 1.26, -0.78, PI/2, -0.88};
-    bin13_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+    // bin13_.gantry = {3.32, 1.12, 3.77};//, 2.10};
+    // bin13_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
+    // bin13_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
 
-    //bin13_.gantry = {3.10, 1.68, 3.77};//, 2.10};
-    //bin13_.left_arm = {0, -0.63, 1.26, -0.78, PI/2, 0};
-    //bin13_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+     bin13_.gantry = {3.10, 1.68, 3.77};//, 2.10};
+    bin13_.left_arm = {0, -0.63, 1.26, -0.78, PI/2, 0};
+    bin13_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
 
    //--bin16
     bin16_.gantry = {6.25, 1.96, -3.14};
@@ -376,9 +377,11 @@ bool GantryControl::pickPart(part part){
                 left_arm_group_.setPoseTarget(part.pose);
                 left_arm_group_.move();
                 activateGripper("left_arm");
-            }
+                ROS_INFO_STREAM(state.attached);
+                state = getGripperState("left_arm");
+                // ros::spinOnce();
         }
-    }
+    }}
     else {
         ROS_INFO_STREAM("[Gripper] = not enabled");
     }

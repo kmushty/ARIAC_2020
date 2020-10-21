@@ -156,4 +156,3 @@ geometry_msgs::Pose Camera::get_faulty_pose() {
    return faulty_pose;
 }
 
-

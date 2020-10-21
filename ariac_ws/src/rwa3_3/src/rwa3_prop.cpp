@@ -51,6 +51,9 @@ void set_preset_loc(std::map<std::string,std::vector<PresetLocation>> &presetLoc
 // @TODO may be modified in future
 void moveToPresetLocation(std::map<std::string,std::vector<PresetLocation>> &presetLoc, std::string location,GantryControl &gantry){
   auto vec = presetLoc[location];
+  if(vec.size() == 1){
+        gantry.goToPresetLocation(vec[0]);
+  }
   for(auto waypoint :vec){
       gantry.goToPresetLocation(waypoint);
   }
@@ -58,12 +61,15 @@ void moveToPresetLocation(std::map<std::string,std::vector<PresetLocation>> &pre
 
 void moveToStartLocation(std::map<std::string,std::vector<PresetLocation>> &presetLoc, std::string location,GantryControl &gantry){
     auto vec = presetLoc[location];
-    if(vec.size() == 1)
+    if(vec.size() == 1){
         gantry.goToPresetLocation(vec[0]);
+        gantry.goToPresetLocation(gantry.start_);
+    }
     else{
         for(int i=vec.size()-2; i>=0;i--){
             gantry.goToPresetLocation(vec[i]);
         }
+        gantry.goToPresetLocation(gantry.start_);
     }
 
 }
@@ -73,7 +79,6 @@ int main(int argc, char ** argv) {
     ros::init(argc, argv, "rwa3_node");
     ros::NodeHandle node;
     ros::AsyncSpinner spinner(8);
-    part temp;
     spinner.start();
 
     Competition comp(node);
@@ -127,7 +132,7 @@ int main(int argc, char ** argv) {
 
                     detected_parts = camera.get_detected_parts();
                     for(auto const& parts: detected_parts) {
-                        if (parts.first == "logical_camera_8" || parts.first == "logical_camera_10")    // agv cameras
+                        if (parts.first == "logical_camera_8" || parts.first == "logical_camera_10" || parts.first == "logical_camera_11")    // agv cameras
                             continue;
                         
                         index = 0;
@@ -138,35 +143,7 @@ int main(int argc, char ** argv) {
                               my_part_in_tray.type = product.type;
                               my_part_in_tray.pose = product.pose;
 
-<<<<<<< HEAD
-                                my_part_in_tray.type = product.type;
-                                my_part_in_tray.pose = product.pose;
-
-                                moveToPresetLocation(presetLoc,parts.first,gantry);
-
-                                gantry.pickPart(my_part);
-                                moveToStartLocation(presetLoc,parts.first,gantry);
-                                gantry.placePart(my_part_in_tray, "agv2");
-                                
-                                // ros::spinOnce();
-                                // ROS_INFO_STREAM("checking if camera is faulty");
-                                // ROS_INFO_STREAM(camera.get_is_faulty());
-                                while(!camera.get_is_faulty()); //only exits if camera is faulty
-                                if(camera.get_is_faulty()) {
-                                    ROS_INFO_STREAM("i AM HERE CODING");
-                                    // ros::Duration(3.0).sleep();
-                                    camera.reset_is_faulty();
-                                    ROS_INFO_STREAM("Part is faulty");
-                                    gantry.presetArmLocation(gantry.start_);
-                                    // ROS_INFO_STREAM(camera.get_faulty_pose());
-                                    temp.pose = camera.get_faulty_pose();
-                                    gantry.pickPart(temp);
-                                    
-                                }
-                                moveToStartLocation(presetLoc,"start",gantry);
-=======
                               moveToPresetLocation(presetLoc,parts.first,gantry);
->>>>>>> e0f5695df434c93119289d15ad703c4b0a630d3b
 
                               gantry.pickPart(my_part);
                               moveToStartLocation(presetLoc,parts.first,gantry);
@@ -188,7 +165,8 @@ int main(int argc, char ** argv) {
              }
          }
      }
-
+    
+     ROS_INFO_STREAM("pRINT I AM HERE");
        
      ros::spinOnce();
      while(camera.get_is_faulty()) {
@@ -197,15 +175,21 @@ int main(int argc, char ** argv) {
         part temp;
 
         temp.pose = camera.get_faulty_pose();
+       // temp.type = "pulley_part_red";
+        temp.type = "disk_part_blue";
         ROS_INFO_STREAM(temp.pose);
 
-        moveToStartLocation(presetLoc,"agv2",gantry);
+        moveToPresetLocation(presetLoc,"agv2",gantry);
+        ROS_INFO_STREAM("no nononononononoons");
         gantry.pickPart(temp);
+        ROS_INFO_STREAM("Hahahahahahaha");
         moveToStartLocation(presetLoc,"start",gantry);
 
         //gantry.placePart(temp);
         //gantry.dropPart(temp);
         //gantry.presetArmLocation(gantry.start_);
+        camera.reset_is_faulty();
+        gantry.deactivateGripper("left_arm");
         ros::spinOnce();
     }
 
