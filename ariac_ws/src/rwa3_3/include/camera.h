@@ -33,11 +33,12 @@ class Camera{
 
     void init(ros::NodeHandle & node);
 
-    std::map<std::string,std::vector<part>> get_detected_parts();
+    //std::map<std::string,std::vector<part>> get_detected_parts();
+    std::map<std::string,part> get_detected_parts();
 
     Camera();
 
-    void remove_part(std::string logical_camera, int index);
+    //void remove_part(std::string logical_camera, int index);
 
     void reset_is_faulty();
 
@@ -50,14 +51,14 @@ class Camera{
   private:
     ros::Subscriber logical_camera_subscriber[NUM_LOGICAL_CAMERAS];
     //std::map<std::string,std::vector<geometry_msgs::PoseStamped>> detected_parts;
-    std::map<std::string,std::vector<part>> detected_parts;
+    //std::map<std::string,std::vector<part>> detected_parts;
+
+    std::map<std::string,part> detected_parts;
 
     ros::Subscriber quality_sensor_subscriber;  
     bool is_faulty;
     
     geometry_msgs::Pose faulty_pose;
-    
-
 };
 
 

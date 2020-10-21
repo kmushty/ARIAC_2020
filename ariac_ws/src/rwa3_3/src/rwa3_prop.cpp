@@ -37,13 +37,13 @@
 #include <tf2/LinearMath/Quaternion.h>
 
 
-// @TODO may be modified in future
 void set_preset_loc(std::map<std::string,std::vector<PresetLocation>> &presetLoc, GantryControl &gantry){
     presetLoc["logical_camera_2"] = {gantry.bin16_};
     presetLoc["logical_camera_6"] = {gantry.bin13_};
     presetLoc["logical_camera_11"] = {gantry.shelf5_1_, gantry.shelf5_2_, gantry.shelf5_3_};
     presetLoc["logical_camera_14"] = {gantry.shelf5_1_, gantry.shelf5_2_, gantry.shelf5_4_};
     presetLoc["start"] = {gantry.start_};
+    presetLoc["agv2"] = {gantry.agv2_};
     // presetLoc["Drop"] = {gantry.drop_};
 }
 
@@ -59,11 +59,8 @@ void moveToPresetLocation(std::map<std::string,std::vector<PresetLocation>> &pre
 void moveToStartLocation(std::map<std::string,std::vector<PresetLocation>> &presetLoc, std::string location,GantryControl &gantry){
     auto vec = presetLoc[location];
     if(vec.size() == 1)
-        gantry.goToPresetLocation(gantry.start_);
+        gantry.goToPresetLocation(vec[0]);
     else{
-        // vec.pop_back();
-        // std::reverse(vec.begin(), vec.end());
-//        vec.push_back(gantry.start_);
         for(int i=vec.size()-2; i>=0;i--){
             gantry.goToPresetLocation(vec[i]);
         }
@@ -111,42 +108,37 @@ int main(int argc, char ** argv) {
     bool foundPart = false;
     int index = 0;
     part my_part, my_part_in_tray;
-    std::map<std::string,std::vector<part>> detected_parts;
+    //std::map<std::string,std::vector<part>> detected_parts;
+    std::map<std::string,part> detected_parts;
+    
     std::map<std::string,std::vector<PresetLocation>> presetLoc;
     set_preset_loc(presetLoc, gantry);
 
 
-    for(auto order: orders){  // @TODO May need to modify here
+    for(auto order: orders){  
 
         for(auto ship : order.shipments){
             agvId = ship.agv_id;
 
-            ROS_INFO_STREAM(agvId);
-
             for (auto product : ship.products){
 
-                foundPart = false;
-                while(!foundPart){
+                foundPart = false; 
+                while(!foundPart){                                                                      // poll until we find part
 
                     detected_parts = camera.get_detected_parts();
                     for(auto const& parts: detected_parts) {
-                        if (parts.first == "logical_camera_8" || parts.first == "logical_camera_10"){
+                        if (parts.first == "logical_camera_8" || parts.first == "logical_camera_10")    // agv cameras
                             continue;
-                        }
                         
-                        ROS_INFO_STREAM(parts.first);
-
                         index = 0;
-                        for(auto part: parts.second){
-                            ROS_INFO_STREAM("I am heree");
-                            if(product.type == part.type.c_str()){
-                                my_part = part;
-                                foundPart = true;
+                        if(product.type == parts.second.type.c_str()){
+                              my_part = parts.second;
+                              foundPart = true;
 
-                                ROS_INFO_STREAM(product.type);
-                                ROS_INFO_STREAM("I am heree2");
-                                ROS_INFO_STREAM(parts.first);
+                              my_part_in_tray.type = product.type;
+                              my_part_in_tray.pose = product.pose;
 
+<<<<<<< HEAD
                                 my_part_in_tray.type = product.type;
                                 my_part_in_tray.pose = product.pose;
 
@@ -172,17 +164,24 @@ int main(int argc, char ** argv) {
                                     
                                 }
                                 moveToStartLocation(presetLoc,"start",gantry);
+=======
+                              moveToPresetLocation(presetLoc,parts.first,gantry);
+>>>>>>> e0f5695df434c93119289d15ad703c4b0a630d3b
 
+                              gantry.pickPart(my_part);
+                              moveToStartLocation(presetLoc,parts.first,gantry);
+                              gantry.placePart(my_part_in_tray, "agv2");
+                              
+                              moveToStartLocation(presetLoc,"start",gantry);
 
-                                camera.remove_part(parts.first, index);
-                                index++;
+                              //camera.remove_part(parts.first, index);
+                              //index++;
 
-                                break;
-                            }
+                              break;
+                          }
 
                         }
 
-                    }
                     ros::spinOnce();
                 }
 
@@ -190,6 +189,25 @@ int main(int argc, char ** argv) {
          }
      }
 
+       
+     ros::spinOnce();
+     while(camera.get_is_faulty()) {
+        ROS_INFO_STREAM("removing faulty parts");
+        
+        part temp;
+
+        temp.pose = camera.get_faulty_pose();
+        ROS_INFO_STREAM(temp.pose);
+
+        moveToStartLocation(presetLoc,"agv2",gantry);
+        gantry.pickPart(temp);
+        moveToStartLocation(presetLoc,"start",gantry);
+
+        //gantry.placePart(temp);
+        //gantry.dropPart(temp);
+        //gantry.presetArmLocation(gantry.start_);
+        ros::spinOnce();
+    }
 
     comp.endCompetition();
     spinner.stop();
@@ -201,7 +219,7 @@ int main(int argc, char ** argv) {
 
 
 
-    //gantry.goToPresetLocation(gantry.bin3_);
+//gantry.goToPresetLocation(gantry.bin3_);
 
 //                auto detected_parts = camera.get_detected_parts();
 //                while(detected_parts.size()<=0)                    //Polling for detected_part
@@ -244,3 +262,57 @@ int main(int argc, char ** argv) {
 //--Go place the part
 //gantry.placePart(part_in_tray, "agv2");
 
+
+
+
+                //while(!foundPart){                                                                      // poll until we find part
+
+                    //detected_parts = camera.get_detected_parts();
+                    //for(auto const& parts: detected_parts) {
+                        //if (parts.first == "logical_camera_8" || parts.first == "logical_camera_10")   // agv cameras
+                            //continue;
+                        
+                        //index = 0;
+                        //for(auto pt: parts.second){
+                            //if(product.type == pt.type.c_str()){
+                                //my_part = pt;
+                                //foundPart = true;
+
+                                //my_part_in_tray.type = product.type;
+                                //my_part_in_tray.pose = product.pose;
+
+                                //moveToPresetLocation(presetLoc,parts.first,gantry);
+
+                                //gantry.pickPart(my_part);
+                                //moveToStartLocation(presetLoc,parts.first,gantry);
+                                //gantry.placePart(my_part_in_tray, "agv2");
+                                
+                                //ROS_INFO_STREAM(camera.get_is_faulty());
+                                //while(!camera.get_is_faulty()); //only exits if camera is faulty
+                                //if(camera.get_is_faulty()) {
+                                     //ros::Duration(3.0).sleep();
+                                    //ROS_INFO_STREAM("I hate coding");
+                                    //camera.reset_is_faulty();
+                                    //ROS_INFO_STREAM("Part is faulty");
+                                    //gantry.presetArmLocation(gantry.start_);
+                                    
+                                    //part temp; 
+                                    //temp.pose = camera.get_faulty_pose();
+                                    //ROS_INFO_STREAM(temp.pose);
+                                    //gantry.pickPart(temp);
+                                    
+                                //}
+
+                                //moveToStartLocation(presetLoc,"start",gantry);
+
+                                //camera.remove_part(parts.first, index);
+                                //index++;
+
+                                //break;
+                            //}
+
+                        //}
+
+                    //}
+                    //ros::spinOnce();
+                //}

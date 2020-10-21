@@ -50,7 +50,8 @@ const nist_gear::LogicalCameraImage::ConstPtr &msg, int index) {
                      //p_w.pose.orientation.w);
             
            std::string key = "logical_camera_" + std::to_string(index); 
-           detected_parts[key].push_back(mypart);
+           //detected_parts[key].push_back(mypart);
+           detected_parts[key] = mypart;
         }
     }
 }
@@ -89,37 +90,60 @@ void Camera::init(ros::NodeHandle & node){
       topic = otopic.str();
 
       logical_camera_subscriber[index]= node.subscribe<nist_gear::LogicalCameraImage>(
-        topic, 10, boost::bind(&Camera::logical_camera_callback, this, _1, index));
+        topic, 1, boost::bind(&Camera::logical_camera_callback, this, _1, index));
   }
 
   
   quality_sensor_subscriber = node.subscribe(
-       "/ariac/quality_control_sensor_1", 10, &Camera::quality_control_sensor_callback,this
+       "/ariac/quality_control_sensor_1", 1, &Camera::quality_control_sensor_callback,this
        );
 
   is_faulty = false;
 }
 
 
-std::map<std::string,std::vector<part>>  Camera::get_detected_parts(){
+//std::map<std::string,std::vector<part>>  Camera::get_detected_parts(){
+    //return detected_parts;
+//}
+
+std::map<std::string,part>  Camera::get_detected_parts(){
     return detected_parts;
 }
 
 
-void Camera::remove_part(std::string logical_camera,  int index){
-    auto vec =  detected_parts[logical_camera];
-    vec.erase(vec.begin()+index);
-}
+//void Camera::remove_part(std::string logical_camera,  int index){
+    //auto vec =  detected_parts[logical_camera];
+    //vec.erase(vec.begin()+index);
+//}
 
 
 void Camera::quality_control_sensor_callback(const nist_gear::LogicalCameraImage &msg){
-    if(msg.models.size() > 0) 
+  if(msg.models.size() > 0) {
+        //ROS_INFO_STREAM("msg obtainted" << msg.models[8].pose);
+
         is_faulty = true;
+   
+        tf2_ros::Buffer tfBuffer;
+        tf2_ros::TransformListener tfListener(tfBuffer);
+        ros::Duration timeout(5.0);
+
+        geometry_msgs::TransformStamped T_w_l;
+        geometry_msgs::PoseStamped p_w, p_l;
+
+        p_l.pose = msg.models[0].pose;
+        T_w_l = tfBuffer.lookupTransform("world", "quality_control_sensor_1_frame", ros::Time(0), timeout);
+
+        //ROS_INFO_STREAM("Pose of part in camera frame" << p_l.pose);
+        tf2::doTransform(p_l, p_w, T_w_l);
+        //ROS_INFO_STREAM("Pose of part in world frame" << p_w.pose);
+
+        faulty_pose = p_w.pose;
+  }
 }
 
 
 void Camera::reset_is_faulty(){
-   is_faulty = false;
+    is_faulty = false;
 }
 
 
@@ -127,5 +151,9 @@ bool Camera::get_is_faulty() {
   return is_faulty;
 }
 
+
+geometry_msgs::Pose Camera::get_faulty_pose() {
+   return faulty_pose;
+}
 
 
