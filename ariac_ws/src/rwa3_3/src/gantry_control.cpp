@@ -53,13 +53,12 @@ void GantryControl::init() {
     agv2_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
     agv2_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
 
+//    agv2_.gantry = {0, 6.30, 0};
+//    agv2_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
+//    agv2_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
    //--bin13
-    // bin13_.gantry = {3.32, 1.12, 3.77};//, 2.10};
-    // bin13_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
-    // bin13_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
-
-
-     bin13_.gantry = {3.10, 1.68, 3.77};//, 2.10};
+    bin13_.gantry = {3.10, 1.68, 3.77};//, 2.10};
     bin13_.left_arm = {0, -0.63, 1.26, -0.78, PI/2, 0};
     bin13_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
 
@@ -88,6 +87,61 @@ void GantryControl::init() {
     shelf5_4_.left_arm = {-1.39, -0.75, 1.26, 0, 0.28, 1.38};
     shelf5_4_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
 
+    go_to_flipped_pulley_.gantry = {0, 6.2, 0};
+    go_to_flipped_pulley_.left_arm = {1.84, -2.73, -1.88, -0.2, 1.63, 0};
+    go_to_flipped_pulley_.right_arm = {1.75, -3.35, -1.4, 0.13, 1.51, 0};
+
+    agv2_flipped1_.gantry = {0.6, 6.9, 0};
+    agv2_flipped1_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
+    // agv2_flipped1_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+    agv2_flipped1_.right_arm =  {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+    agv2_flipped_.gantry = {0.6, 6.58, 0};
+    agv2_flipped_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
+    agv2_flipped_.right_arm = {1.57, -1.57, -2.26, 0.13, 0, 0.13};
+
+
+  void GantryControl::placePart(part part, std::string agv, std::string arm){
+     auto target_pose_in_tray = getTargetWorldPose(part.pose, agv, arm);
+      ros::Duration(3.0).sleep();
+      goToPresetLocation(agv2_);
+      target_pose_in_tray.position.z += (ABOVE_TARGET + 1.5*model_height[part.type]);
+
+      left_arm_group_.setPoseTarget(target_pose_in_tray);
+      left_arm_group_.move();
+      deactivateGripper("left_arm");
+      auto state = getGripperState("left_arm");
+      if (state.attached)
+          goToPresetLocation(start_);
+  }
+
+  void GantryControl::placeFlippedPart(part part, std::string agv, std::string arm){
+      ROS_INFO_STREAM("target Pose is"<< part.pose);
+      auto target_pose_in_tray = getTargetWorldPose(part.pose, agv, arm);
+
+      target_pose_in_tray.orientation.x = -0.710413;
+      target_pose_in_tray.orientation.y = 0.00131;
+      target_pose_in_tray.orientation.z = 0.7037;
+      target_pose_in_tray.orientation.w = -0.0018;
+
+      ROS_INFO_STREAM("target Pose in tray is"<< target_pose_in_tray);
+
+      ros::Duration(3.0).sleep();
+      goToPresetLocation(agv2_flipped1_);
+     // target_pose_in_tray.position.z += (ABOVE_TARGET + 1.5*model_height[part.type]);
+      
+      target_pose_in_tray.position.z += (ABOVE_TARGET + 1.5*model_height[part.type]);
+
+  //    target_pose_in_tray.orientation.x = 0;
+      ROS_INFO("Target orientation");
+      ROS_INFO_STREAM(target_pose_in_tray.orientation);
+      right_arm_group_.setPoseTarget(target_pose_in_tray);
+      right_arm_group_.move();
+      deactivateGripper("right_arm");
+      auto state = getGripperState("right_arm");
+      if (state.attached)
+          goToPresetLocation(start_);
+  }
      
 
     /*
@@ -381,7 +435,8 @@ bool GantryControl::pickPart(part part){
                 state = getGripperState("left_arm");
                 // ros::spinOnce();
         }
-    }}
+    }
+    }
     else {
         ROS_INFO_STREAM("[Gripper] = not enabled");
     }
