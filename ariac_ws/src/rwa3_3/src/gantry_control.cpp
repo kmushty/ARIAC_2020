@@ -44,6 +44,101 @@ void GantryControl::init() {
     start_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
 
     //--bin3
+    //--bin13
+    // bin13_.gantry = {3.32, 1.12, 3.77};//, 2.10};
+    // bin13_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
+    // bin13_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+
+    bin13_.gantry = {3.10, 1.68, 3.77};//, 2.10};
+    bin13_.left_arm = {0, -0.63, 1.26, -0.78, PI/2, 0};
+    bin13_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+    //--agv2
+    agv2_.gantry = {0.6, 6.9, PI};
+    agv2_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
+    agv2_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+//    agv2_.gantry = {0, 6.30, 0};
+//    agv2_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
+//    agv2_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+//    //--bin13
+//     bin13_.gantry = {3.10, 1.68, 3.77};//, 2.10};
+//     bin13_.left_arm = {0, -0.63, 1.26, -0.78, PI/2, 0};
+//     bin13_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+    //--bin13
+    bin13_.gantry = {1.85, 2.14,0};//, 2.10};
+    // bin13_.left_arm = {0, -1.45, 1.58, -0.13, PI/2, -0.88};
+    bin13_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
+    bin13_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+//   //--bin16
+//    bin16_.gantry = {6.25, 1.96, -3.14};
+//    bin16_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
+//    bin16_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+    //--bin16
+    bin16_.gantry = {4.60, 1.95, 0};
+    bin16_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
+    bin16_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+    //--shelf5 - waypoint 1
+    shelf5_1_.gantry = {0.0, -4.76, 0};
+    shelf5_1_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
+    shelf5_1_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+    //--shelf5 - waypoint 2
+//    shelf5_2_.gantry = {-15.13, -5.46, 0};
+//    shelf5_2_.left_arm = {-1.25, -PI/2, PI/2, 0, 0.25, 1.38};
+//    shelf5_2_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+//
+//    //--shelf5 - waypoint 3
+//    shelf5_3_.gantry = {-14.23, -4.25, 0};
+//    shelf5_3_.left_arm = {-1.39, -0.75, 1.26, 0, 0.28, 1.38};
+//    shelf5_3_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+    shelf5_2_.gantry = {-15.13, -5.46, 0};
+    shelf5_2_.left_arm = {-1.88, -0.73, 1.46, -0.76, 0.25, -1.88};
+    shelf5_2_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+    //--shelf5 - waypoint 3
+//    shelf5_3_.gantry = {-14.23, -4.25, 0};
+//    shelf5_3_.left_arm = {-1.39, -0.75, 1.26, 0, 0.28, 1.38};
+//    shelf5_3_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+    shelf5_3_.gantry = {-14.68, -4.34, 0};
+    shelf5_3_.left_arm = {-1.88, -0.73, 1.46, -0.76, -0.25, 0};
+    shelf5_3_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+    //--shelf5 - waypoint 4
+    shelf5_4_.gantry = {-15.19, -5.46, 0};
+    shelf5_4_.left_arm = {-1.39, -0.75, 1.26, 0, 0.28, 1.38};
+    shelf5_4_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+    shelf5_5_.gantry = {-15.19, -4.25, 0};
+    shelf5_5_.left_arm = {-1.39, -0.75, 1.26, 0, 0.28, 1.38};
+    shelf5_5_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+    go_to_flipped_pulley_.gantry = {0, 6.2, 0};
+    go_to_flipped_pulley_.left_arm = {1.84, -2.73, -1.88, -0.2, 1.63, 0};
+    go_to_flipped_pulley_.right_arm = {1.75, -3.35, -1.4, 0.13, 1.51, 0};
+
+    agv2_flipped1_.gantry = {0.6, 6.9, 0};
+    agv2_flipped1_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
+    // agv2_flipped1_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+    agv2_flipped1_.right_arm =  {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+    agv2_flipped_.gantry = {0.6, 6.58, 0};
+    agv2_flipped_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
+    agv2_flipped_.right_arm = {1.57, -1.57, -2.26, 0.13, 0, 0.13};
+
+    /*
+     //--start location
+    start_.gantry = {0,0,0};
+    start_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
+    start_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+    //--bin3
     bin3_.gantry = {4.0, -1.1, 0.};
     bin3_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
     bin3_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
@@ -53,8 +148,55 @@ void GantryControl::init() {
     agv2_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
     agv2_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
 
+//    agv2_.gantry = {0, 6.30, 0};
+//    agv2_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
+//    agv2_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+   //--bin13
+    bin13_.gantry = {3.10, 1.68, 3.77};//, 2.10};
+    bin13_.left_arm = {0, -0.63, 1.26, -0.78, PI/2, 0};
+    bin13_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+   //--bin16
+    bin16_.gantry = {6.25, 1.96, -3.14};
+    bin16_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
+    bin16_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+    //--shelf5 - waypoint 1
+    shelf5_1_.gantry = {0.0, -4.76, 0};
+    shelf5_1_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
+    shelf5_1_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+    //--shelf5 - waypoint 2
+    shelf5_2_.gantry = {-15.13, -5.46, 0};
+    shelf5_2_.left_arm = {-1.25, -PI/2, PI/2, 0, 0.25, 1.38};
+    shelf5_2_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+    //--shelf5 - waypoint 3
+    shelf5_3_.gantry = {-14.23, -4.25, 0};
+    shelf5_3_.left_arm = {-1.39, -0.75, 1.26, 0, 0.28, 1.38};
+    shelf5_3_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+    //--shelf5 - waypoint 4
+    shelf5_4_.gantry = {-15.19, -4.25, 0};
+    shelf5_4_.left_arm = {-1.39, -0.75, 1.26, 0, 0.28, 1.38};
+    shelf5_4_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};     
 
 
+  */   
+
+
+
+
+
+
+     
+
+
+//    //--shelf5 - waypoint 4
+//    shelf5_5_.gantry = {-15.13, -4.62, -0.13};
+//    shelf5_5_.left_arm = {-1.51, -0.5, 0.88, 4.65, 0, 0};
+//    shelf5_5_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
 //    tf2_ros::Buffer tfBuffer;
 //    tf2_ros::TransformListener tfListener(tfBuffer);
 //    ros::Rate rate(10);
@@ -165,7 +307,7 @@ stats GantryControl::getStats(std::string function) {
 }
 
 geometry_msgs::Pose GantryControl::getTargetWorldPose(geometry_msgs::Pose target,
-                                                      std::string agv){
+                                                      std::string agv, std::string arm){
     static tf2_ros::StaticTransformBroadcaster br;
     geometry_msgs::TransformStamped transformStamped;
 
@@ -200,22 +342,34 @@ geometry_msgs::Pose GantryControl::getTargetWorldPose(geometry_msgs::Pose target
     for (int i=0; i< 10; i++) {
         try {
             world_target_tf = tfBuffer.lookupTransform("world", "target_frame",
+                                                       ros::Time(0), timeout);
+        }
+        catch (tf2::TransformException &ex) {
+            ROS_WARN("%s", ex.what());
+            ros::Duration(1.0).sleep();
+            continue;
+        }
+        if(arm == "right_arm") {
+            try {
+                ee_target_tf = tfBuffer.lookupTransform("target_frame", "right_ee_link",
                                                         ros::Time(0), timeout);
+            }
+            catch (tf2::TransformException &ex) {
+                ROS_WARN("%s", ex.what());
+                ros::Duration(1.0).sleep();
+                continue;
+            }
         }
-        catch (tf2::TransformException &ex) {
-            ROS_WARN("%s", ex.what());
-            ros::Duration(1.0).sleep();
-            continue;
-        }
-
-        try {
-            ee_target_tf = tfBuffer.lookupTransform("target_frame", "left_ee_link",
-                                                 ros::Time(0), timeout);
-        }
-        catch (tf2::TransformException &ex) {
-            ROS_WARN("%s", ex.what());
-            ros::Duration(1.0).sleep();
-            continue;
+        else{
+            try {
+                ee_target_tf = tfBuffer.lookupTransform("target_frame", "left_ee_link",
+                                                        ros::Time(0), timeout);
+            }
+            catch (tf2::TransformException &ex) {
+                ROS_WARN("%s", ex.what());
+                ros::Duration(1.0).sleep();
+                continue;
+            }
         }
     }
 
@@ -234,6 +388,7 @@ geometry_msgs::Pose GantryControl::getTargetWorldPose(geometry_msgs::Pose target
 bool GantryControl::pickPart(part part){
     //--Activate gripper
     activateGripper("left_arm");
+
 //    ros::AsyncSpinner spinner(1);
 //    spinner.start();
 
@@ -262,7 +417,7 @@ bool GantryControl::pickPart(part part){
             //--Move arm to previous position
             left_arm_group_.setPoseTarget(currentPose);
             left_arm_group_.move();
-            goToPresetLocation(start_);
+            /*goToPresetLocation(start_);*/
             return true;
         }
         else {
@@ -276,8 +431,11 @@ bool GantryControl::pickPart(part part){
                 left_arm_group_.setPoseTarget(part.pose);
                 left_arm_group_.move();
                 activateGripper("left_arm");
-            }
+                ROS_INFO_STREAM(state.attached);
+                state = getGripperState("left_arm");
+              // ros::spinOnce();
         }
+     }
     }
     else {
         ROS_INFO_STREAM("[Gripper] = not enabled");
@@ -317,8 +475,9 @@ bool GantryControl::pickPart(part part){
 //    ros::waitForShutdown();
 }
 
-void GantryControl::placePart(part part, std::string agv){
-   auto target_pose_in_tray = getTargetWorldPose(part.pose, agv);
+
+void GantryControl::placePart(part part, std::string agv, std::string arm){
+    auto target_pose_in_tray = getTargetWorldPose(part.pose, agv, arm);
     ros::Duration(3.0).sleep();
     goToPresetLocation(agv2_);
     target_pose_in_tray.position.z += (ABOVE_TARGET + 1.5*model_height[part.type]);
@@ -327,8 +486,56 @@ void GantryControl::placePart(part part, std::string agv){
     left_arm_group_.move();
     deactivateGripper("left_arm");
     auto state = getGripperState("left_arm");
-    if (state.attached)
-        goToPresetLocation(start_);
+    // if (state.attached)
+    //     goToPresetLocation(start_);
+}
+
+void GantryControl::placeFlippedPart(part part, std::string agv, std::string arm){
+    ROS_INFO_STREAM("target Pose is"<< part.pose);
+    auto target_pose_in_tray = getTargetWorldPose(part.pose, agv, arm);
+
+    target_pose_in_tray.orientation.x = -0.710413;
+    target_pose_in_tray.orientation.y = 0.00131;
+    target_pose_in_tray.orientation.z = 0.7037;
+    target_pose_in_tray.orientation.w = -0.0018;
+
+    ROS_INFO_STREAM("target Pose in tray is"<< target_pose_in_tray);
+
+    ros::Duration(3.0).sleep();
+    goToPresetLocation(agv2_flipped1_);
+    // target_pose_in_tray.position.z += (ABOVE_TARGET + 1.5*model_height[part.type]);
+
+    target_pose_in_tray.position.z += (ABOVE_TARGET + 1.5*model_height[part.type]);
+
+//    target_pose_in_tray.orientation.x = 0;
+    ROS_INFO("Target orientation");
+    ROS_INFO_STREAM(target_pose_in_tray.orientation);
+    right_arm_group_.setPoseTarget(target_pose_in_tray);
+    right_arm_group_.move();
+    deactivateGripper("right_arm");
+    auto state = getGripperState("right_arm");
+    // if (state.attached)
+    //     goToPresetLocation(start_);
+}
+
+
+
+void GantryControl::presetArmLocation(PresetLocation location) {
+    //--left arm
+    joint_group_positions_.at(3) = location.left_arm.at(0);
+    joint_group_positions_.at(4) = location.left_arm.at(1);
+    joint_group_positions_.at(5) = location.left_arm.at(2);
+    joint_group_positions_.at(6) = location.left_arm.at(3);
+    joint_group_positions_.at(7) = location.left_arm.at(4);
+    joint_group_positions_.at(8) = location.left_arm.at(5);
+
+    //--right arm
+    joint_group_positions_.at(9) = location.right_arm.at(0);
+    joint_group_positions_.at(10) = location.right_arm.at(1);
+    joint_group_positions_.at(11) = location.right_arm.at(2);
+    joint_group_positions_.at(12) = location.right_arm.at(3);
+    joint_group_positions_.at(13) = location.right_arm.at(4);
+    joint_group_positions_.at(14) = location.right_arm.at(5);
 }
 
 void GantryControl::goToPresetLocation(PresetLocation location) {

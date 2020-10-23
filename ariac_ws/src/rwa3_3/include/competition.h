@@ -35,6 +35,11 @@ public:
     std::string getCompetitionState();
     stats getStats(std::string function);
 
+    /***********************************
+     ******** New Modifications********
+    ***********************************/
+    std::vector<nist_gear::Order> getOrders();
+
 private:
     ros::NodeHandle node_;
 
@@ -47,6 +52,7 @@ private:
     ros::Subscriber competition_state_subscriber_;
     ros::Subscriber competition_clock_subscriber_;
     ros::Subscriber orders_subscriber_;
+
     std::vector<nist_gear::Order> received_orders_;
 
     // to collect statistics

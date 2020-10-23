@@ -187,10 +187,12 @@ int main(int argc, char ** argv) {
     //   1. Starting the competition
     //   2. Creating a subsrciber to ariac/orders
 
+    ROS_INFO("Checkpoint - 1");
     OrderSubscriberClass orderObject(node);
     ros::Subscriber orderSub = node.subscribe<nist_gear::Order>
     ("/ariac/orders", 10, boost::bind(&OrderSubscriberClass::ordersCallback, &orderObject, _1));
     orderDetails = orderObject.returnOrderMessage();
+    ROS_INFO("Checkpoint - 2");
 
     // Testing
 //     ROS_INFO("%f",orderDetails->shipments[0].products[0].pose.position.x);
@@ -198,51 +200,54 @@ int main(int argc, char ** argv) {
 
     //--2-Look for parts in this order
     // Creating subscribers for logical cameras
-    ros::Subscriber logical_camera_subscriber[maxLogicalCamera];
+    ros::Subscriber logical_camera_subscriber;
     MyCompetitionClass comp_class(node);
+
+    ROS_INFO("%s",orderDetails->order_id.c_str());
 
     //--2-Look for parts in this order
     for(auto sm : orderDetails->shipments){
         agvId = sm.agv_id;
-        for(auto product : sm.products){
-            for(int index = 0; index < maxLogicalCamera; index++) {
-                otopic.str(""); otopic.clear();
-                otopic << "/ariac/logical_camera_" << (index);
-                topic = otopic.str();
+//        for(auto product : sm.products){
+//        for(int index = 0; index < maxLogicalCamera; index++) {
+            otopic.str(""); otopic.clear();
+            otopic << "/ariac/logical_camera_" << (11);
+            topic = otopic.str();
 
-                logical_camera_subscriber[index]= node.subscribe<nist_gear::LogicalCameraImage>(
-                topic, 10, boost::bind(&MyCompetitionClass::logical_camera_callback, &comp_class, _1, index, product.type));
+            ROS_INFO("Checkpoint - 3");
+//            logical_camera_subscriber = node.subscribe<nist_gear::LogicalCameraImage>(
+//            topic, 10, boost::bind(&MyCompetitionClass::logical_camera_callback, &comp_class, _1, 11, sm.products[0].type));
+            ROS_INFO("Checkpoint - 4");
+            // Getting target part details
+            requiredPart = comp_class.partDetails();
+            //--get pose of part in tray from /ariac/orders
+            part_in_tray.type = sm.products[0].type;
+            part_in_tray.pose.position.x = sm.products[0].pose.position.x;
+            part_in_tray.pose.position.x = sm.products[0].pose.position.y;
+            part_in_tray.pose.position.x = sm.products[0].pose.position.z;
+            part_in_tray.pose.orientation.x = sm.products[0].pose.orientation.x;
+            part_in_tray.pose.orientation.y = sm.products[0].pose.orientation.y;
+            part_in_tray.pose.orientation.z = sm.products[0].pose.orientation.z;
+            part_in_tray.pose.orientation.w = sm.products[0].pose.orientation.w;
 
-                // Getting target part details
-                requiredPart = comp_class.partDetails();
-                //--get pose of part in tray from /ariac/orders
-                part_in_tray.type = product.type;
-                part_in_tray.pose.position.x = product.pose.position.x;
-                part_in_tray.pose.position.x = product.pose.position.y;
-                part_in_tray.pose.position.x = product.pose.position.z;
-                part_in_tray.pose.orientation.x = product.pose.orientation.x;
-                part_in_tray.pose.orientation.y = product.pose.orientation.y;
-                part_in_tray.pose.orientation.z = product.pose.orientation.z;
-                part_in_tray.pose.orientation.w = product.pose.orientation.w;
-
-                //--Go pick the part
-                //#############################################
-                // TODO
-                //--We go to this bin because a camera above
-                // --this bin found one of the parts in the order
-                // gantry.goToPresetLocation(gantry.bin3_);
-                //##############################################
-                gantry.goToPresetLocation(gantry.bin3_);
-                gantry.pickPart(requiredPart);
-                //--Go place the part
-                if(agvId == "any" || agvId == "agv2") {
-                    gantry.placePart(part_in_tray, "agv2");
-                    quaSenName = "/ariac/quality_control_sensor_1";
-                }
-                else {
-                    gantry.placePart(part_in_tray, "agv1");
-                    quaSenName = "/ariac/quality_control_sensor_2";
-                }
+            //--Go pick the part
+            //#############################################
+            // TODO
+            //--We go to this bin because a camera above
+            // --this bin found one of the parts in the order
+            // gantry.goToPresetLocation(gantry.bin3_);
+            //##############################################
+            gantry.goToPresetLocation(gantry.bin3_);
+            gantry.pickPart(requiredPart);
+            //--Go place the part
+            if(agvId == "any" || agvId == "agv2") {
+                gantry.placePart(part_in_tray, "agv2");
+                quaSenName = "/ariac/quality_control_sensor_1";
+            }
+            else {
+                gantry.placePart(part_in_tray, "agv1");
+                quaSenName = "/ariac/quality_control_sensor_2";
+            }
 
 //              FaultyPartDetectReplaceClass qualityCheck(node);
 //              ros::Subscriber qualitySensorsSub;
@@ -250,8 +255,8 @@ int main(int argc, char ** argv) {
 //              qualitySensorsSub = node.subscribe<nist_gear::LogicalCameraImage>
 //              (quaSenName, 10, boost::bind(&FaultyPartDetectReplaceClass::qualitySensorCallback, &qualityCheck));
 
-            }
-        }
+//            }
+//        }
     }
     //--We go to this bin because a camera above
     //--this bin found one of the parts in the order

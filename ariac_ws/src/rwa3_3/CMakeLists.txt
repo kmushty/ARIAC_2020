@@ -29,6 +29,7 @@ find_package(catkin REQUIRED COMPONENTS
         tf2_geometry_msgs
         tf2_ros
         roscpp
+        geometry_msgs
         )
 
 find_package(Eigen3 REQUIRED)
@@ -156,11 +157,14 @@ include_directories(include ${catkin_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS})
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
 add_executable(rwa3_node
-        src/rwa3_node.cpp
+        #src/rwa3_node.cpp
+        #src/rwa3_1.cpp
+        src/rwa3_prop.cpp
+        src/camera.cpp
         src/competition.cpp
         src/gantry_control.cpp
         src/utils.cpp
-        )
+    )
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
