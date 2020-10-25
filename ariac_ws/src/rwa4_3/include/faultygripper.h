@@ -17,20 +17,21 @@
 #include "utils.h"
 #include "gantry_control.h"
 
-class FaultyGripper{
+// Use of inheritance
+class FaultyGripper: public GantryControl{
 public:
     // Subsribing to logical cameras
     void init(ros::NodeHandle & node);
 
     // Takes care of faulty gripper scenario
-    void faultyGripperCheck(GantryControl &gantry, std::string agvId);
+    void faultyGripperCheck(std::string agvId);
 
     // For getting the part pose in world frame
     void logical_camera_callback(
     const nist_gear::LogicalCameraImage::ConstPtr &msg, int index);
 
     // Getting the actual pose of the part in agv tray
-    geometry_msgs::Pose getTargetPose(GantryControl &gantry);
+    geometry_msgs::Pose getTargetPose();
 
     bool comparePose(geometry_msgs::Pose placedPose, geometry_msgs::Pose requiredPose);
 
