@@ -64,7 +64,8 @@ void moveToStartLocation(std::map<std::string,std::vector<PresetLocation>> &pres
     auto vec = presetLoc[location];
     if(vec.size() == 1){
         gantry.goToPresetLocation(vec[0]);
-        gantry.goToPresetLocation(gantry.start_);
+        if(location != "start")
+            gantry.goToPresetLocation(gantry.start_);
     }
     else{
         for(int i=vec.size()-2; i>=0;i--){
@@ -189,7 +190,7 @@ int main(int argc, char ** argv) {
                               }else
                                   gantry.placePart(my_part_in_tray, "agv2", "left_arm");
 
-                              moveToStartLocation(presetLoc,"start",gantry);
+                              moveToStartLocation(presetLoc,"agv2",gantry);
 
 
                               ros::spinOnce();
@@ -208,18 +209,20 @@ int main(int argc, char ** argv) {
                                   ROS_INFO_STREAM("no nononononononoons");
                                   gantry.pickPart(temp);
                                   ROS_INFO_STREAM("Hahahahahahaha");
-                                  moveToStartLocation(presetLoc,"start",gantry);
+                                  moveToStartLocation(presetLoc,"agv2",gantry); // Inoder for the part not to hit agv tray
 
                                   //gantry.placePart(temp);
                                   //gantry.dropPart(temp);
                                   //gantry.presetArmLocation(gantry.start_);
+                                  ROS_INFO_STREAM("GETTING IS_FAULTY :"<< camera.get_is_faulty());
                                   foundPart = false;
                                   camera.reset_is_faulty();
+                                  ROS_INFO_STREAM("RESETTING IS_FAULTY :" << camera.get_is_faulty());
                                   gantry.deactivateGripper("left_arm");
                               }
 
                               //camera.remove_part(parts.first, index);
-                              //index++;
+                              //index++;11
 
                               break;
                           }
