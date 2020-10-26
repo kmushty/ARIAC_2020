@@ -191,7 +191,7 @@ int main(int argc, char ** argv) {
                             } else
                                 gantry.placePart(my_part_in_tray, agvId, "left_arm");
 
-                            moveToStartLocation(presetLoc, agvId, gantry);
+//                            moveToStartLocation(presetLoc, agvId, gantry);
 
                             //TODO Determining preset location for agv1
                             // Faulty Gripper Implementation
