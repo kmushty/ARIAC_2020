@@ -30,6 +30,7 @@
 #include <tf2_ros/transform_listener.h>
 #include <geometry_msgs/TransformStamped.h>
 #include <tf2_geometry_msgs/tf2_geometry_msgs.h> //--needed for tf2::Matrix3x3
+#include <tf2/transform_datatypes.h>
 
 #include "competition.h"
 #include "utils.h"
@@ -142,9 +143,11 @@ int main(int argc, char ** argv) {
     bool foundPart = false;
     int index = 0;
     part my_part, my_part_in_tray, placed_part, actual_part;
-    //std::map<std::string,std::vector<part>> detected_parts;
     std::map<std::string,part> detected_parts;
-    
+    float dis, dotProduct;
+    double yaw, pitch, roll;
+    double yaw1, pitch1, roll1;
+    double angleDiff;
     std::map<std::string,std::vector<PresetLocation>> presetLoc;
     set_preset_loc(presetLoc, gantry);
 
@@ -193,6 +196,8 @@ int main(int argc, char ** argv) {
 
 //                            moveToStartLocation(presetLoc, agvId, gantry);
 
+
+
                             //TODO Determining preset location for agv1
                             // Faulty Gripper Implementation
                             if (agvId == "agv2")
@@ -202,15 +207,39 @@ int main(int argc, char ** argv) {
 
                             actual_part.type = placed_part.type;
                             actual_part.pose = gantry.getTargetWorldPose(my_part_in_tray.pose, agvId, "left_arm");
-                            if(sqrt(pow(actual_part.pose.position.x - placed_part.pose.position.x, 2) +
-                                    pow(actual_part.pose.position.y - placed_part.pose.position.y, 2) +
-                                    pow(actual_part.pose.position.z - placed_part.pose.position.x, 2)) > 0.03) {
+                            dis = sqrt(pow(actual_part.pose.position.x - placed_part.pose.position.x, 2) +
+                                       pow(actual_part.pose.position.y - placed_part.pose.position.y, 2) +
+                                       pow(actual_part.pose.position.z - placed_part.pose.position.x, 2));
+
+                            dotProduct = actual_part.pose.orientation.x * placed_part.pose.orientation.x +
+                                         actual_part.pose.orientation.y * placed_part.pose.orientation.y +
+                                         actual_part.pose.orientation.z * placed_part.pose.orientation.z +
+                                         actual_part.pose.orientation.w * placed_part.pose.orientation.w;
+
+                            tf2::Quaternion q1(placed_part.pose.orientation.x,
+                                               placed_part.pose.orientation.y,
+                                               placed_part.pose.orientation.z,
+                                               placed_part.pose.orientation.w);
+                            tf2::Matrix3x3 m1(q1);
+                            m1.getRPY(roll, pitch, yaw);
+
+                            tf2::Quaternion q2(actual_part.pose.orientation.x,
+                                               actual_part.pose.orientation.y,
+                                               actual_part.pose.orientation.z,
+                                               actual_part.pose.orientation.w);
+                            tf2::Matrix3x3 m2(q2);
+                            m2.getRPY(roll1, pitch1, yaw1);
+                            angleDiff = yaw - yaw1;
+
+                            if(dis > 0.03 || abs(dotProduct) < 0.95 || (abs(angleDiff) > 0.1 && abs(abs(angleDiff) - 2* M_PI) > 0.1) ){
                                 ROS_INFO("Faulty Gripper Detected");
                                 ROS_INFO("Re-picking and replacing the part");
                                 moveToPresetLocation(presetLoc, agvId, gantry);
                                 gantry.pickPart(placed_part);
                                 gantry.placePart(actual_part, agvId, "left_arm");
                             }
+
+                            // Faulty gripper implemetation complete - Testing pending
 
 
                             ros::spinOnce();
