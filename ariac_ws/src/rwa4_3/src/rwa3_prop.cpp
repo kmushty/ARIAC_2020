@@ -104,6 +104,10 @@ void agvDeliveryService(ros::ServiceClient &agvDelivery){
     ROS_INFO("AGV delivery successful");
 }
 
+void faultyGripper(){
+
+}
+
 
 int main(int argc, char ** argv) {
     ros::init(argc, argv, "rwa3_node");

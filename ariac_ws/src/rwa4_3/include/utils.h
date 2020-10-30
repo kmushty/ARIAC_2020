@@ -92,10 +92,10 @@ typedef struct Product {
     std::string tray;
     std::string arm_name;
     std::string cache_id;
-    shipment* parent_shipment;
-    bool high_priority;
-    int correction_attempts;
-    int service_attempts;
+    shipment* parent_shipment{};
+    bool high_priority{};
+    int correction_attempts{};
+    int service_attempts{};
 
     Product(); // contructor
 } product;

@@ -159,12 +159,12 @@ include_directories(include ${catkin_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS})
 add_executable(rwa3_node
         #src/rwa3_node.cpp
         #src/rwa3_1.cpp
-        src/rwa3_prop.cpp
+#        src/rwa3_prop.cpp
         src/camera.cpp
         src/competition.cpp
         src/gantry_control.cpp
         src/utils.cpp
-    )
+  src/rwa4_prop.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -225,7 +225,8 @@ install(TARGETS rwa3_node
 install(FILES
         config/rwa3_sensor_kootbally.yaml
         config/rwa3-sample.yaml
-        launch/rwa3.launch
+#        launch/rwa3.launch
+		launch/rwa4.launch
         DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/config
         )
 
