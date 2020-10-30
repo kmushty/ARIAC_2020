@@ -57,6 +57,7 @@ void GantryControl::init() {
     //--agv2
     agv2_.gantry = {0.6, 6.9, PI};
     agv2_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
+//    agv2_.left_arm = {0.0, -1.01, 1.76, -PI/4, PI/2, 0};
     agv2_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
 
 //    agv2_.gantry = {0, 6.30, 0};
@@ -118,6 +119,19 @@ void GantryControl::init() {
     shelf5_5_.gantry = {-15.19, -4.25, 0};
     shelf5_5_.left_arm = {-1.39, -0.75, 1.26, 0, 0.28, 1.38};
     shelf5_5_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+    //--shelf8 - waypoint 1
+    shelf8_1_.gantry = {0.18, -1.50, 0};
+    shelf8_1_.left_arm = {-2.39, -PI/4, PI/2, -PI/4, 0, 0};
+    shelf8_1_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+    shelf8_2_.gantry = {-14.68, -1.50, 0};
+    shelf8_2_.left_arm = {-2.39, -PI/4, PI/2, -PI/4, 0, 0};
+    shelf8_2_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+    shelf8_3_.gantry = {-14.07, -1.14, 0};
+    shelf8_3_.left_arm = {-1.24, -PI/4, PI/2, -PI/4, 0.30, 0};
+    shelf8_3_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
 
     go_to_flipped_pulley_.gantry = {0, 6.2, 0};
     go_to_flipped_pulley_.left_arm = {1.84, -2.73, -1.88, -0.2, 1.63, 0};

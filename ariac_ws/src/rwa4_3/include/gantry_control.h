@@ -76,6 +76,11 @@ class GantryControl {
     shelf5_1 shelf5_1_;
     shelf5_2 shelf5_2_;
     shelf5_3 shelf5_3_;
+    // Added coordinates for shelf 8 to test faulty gripper functionality
+    shelf8_1 shelf8_1_;
+    shelf8_2 shelf8_2_;
+    shelf8_3 shelf8_3_;
+    /** -------------**/
     shelf5_4 shelf5_4_;
     shelf5_5 shelf5_5_;
     go_to_flipped_pulley go_to_flipped_pulley_;
