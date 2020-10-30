@@ -51,6 +51,7 @@ void set_preset_loc(std::map<std::string,std::vector<PresetLocation>> &presetLoc
 
     presetLoc["start"] = {gantry.start_};
     presetLoc["agv2"] = {gantry.agv2_};
+    presetLoc["agv2_faultyG"] = {gantry.agv2_faultyG_};
     // presetLoc["Drop"] = {gantry.drop_};
 }
 
@@ -152,6 +153,8 @@ int main(int argc, char ** argv) {
     double yaw, pitch, roll;
     double yaw1, pitch1, roll1;
     double angleDiff;
+    bool flippedPart;
+    nist_gear::VacuumGripperState armState;
     std::map<std::string,std::vector<PresetLocation>> presetLoc;
     set_preset_loc(presetLoc, gantry);
 
@@ -174,6 +177,7 @@ int main(int argc, char ** argv) {
                             continue;
 
                         index = 0;
+                        flippedPart = false;
                         if (product.type == parts.second.type.c_str()) {
                             my_part = parts.second;
                             foundPart = true;
@@ -195,11 +199,12 @@ int main(int argc, char ** argv) {
                                 gantry.goToPresetLocation(gantry.agv2_flipped_);
                                 my_part_in_tray.pose.orientation.x = 0;
                                 my_part_in_tray.pose.orientation.w = 1;
+                                flippedPart = true;
 
-                                gantry.placeFlippedPart(my_part_in_tray, agvId, "right_arm");
+//                                gantry.placeFlippedPart(my_part_in_tray, agvId, "right_arm");
                             }
-                            else
-                                gantry.placePart(my_part_in_tray, agvId, "left_arm");
+//                            else
+//                                gantry.placePart(my_part_in_tray, agvId, "left_arm");
 
 //                            moveToStartLocation(presetLoc, "start", gantry);
 
@@ -242,8 +247,14 @@ int main(int argc, char ** argv) {
                             m2.getRPY(roll1, pitch1, yaw1);
                             angleDiff = yaw - yaw1;
 
-                            if(dis > 0.03){// || abs(dotProduct) < 0.95 || (abs(angleDiff) > 0.1 && abs(abs(angleDiff) - 2* M_PI) > 0.1) ){
-                                ROS_INFO_STREAM(dis);
+                            if(flippedPart)
+                                armState = gantry.getGripperState("right_arm");
+                            else
+                                armState = gantry.getGripperState("left_arm");
+
+                            if(!armState.attached){// || abs(dotProduct) < 0.95 || (abs(angleDiff) > 0.1 && abs(abs(angleDiff) - 2* M_PI) > 0.1) ){
+                                ROS_INFO_STREAM(!armState.attached);
+                                moveToPresetLocation(presetLoc, agvId + "_faultyG", gantry);
                                 ros::Duration(5).sleep();
                                 ROS_INFO("Faulty Gripper Detected");
                                 ROS_INFO("Re-picking and replacing the part");
@@ -251,8 +262,12 @@ int main(int argc, char ** argv) {
                                 moveToPresetLocation(presetLoc, agvId, gantry);
                                 gantry.placePart(actual_part, agvId, "left_arm");
                             }
-//                            else
-//                                gantry.placePart(my_part_in_tray, agvId, "left_arm");
+                            else{
+                                if(flippedPart)
+                                    gantry.placeFlippedPart(my_part_in_tray, agvId, "right_arm");
+                                else
+                                    gantry.placePart(my_part_in_tray, agvId, "left_arm");
+                            }
 
                             // Faulty gripper implemetation complete - Testing pending
 

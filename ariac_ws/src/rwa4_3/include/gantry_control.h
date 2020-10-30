@@ -71,6 +71,7 @@ class GantryControl {
     start start_;
     bin3 bin3_;
     agv2 agv2_;
+    agv2_faultyG agv2_faultyG_;
     bin13 bin13_;
     bin16 bin16_;
     shelf5_1 shelf5_1_;

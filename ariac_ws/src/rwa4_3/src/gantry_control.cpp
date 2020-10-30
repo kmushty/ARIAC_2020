@@ -57,8 +57,16 @@ void GantryControl::init() {
     //--agv2
     agv2_.gantry = {0.6, 6.9, PI};
     agv2_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
-//    agv2_.left_arm = {0.0, -1.01, 1.76, -PI/4, PI/2, 0};
     agv2_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+    //--agv2_1 for faulty gripper
+//    agv2_faultyG_.gantry = {0.6, 6.9, PI};
+//    agv2_faultyG_.left_arm = {0.0, -1.01, 1.76, -PI/4, PI/2, 0};
+//    agv2_faultyG_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+    agv2_faultyG_.gantry = {0.7, 6.9, PI};
+    agv2_faultyG_.left_arm = {0.0, -1.38, 2.14, -PI/4, PI/2, 0};
+    agv2_faultyG_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
 
 //    agv2_.gantry = {0, 6.30, 0};
 //    agv2_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
