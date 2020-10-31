@@ -59,6 +59,11 @@ void GantryControl::init() {
     agv2_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
     agv2_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
 
+    //--agv1
+    agv1_.gantry = {-0.6, -6.9, 0.0};
+    agv1_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
+    agv1_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
     //--agv2_1 for faulty gripper
 //    agv2_faultyG_.gantry = {0.6, 6.9, PI};
 //    agv2_faultyG_.left_arm = {0.0, -1.01, 1.76, -PI/4, PI/2, 0};
@@ -77,11 +82,18 @@ void GantryControl::init() {
 //     bin13_.left_arm = {0, -0.63, 1.26, -0.78, PI/2, 0};
 //     bin13_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
 
+//    //--bin13
+//    bin13_.gantry = {1.85, 2.14,0};//, 2.10};
+//    // bin13_.left_arm = {0, -1.45, 1.58, -0.13, PI/2, -0.88};
+//    bin13_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
+//    bin13_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
     //--bin13
-    bin13_.gantry = {1.85, 2.14,0};//, 2.10};
+    bin13_.gantry = {2.10, 2.25,0};//, 2.10};
     // bin13_.left_arm = {0, -1.45, 1.58, -0.13, PI/2, -0.88};
-    bin13_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
+    bin13_.left_arm = {0.0, -PI/4, PI/2, -0.80, PI/2, 0};
     bin13_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
 
 //   //--bin16
 //    bin16_.gantry = {6.25, 1.96, -3.14};
@@ -149,6 +161,18 @@ void GantryControl::init() {
     shelf8_3_.left_arm = {-1.78, -PI/4, PI/2, -PI/4, -0.20, 0};
     shelf8_3_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
 
+    shelf11_1_.gantry = {0.18, 1.50, 0};
+    shelf11_1_.left_arm = {-2.39, -PI/4, PI/2, -PI/4, 0, 0};
+    shelf11_1_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+    shelf11_2_.gantry = {-14.68, 1.50, 0};
+    shelf11_2_.left_arm = {-2.39, -PI/4, PI/2, -PI/4, 0, 0};
+    shelf11_2_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+    shelf11_3_.gantry = {-14.55, 1.8, 0};
+    shelf11_3_.left_arm = {-1.78, -PI/4, PI/2, -PI/4, -0.20, 0};
+    shelf11_3_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
     go_to_flipped_pulley_.gantry = {0, 6.2, 0};
     go_to_flipped_pulley_.left_arm = {1.84, -2.73, -1.88, -0.2, 1.63, 0};
     go_to_flipped_pulley_.right_arm = {1.75, -3.35, -1.4, 0.13, 1.51, 0};
@@ -161,6 +185,15 @@ void GantryControl::init() {
     agv2_flipped_.gantry = {0.6, 6.58, 0};
     agv2_flipped_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
     agv2_flipped_.right_arm = {1.57, -1.57, -2.26, 0.13, 0, 0.13};
+
+    agv2_flipped1_.gantry = {0.6, 6.9, 0};
+    agv2_flipped1_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
+    // agv2_flipped1_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+    agv2_flipped1_.right_arm =  {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+    agv1_flipped_.gantry = {0.6, -6.58, 0};
+    agv1_flipped_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
+    agv1_flipped_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
 
     /*
      //--start location
