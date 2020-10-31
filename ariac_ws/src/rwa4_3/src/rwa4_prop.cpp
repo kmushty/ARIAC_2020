@@ -279,7 +279,7 @@ void processHPOrder(nist_gear::Order &order,Camera &camera, GantryControl &gantr
                 }
             }else
                 removeProduct(camera,gantry,prod);
-
+            
             moveFromLocationToStart(presetLoc,"start",gantry);
         }
     }
@@ -334,7 +334,7 @@ int main(int argc, char ** argv) {
             auto ship = order.shipments[j];
 
 
-            for (int k=0; j<ship.products.size(); k++){
+            for (int k=0; k<ship.products.size(); k++){
                 auto product = ship.products[k];
 
                 ROS_INFO_STREAM(product.type);
@@ -346,17 +346,21 @@ int main(int argc, char ** argv) {
                     processPart(prod, gantry, camera, false, false);
                 else
                     processHPOrder(comp.getOrders()[1],camera,gantry);
-
+                
+                ROS_INFO_STREAM("heere 1");
                 ros::spinOnce();
                 ros::spinOnce();
                 if(camera.get_is_faulty()) {
                     removeFaultyProduct(camera,gantry,prod);
                     k--;                                                                                                 //process product again
                 }
+                ROS_INFO_STREAM("heere 2");
                 moveFromLocationToStart(presetLoc,"start",gantry);
-
+                ROS_INFO_STREAM("heere x");
             }
+            ROS_INFO_STREAM("herex1");
         }
+        ROS_INFO_STREAM("here3");
         agvDeliveryService(agvDelivery);
     }
 
