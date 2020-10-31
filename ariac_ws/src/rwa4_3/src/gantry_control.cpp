@@ -137,8 +137,16 @@ void GantryControl::init() {
     shelf8_2_.left_arm = {-2.39, -PI/4, PI/2, -PI/4, 0, 0};
     shelf8_2_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
 
-    shelf8_3_.gantry = {-14.07, -1.14, 0};
-    shelf8_3_.left_arm = {-1.24, -PI/4, PI/2, -PI/4, 0.30, 0};
+    // shelf8_3_.gantry = {-14.07, -1.14, 0};
+    // shelf8_3_.left_arm = {-1.24, -PI/4, PI/2, -PI/4, 0.30, 0};
+    // shelf8_3_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+    // shelf8_3_.gantry = {-14.55, -1.14, 0};
+    // shelf8_3_.left_arm = {-1.57, -PI/4, PI/2, -PI/4, 0.0, 0};
+    // shelf8_3_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+    shelf8_3_.gantry = {-14.55, -1.2, 0};
+    shelf8_3_.left_arm = {-1.78, -PI/4, PI/2, -PI/4, -0.20, 0};
     shelf8_3_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
 
     go_to_flipped_pulley_.gantry = {0, 6.2, 0};
