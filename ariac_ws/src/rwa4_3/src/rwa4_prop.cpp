@@ -70,31 +70,29 @@ void initWayPoints(std::map<std::string,std::vector<PresetLocation>> &presetLoc,
 
     presetLoc["logical_camera_2"] = {gantry.bin16_};                                                          // waypoints from start position position to logical_camera
     presetLoc["logical_camera_6"] = {gantry.bin13_};
-
-
-    presetLoc["start"] = {gantry.start_};                                                                     // useful presetloc
-    presetLoc["agv2"] = {gantry.agv2_};
-    presetLoc["agv1"] = {gantry.agv1_};
-    presetLoc["agv2_faultyG"] = {gantry.agv2_faultyG_};
-
-
-    presetLoc["logical_camera_11"] = {gantry.shelf5_1_, gantry.shelf5_2_, gantry.shelf5_3_};                  // faulty gripper
+    presetLoc["logical_camera_11"] = {gantry.shelf5_1_, gantry.shelf5_2_, gantry.shelf5_3_};                  
     presetLoc["logical_camera_12"] = {gantry.shelf8_1_, gantry.shelf8_2_, gantry.shelf8_3_};
     presetLoc["logical_camera_15"] = {gantry.shelf8_1_, gantry.shelf8_2_, gantry.shelf8_3_};
     presetLoc["logical_camera_13"] = {gantry.shelf11_1_, gantry.shelf11_2_, gantry.shelf11_3_};
     presetLoc["logical_camera_16"] = {gantry.shelf11_1_, gantry.shelf11_2_, gantry.shelf11_3_};
 
-
+    presetLoc["start"] = {gantry.start_};                                                                     // useful presetloc
+    presetLoc["agv2"] = {gantry.agv2_};
+    presetLoc["agv1"] = {gantry.agv1_};
+    presetLoc["agv2_faultyG"] = {gantry.agv2_faultyG_};
+    //presetLoc["agv1_faultyG"] = {gantry.agv1_faultyG_};
+    presetLoc["flipped_pulley_"] = {gantry.go_to_flipped_pulley_};
+    presetLoc["agv2_flipped"]  = {gantry.agv2_flipped_};
+    presetLoc["agv1_flipped"]  = {gantry.agv1_flipped_};
 }
 
 
 
-void moveFromStartToLocation(std::map<std::string,std::vector<PresetLocation>> &presetLoc, std::string location,GantryControl &gantry){
+void moveToLocation(std::map<std::string,std::vector<PresetLocation>> &presetLoc, std::string location,GantryControl &gantry){
     auto vec = presetLoc[location];
     for(auto waypoint :vec)
         gantry.goToPresetLocation(waypoint);
 }
-
 
 
 void moveFromLocationToStart(std::map<std::string,std::vector<PresetLocation>> &presetLoc, std::string location,GantryControl &gantry) {
@@ -111,7 +109,8 @@ void moveFromLocationToStart(std::map<std::string,std::vector<PresetLocation>> &
     }
 }
 
-void faultyGripper(part placed_part, part actual_part,GantryControl &gantry){
+
+void faultyGripper(GantryControl &gantry,product &prod,Camera &camera){
     /* For testing why the score is zero
     dis = sqrt(pow(actual_part.pose.position.x - placed_part.pose.position.x, 2) +
                pow(actual_part.pose.position.y - placed_part.pose.position.y, 2) +
@@ -144,16 +143,62 @@ void faultyGripper(part placed_part, part actual_part,GantryControl &gantry){
 
     if(!armState.attached){// || abs(dotProduct) < 0.95 || (abs(angleDiff) > 0.1 && abs(abs(angleDiff) - 2* M_PI) > 0.1) ){
     */
-    moveFromStartToLocation(presetLoc, "agv2_faultyG", gantry);
-    ros::Duration(5).sleep();
-    ROS_INFO("Faulty Gripper Detected");
-    ROS_INFO("Re-picking and replacing the part");
-    gantry.pickPart(placed_part);
-    moveFromStartToLocation(presetLoc, "agv2", gantry);
-    gantry.placePart(actual_part, "agv2", "left_arm");
+
+
+    
+//     placeFlippedPart(my_part_in_tray,"agv2","right_arm");
+
+//                else
+                    //gantry.placePart(my_part_in_tray, "agv2", "left_arm");
+//
+                //if (prod.agv_id == "agv2") {
+                    //placed_part = camera.get_detected_parts()["logical_camera_10"];
+                    //ROS_INFO_STREAM(placed_part.pose);
+                //}
+                //else {
+                    //placed_part = camera.get_detected_parts()["logical_camera_8"];
+                    //ROS_INFO_STREAM(placed_part.pose);
+                //}
+
+//                placed_part = camera.get_detected_parts()["logical_camera_10"];
+                //actual_part.type = placed_part.type;
+                //if (flippedPart) {
+                    //armState = gantry.getGripperState(prod.arm_name);
+                    //actual_part.pose = gantry.getTargetWorldPose(my_part_in_tray.pose, prod.agv_id, prod.arm_name);
+                //}
+                //else {
+                    //armState = gantry.getGripperState(prod.arm_name);
+                    //actual_part.pose = gantry.getTargetWorldPose(my_part_in_tray.pose, prod.agv_id, prod.arm_name);
+                //}
+
+                //if (!armState.attached) {
+                    //faultyGripper(placed_part, actual_part, gantry);
+                //} else {
+                    //if (flippedPart)
+                        //gantry.placeFlippedPart(my_part_in_tray, prod.agv_id, "right_arm");
+                    //else
+                        //gantry.placePart(my_part_in_tray, prod.agv_id, prod.arm_name);
+                //}
+
+
+    //moveToLocation(presetLoc, "agv2_faultyG", gantry);                                                     //change arm configuration for both left and right arm
+    //ros::Duration(5).sleep();
+    //ROS_INFO("Faulty Gripper Detected");
+    //ROS_INFO("Re-picking and replacing the part");
+    //gantry.pickPart(placed_part);
+    //moveToLocation(presetLoc, "agv2", gantry);
+    //gantry.placePart(actual_part, "agv2", "left_arm");
 }
 
 
+void flipPart(GantryControl &gantry, part &my_part_in_tray){
+     moveToLocation(presetLoc,"flipped_pulley_",gantry);                                                    //set arms to desired configuration to flip
+     gantry.activateGripper("right_arm");                                                                   //activate and deactivate gripper
+     gantry.deactivateGripper("left_arm");
+
+     my_part_in_tray.pose.orientation.x = 0;                                                                //modify pose orientation
+     my_part_in_tray.pose.orientation.w = 1;
+}
 
 
 void processPart(product prod, GantryControl &gantry, Camera &camera, bool priority_flag,  bool flip_flag) {
@@ -163,78 +208,48 @@ void processPart(product prod, GantryControl &gantry, Camera &camera, bool prior
     nist_gear::VacuumGripperState armState;
     std::map<std::string,part> detected_parts;
 
-    while(!foundPart) {                                                                                                      // poll until we find part
+    while(!foundPart) {                                                                                          // poll until we find part
         detected_parts = camera.get_detected_parts();
 
-        for(auto const& parts: detected_parts) {                                                                          // search all logical cameras for desired part
+        for(auto const& parts: detected_parts) {                                                                 // search all logical cameras for desired part
             if (parts.first == "logical_camera_8" ||
-                parts.first == "logical_camera_10")                                // Exclude agv cameras
+                parts.first == "logical_camera_10")                                                              // Exclude agv cameras
                 continue;
 
-            flippedPart = false;
             if (prod.type == parts.second.type.c_str()) {
                 my_part = parts.second;
 
                 my_part_in_tray.type = prod.type;
                 my_part_in_tray.pose = prod.pose;
 
-                moveFromStartToLocation(presetLoc, parts.first, gantry);
+                moveToLocation(presetLoc, parts.first, gantry);
                 gantry.pickPart(my_part);
                 moveFromLocationToStart(presetLoc, parts.first, gantry);
 
 
-                if (flip_flag && int(my_part_in_tray.pose.orientation.x) == 1) {
-                    gantry.goToPresetLocation(gantry.go_to_flipped_pulley_);
-                    gantry.activateGripper("right_arm");
-                    gantry.deactivateGripper("left_arm");
-                    if(prod.agv_id == "agv2")
-                        gantry.goToPresetLocation(gantry.agv2_flipped_);
-                    else
-                        gantry.goToPresetLocation(gantry.agv1_flipped_);
-                    my_part_in_tray.pose.orientation.x = 0;
-                    my_part_in_tray.pose.orientation.w = 1;
-                    flippedPart = true;
-
-//                    gantry.placeFlippedPart(my_part_in_tray,"agv2","right_arm");
+                if (flip_flag && int(my_part_in_tray.pose.orientation.x) == 1) {                                   //Flip part if part needs to be flipped
+                    moveToLocation(presetLoc,prod.agv_id+"_flipped",gantry);                                       //go to location to flip pulley
+                    flipPart(gantry, my_part_in_tray);
                 }
-//                else
-//                    gantry.placePart(my_part_in_tray, "agv2", "left_arm");
-                moveFromStartToLocation(presetLoc, prod.agv_id, gantry);
+                else
+                    moveToLocation(presetLoc, prod.agv_id, gantry);                                                //move to desired agv id
 
+                if (!armState.attached)                                                                            //object accidentally fell on the tray 
+                    faultyGripper(gantry, prod, camera);
+                else 
+                    gantry.placePart(my_part_in_tray, prod.agv_id, prod.arm_name);                                 //place part on the tray
+                
 
-                if (prod.agv_id == "agv2") {
-                    placed_part = camera.get_detected_parts()["logical_camera_10"];
-                    ROS_INFO_STREAM(placed_part.pose);
-                }
-                else {
-                    placed_part = camera.get_detected_parts()["logical_camera_8"];
-                    ROS_INFO_STREAM(placed_part.pose);
-                }
-
-//                placed_part = camera.get_detected_parts()["logical_camera_10"];
-                actual_part.type = placed_part.type;
-                if (flippedPart) {
-                    armState = gantry.getGripperState(prod.arm_name);
-                    actual_part.pose = gantry.getTargetWorldPose(my_part_in_tray.pose, prod.agv_id, prod.arm_name);
-                }
-                else {
-                    armState = gantry.getGripperState(prod.arm_name);
-                    actual_part.pose = gantry.getTargetWorldPose(my_part_in_tray.pose, prod.agv_id, prod.arm_name);
-                }
-
-                if (!armState.attached) {
-                    faultyGripper(placed_part, actual_part, gantry);
-                } else {
-                    if (flippedPart)
-                        gantry.placeFlippedPart(my_part_in_tray, prod.agv_id, "right_arm");
-                    else
-                        gantry.placePart(my_part_in_tray, prod.agv_id, prod.arm_name);
-                }
-
-
-                foundPart = true;
-                break;
-
+              /////////////////////////////////////////////////////////////////////////
+              // check pose to see if it matches with what expected
+              // otherwise redo it again and again to match expeced pose
+              //
+              //
+              //
+              //////////////////////////////////////////////////////////////////////////
+              
+              foundPart = true;
+              break;
             }
 
         }

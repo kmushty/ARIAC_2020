@@ -541,48 +541,25 @@ bool GantryControl::pickPart(part part){
 
 void GantryControl::placePart(part part, std::string agv, std::string arm){
     auto target_pose_in_tray = getTargetWorldPose(part.pose, agv, arm);
-    ros::Duration(3.0).sleep();
-    if(agv == "agv2")
-        goToPresetLocation(agv2_);
-    else
-        goToPresetLocation(agv1_);
     target_pose_in_tray.position.z += (ABOVE_TARGET + 1.5*model_height[part.type]);
-
-    left_arm_group_.setPoseTarget(target_pose_in_tray);
-    left_arm_group_.move();
+    
+    //target_pose_in_tray.orientation.x = -0.710413;
+    //target_pose_in_tray.orientation.y = 0.00131;
+    //target_pose_in_tray.orientation.z = 0.7037;
+    //target_pose_in_tray.orientation.w = -0.0018;
+    
+    if(arm == "left_arm"){
+       left_arm_group_.setPoseTarget(target_pose_in_tray);
+       left_arm_group_.move();
+    }else {
+       right_arm_group_.setPoseTarget(target_pose_in_tray);
+       right_arm_group_.move();
+    }
     deactivateGripper(arm);
     auto state = getGripperState(arm);
-    // if (state.attached)
-    //     goToPresetLocation(start_);
 }
 
-void GantryControl::placeFlippedPart(part part, std::string agv, std::string arm){
-    ROS_INFO_STREAM("target Pose is"<< part.pose);
-    auto target_pose_in_tray = getTargetWorldPose(part.pose, agv, arm);
 
-    target_pose_in_tray.orientation.x = -0.710413;
-    target_pose_in_tray.orientation.y = 0.00131;
-    target_pose_in_tray.orientation.z = 0.7037;
-    target_pose_in_tray.orientation.w = -0.0018;
-
-    ROS_INFO_STREAM("target Pose in tray is"<< target_pose_in_tray);
-
-    ros::Duration(3.0).sleep();
-    goToPresetLocation(agv2_flipped1_);
-    // target_pose_in_tray.position.z += (ABOVE_TARGET + 1.5*model_height[part.type]);
-
-    target_pose_in_tray.position.z += (ABOVE_TARGET + 1.5*model_height[part.type]);
-
-//    target_pose_in_tray.orientation.x = 0;
-    ROS_INFO("Target orientation");
-    ROS_INFO_STREAM(target_pose_in_tray.orientation);
-    right_arm_group_.setPoseTarget(target_pose_in_tray);
-    right_arm_group_.move();
-    deactivateGripper("right_arm");
-    auto state = getGripperState("right_arm");
-    // if (state.attached)
-    //     goToPresetLocation(start_);
-}
 
 
 
