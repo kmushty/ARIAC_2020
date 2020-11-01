@@ -70,15 +70,21 @@ void initWayPoints(std::map<std::string,std::vector<PresetLocation>> &presetLoc,
 
     presetLoc["logical_camera_2"] = {gantry.bin16_};                                                          // waypoints from start position position to logical_camera
     presetLoc["logical_camera_6"] = {gantry.bin13_};
-    presetLoc["logical_camera_11"] = {gantry.shelf5_1_, gantry.shelf5_2_, gantry.shelf5_3_};
-    // faulty gripper
-    presetLoc["logical_camera_12"] = {gantry.shelf8_1_, gantry.shelf8_2_, gantry.shelf8_3_};
-    presetLoc["logical_camera_15"] = {gantry.shelf8_1_, gantry.shelf8_2_, gantry.shelf8_3_};
 
 
     presetLoc["start"] = {gantry.start_};                                                                     // useful presetloc
     presetLoc["agv2"] = {gantry.agv2_};
+    presetLoc["agv1"] = {gantry.agv1_};
     presetLoc["agv2_faultyG"] = {gantry.agv2_faultyG_};
+
+
+    presetLoc["logical_camera_11"] = {gantry.shelf5_1_, gantry.shelf5_2_, gantry.shelf5_3_};                  // faulty gripper
+    presetLoc["logical_camera_12"] = {gantry.shelf8_1_, gantry.shelf8_2_, gantry.shelf8_3_};
+    presetLoc["logical_camera_15"] = {gantry.shelf8_1_, gantry.shelf8_2_, gantry.shelf8_3_};
+    presetLoc["logical_camera_13"] = {gantry.shelf11_1_, gantry.shelf11_2_, gantry.shelf11_3_};
+    presetLoc["logical_camera_16"] = {gantry.shelf11_1_, gantry.shelf11_2_, gantry.shelf11_3_};
+
+
 }
 
 
@@ -181,7 +187,10 @@ void processPart(product prod, GantryControl &gantry, Camera &camera, bool prior
                     gantry.goToPresetLocation(gantry.go_to_flipped_pulley_);
                     gantry.activateGripper("right_arm");
                     gantry.deactivateGripper("left_arm");
-                    gantry.goToPresetLocation(gantry.agv2_flipped_);
+                    if(prod.agv_id == "agv2")
+                        gantry.goToPresetLocation(gantry.agv2_flipped_);
+                    else
+                        gantry.goToPresetLocation(gantry.agv1_flipped_);
                     my_part_in_tray.pose.orientation.x = 0;
                     my_part_in_tray.pose.orientation.w = 1;
                     flippedPart = true;
@@ -190,33 +199,36 @@ void processPart(product prod, GantryControl &gantry, Camera &camera, bool prior
                 }
 //                else
 //                    gantry.placePart(my_part_in_tray, "agv2", "left_arm");
-                moveFromStartToLocation(presetLoc, "agv2", gantry);
+                moveFromStartToLocation(presetLoc, prod.agv_id, gantry);
 
-                /* If both the agvs are considered
-//                if (agvId == "agv2") {
-//                    placed_part = camera.get_detected_parts()["logical_camera_10"];
-//                    ROS_INFO_STREAM(placed_part.pose);
-//                }
-//                else {
-//                    placed_part = camera.get_detected_parts()["logical_camera_8"];
-//                    ROS_INFO_STREAM(placed_part.pose);
-//                }
-                 */
-                placed_part = camera.get_detected_parts()["logical_camera_10"];
+
+                if (prod.agv_id == "agv2") {
+                    placed_part = camera.get_detected_parts()["logical_camera_10"];
+                    ROS_INFO_STREAM(placed_part.pose);
+                }
+                else {
+                    placed_part = camera.get_detected_parts()["logical_camera_8"];
+                    ROS_INFO_STREAM(placed_part.pose);
+                }
+
+//                placed_part = camera.get_detected_parts()["logical_camera_10"];
                 actual_part.type = placed_part.type;
-                actual_part.pose = gantry.getTargetWorldPose(my_part_in_tray.pose, "agv2", "left_arm");
-                if (flippedPart)
-                    armState = gantry.getGripperState("right_arm");
-                else
-                    armState = gantry.getGripperState("left_arm");
+                if (flippedPart) {
+                    armState = gantry.getGripperState(prod.arm_name);
+                    actual_part.pose = gantry.getTargetWorldPose(my_part_in_tray.pose, prod.agv_id, prod.arm_name);
+                }
+                else {
+                    armState = gantry.getGripperState(prod.arm_name);
+                    actual_part.pose = gantry.getTargetWorldPose(my_part_in_tray.pose, prod.agv_id, prod.arm_name);
+                }
 
                 if (!armState.attached) {
                     faultyGripper(placed_part, actual_part, gantry);
                 } else {
                     if (flippedPart)
-                        gantry.placeFlippedPart(my_part_in_tray, "agv2", "right_arm");
+                        gantry.placeFlippedPart(my_part_in_tray, prod.agv_id, "right_arm");
                     else
-                        gantry.placePart(my_part_in_tray, "agv2", "left_arm");
+                        gantry.placePart(my_part_in_tray, prod.agv_id, prod.arm_name);
                 }
 
 
@@ -279,7 +291,7 @@ void processHPOrder(nist_gear::Order &order,Camera &camera, GantryControl &gantr
                 }
             }else
                 removeProduct(camera,gantry,prod);
-            
+
             moveFromLocationToStart(presetLoc,"start",gantry);
         }
     }
@@ -306,8 +318,8 @@ int main(int argc, char ** argv) {
     gantry.goToPresetLocation(gantry.start_);
 
 
-    ros::ServiceClient agvDelivery = node.serviceClient<nist_gear::AGVControl>("/ariac/agv2");               //initialize agvDelivery
-
+    ros::ServiceClient agv2Delivery = node.serviceClient<nist_gear::AGVControl>("/ariac/agv2");               //initialize agvDelivery
+    ros::ServiceClient agv1Delivery = node.serviceClient<nist_gear::AGVControl>("/ariac/agv1");
 
     Camera camera;
     camera.init(node);                                                                                       //initialize camera
@@ -340,13 +352,15 @@ int main(int argc, char ** argv) {
                 ROS_INFO_STREAM(product.type);
                 prod.type = product.type;
                 prod.pose = product.pose;
+                prod.agv_id = ship.agv_id;
+                prod.arm_name = "left_arm";
 
                 //High priority Order
                 if(comp.getOrders().size()<=1)
                     processPart(prod, gantry, camera, false, false);
                 else
                     processHPOrder(comp.getOrders()[1],camera,gantry);
-                
+
                 ROS_INFO_STREAM("heere 1");
                 ros::spinOnce();
                 ros::spinOnce();
@@ -361,7 +375,10 @@ int main(int argc, char ** argv) {
             ROS_INFO_STREAM("herex1");
         }
         ROS_INFO_STREAM("here3");
-        agvDeliveryService(agvDelivery);
+        if(prod.agv_id == "agv2")
+            agvDeliveryService(agv2Delivery);
+        else
+            agvDeliveryService(agv1Delivery);
     }
 
     comp.endCompetition();

@@ -542,13 +542,16 @@ bool GantryControl::pickPart(part part){
 void GantryControl::placePart(part part, std::string agv, std::string arm){
     auto target_pose_in_tray = getTargetWorldPose(part.pose, agv, arm);
     ros::Duration(3.0).sleep();
-    goToPresetLocation(agv2_);
+    if(agv == "agv2")
+        goToPresetLocation(agv2_);
+    else
+        goToPresetLocation(agv1_);
     target_pose_in_tray.position.z += (ABOVE_TARGET + 1.5*model_height[part.type]);
 
     left_arm_group_.setPoseTarget(target_pose_in_tray);
     left_arm_group_.move();
-    deactivateGripper("left_arm");
-    auto state = getGripperState("left_arm");
+    deactivateGripper(arm);
+    auto state = getGripperState(arm);
     // if (state.attached)
     //     goToPresetLocation(start_);
 }

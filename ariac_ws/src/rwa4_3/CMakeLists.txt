@@ -164,7 +164,8 @@ add_executable(rwa3_node
         src/competition.cpp
         src/gantry_control.cpp
         src/utils.cpp
-  src/rwa4_prop.cpp)
+	src/rwa4_prop.cpp)
+#  src/rwa4_prop.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
