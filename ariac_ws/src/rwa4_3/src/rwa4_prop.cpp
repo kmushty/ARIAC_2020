@@ -44,7 +44,7 @@ std::map<std::string,std::vector<PresetLocation>> presetLoc;
 
 
 
-void agvDeliveryService(ros::ServiceClient &agvDelivery){
+void agvDeliveryService(ros::ServiceClient &agvDelivery, std::string shipmentType){
     // AGV Delivering the parts
     if (!agvDelivery.exists()) {
         ROS_INFO("[AGV][startAGV] Waiting for thE AGV to start...");
@@ -53,7 +53,7 @@ void agvDeliveryService(ros::ServiceClient &agvDelivery){
     }
     ROS_INFO("[AGV][startAGV] Requesting AGV start...");
     nist_gear::AGVControl srv;
-    srv.request.shipment_type =  "order_0_shipment_0";
+    srv.request.shipment_type = shipmentType;
     agvDelivery.call(srv);
 
 
@@ -274,12 +274,14 @@ void processHPOrder(nist_gear::Order &order,Camera &camera, GantryControl &gantr
     for(int j=0; j<=order.shipments.size(); j++){
         auto ship = order.shipments[j];
 
-        for (int k=1; j<ship.products.size(); k++){
+        for (int k=0; j<ship.products.size(); k++){
             auto product = ship.products[k];
 
 
             prod.type = product.type;
             prod.pose = product.pose;
+            prod.agv_id = ship.agv_id;
+            prod.arm_name = "left_arm";
 
             if(wanted){
                 processPart(prod, gantry, camera, false, false);
@@ -373,12 +375,13 @@ int main(int argc, char ** argv) {
                 ROS_INFO_STREAM("heere x");
             }
             ROS_INFO_STREAM("herex1");
+            if(prod.agv_id == "agv2")
+                agvDeliveryService(agv2Delivery, order.shipments[j].shipment_type);
+            else
+                agvDeliveryService(agv1Delivery, order.shipments[j].shipment_type);
         }
         ROS_INFO_STREAM("here3");
-        if(prod.agv_id == "agv2")
-            agvDeliveryService(agv2Delivery);
-        else
-            agvDeliveryService(agv1Delivery);
+
     }
 
     comp.endCompetition();
