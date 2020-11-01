@@ -73,6 +73,7 @@ class GantryControl {
     agv2 agv2_;
     agv1 agv1_;
     agv2_faultyG agv2_faultyG_;
+    agv1_faultyG agv1_faultyG_;
     bin13 bin13_;
     bin16 bin16_;
     shelf5_1 shelf5_1_;

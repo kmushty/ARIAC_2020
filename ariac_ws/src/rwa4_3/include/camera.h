@@ -55,6 +55,8 @@ class Camera{
 
     std::map<std::string,part> detected_parts;
 
+    // vector of parts for agv logical cameras
+
     ros::Subscriber quality_sensor_subscriber;  
     bool is_faulty;
     

@@ -49,16 +49,16 @@ orders:
         pose:
           xyz: [0.0, 0.0, 0]
           rpy: [0, 0, '-pi/4']
-      part_1:
-        type: gasket_part_blue
-        pose:
-          xyz: [-0.15, 0.2, 0]
-          rpy: [0, 0, '-pi/4']
-      part_2:
-        type: disk_part_green
-        pose:
-          xyz: [0.15, -0.2, 0]
-          rpy: [0, 0, 0]
+#      part_1:
+#        type: gasket_part_blue
+#        pose:
+#          xyz: [-0.15, 0.2, 0]
+#          rpy: [0, 0, '-pi/4']
+#      part_2:
+#        type: disk_part_green
+#        pose:
+#          xyz: [0.15, -0.2, 0]
+#          rpy: [0, 0, 0]
   order_1:
     announcement_condition: unwanted_products
     announcement_condition_value: 1

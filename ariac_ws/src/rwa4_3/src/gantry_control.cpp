@@ -73,6 +73,11 @@ void GantryControl::init() {
     agv2_faultyG_.left_arm = {0.0, -1.38, 2.14, -PI/4, PI/2, 0};
     agv2_faultyG_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
 
+    agv1_faultyG_.gantry = {-0.7, -6.9, 0.0};
+    agv1_faultyG_.left_arm = {0.0, -1.38, 2.14, -PI/4, PI/2, 0};
+    agv1_faultyG_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+
 //    agv2_.gantry = {0, 6.30, 0};
 //    agv2_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
 //    agv2_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
@@ -186,10 +191,10 @@ void GantryControl::init() {
     agv2_flipped_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
     agv2_flipped_.right_arm = {1.57, -1.57, -2.26, 0.13, 0, 0.13};
 
-    agv2_flipped1_.gantry = {0.6, 6.9, 0};
-    agv2_flipped1_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
+    agv1_flipped1_.gantry = {0.6, -6.9, 0};
+    agv1_flipped1_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
     // agv2_flipped1_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
-    agv2_flipped1_.right_arm =  {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+    agv1_flipped1_.right_arm =  {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
 
     agv1_flipped_.gantry = {0.6, -6.58, 0};
     agv1_flipped_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
