@@ -49,11 +49,11 @@ orders:
         pose:
           xyz: [0.0, 0.0, 0]
           rpy: [0, 0, '-pi/4']
-#      part_1:
-#        type: gasket_part_blue
-#        pose:
-#          xyz: [-0.15, 0.2, 0]
-#          rpy: [0, 0, '-pi/4']
+      part_1:
+        type: gasket_part_blue
+        pose:
+          xyz: [-0.15, 0.2, 0]
+          rpy: [0, 0, '-pi/4']
 #      part_2:
 #        type: disk_part_green
 #        pose:
@@ -70,11 +70,11 @@ orders:
         pose:
           xyz: [-0.15, -0.2, 0]
           rpy: [0, 0, 0]
-      part_1:
-        type: gasket_part_blue
-        pose:
-          xyz: [0.15, 0.2, 0]
-          rpy: [0, 0, '-pi/4']
+#      part_1:
+#        type: gasket_part_blue
+#        pose:
+#          xyz: [0.15, 0.2, 0]
+#          rpy: [0, 0, '-pi/4']
 
 models_over_bins:
   bin13:

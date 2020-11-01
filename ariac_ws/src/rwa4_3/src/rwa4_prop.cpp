@@ -217,6 +217,7 @@ void processPart(product prod, GantryControl &gantry, Camera &camera, bool prior
                 else
                     moveToLocation(presetLoc, prod.agv_id, gantry);                                                //move to desired agv id
 
+                armState = gantry.getGripperState(prod.arm_name);
                 if (!armState.attached)                                                                            //object accidentally fell on the tray 
                     faultyGripper(gantry, prod, camera, my_part_in_tray);
                 else 
@@ -263,7 +264,7 @@ void removeProduct(Camera &camera, GantryControl &gantry, product &prod) {
 }
 
 
-
+//TODO:Make it more robust
 void processHPOrder(nist_gear::Order &order,Camera &camera, GantryControl &gantry){
     ROS_INFO_STREAM("Processing HP order");
     product prod;
@@ -272,7 +273,7 @@ void processHPOrder(nist_gear::Order &order,Camera &camera, GantryControl &gantr
     for(int j=0; j<=order.shipments.size(); j++){
         auto ship = order.shipments[j];
 
-        for (int k=0; j<ship.products.size(); k++){
+        for (int k=0; k<ship.products.size(); k++){
             auto product = ship.products[k];
 
 
