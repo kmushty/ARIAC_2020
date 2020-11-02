@@ -278,7 +278,7 @@ void removeProduct(Camera &camera, GantryControl &gantry, product &prod) {
 
 
 //TODO:Make it more robust
-void processHPOrder(nist_gear::Order &order,Camera &camera, GantryControl &gantry){
+void processHPOrder(nist_gear::Order &order,Camera &camera, GantryControl &gantry, ros::ServiceClient &agv2Delivery, ros::ServiceClient &agv1Delivery){
     ROS_INFO_STREAM("Processing HP order");
     product prod;
     bool wanted = true;
@@ -310,6 +310,10 @@ void processHPOrder(nist_gear::Order &order,Camera &camera, GantryControl &gantr
             ROS_INFO("HELLO1");
         }
         ROS_INFO("HELLO2");
+        if(prod.agv_id == "agv2")
+            agvDeliveryService(agv2Delivery, order.shipments[j].shipment_type);
+        else
+            agvDeliveryService(agv1Delivery, order.shipments[j].shipment_type);
     }
 
 }
@@ -371,12 +375,11 @@ int main(int argc, char ** argv) {
                 prod.agv_id = ship.agv_id;
                 prod.arm_name = "left_arm";
 
-                //High priority Order
-                //TODO- place agv in high priority order
+            
                 ROS_INFO_STREAM(comp.getOrders().size());
                 ROS_INFO_STREAM(HighPriorityOrderInitiated);
                 if(comp.getOrders().size()>1 && HighPriorityOrderInitiated == false){  
-                    processHPOrder(comp.getOrders()[1],camera,gantry);
+                    processHPOrder(comp.getOrders()[1],camera,gantry, agv2Delivery, agv1Delivery);
                     ROS_INFO_STREAM("I am here1243");
                     HighPriorityOrderInitiated = true;
                     ROS_INFO_STREAM(comp.getOrders().size());

@@ -94,9 +94,14 @@ void Camera::init(ros::NodeHandle & node){
   }
 
   
-  quality_sensor_subscriber = node.subscribe(
+  quality_sensor_subscriber_1 = node.subscribe(
        "/ariac/quality_control_sensor_1", 1, &Camera::quality_control_sensor_callback,this
        );
+  
+  quality_sensor_subscriber_2 = node.subscribe(
+       "/ariac/quality_control_sensor_2", 1, &Camera::quality_control_sensor_callback,this
+       );
+
 
   is_faulty = false;
 }

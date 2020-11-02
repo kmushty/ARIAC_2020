@@ -57,10 +57,8 @@ class Camera{
 
     // vector of parts for agv logical cameras
      
-     //TODO 
-    // Do this for both quality sensors
-    ros::Subscriber quality_sensor_subscriber;
-    // ros::Subscriber quality_sensor_subscriber_2;  
+    ros::Subscriber quality_sensor_subscriber_1;
+    ros::Subscriber quality_sensor_subscriber_2;  
     bool is_faulty;
     
     geometry_msgs::Pose faulty_pose;
