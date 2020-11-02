@@ -452,7 +452,8 @@ geometry_msgs::Pose GantryControl::getTargetWorldPose(geometry_msgs::Pose target
 
     return world_target;
 }
-
+ 
+//TODO- make pick part more robust. Sometimes fails to pick part
 bool GantryControl::pickPart(part part){
     //--Activate gripper
     activateGripper("left_arm");

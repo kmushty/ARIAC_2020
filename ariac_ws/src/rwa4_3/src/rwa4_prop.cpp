@@ -72,6 +72,7 @@ void initWayPoints(std::map<std::string,std::vector<PresetLocation>> &presetLoc,
     presetLoc["logical_camera_6"] = {gantry.bin13_};
     presetLoc["logical_camera_11"] = {gantry.shelf5_1_, gantry.shelf5_2_, gantry.shelf5_3_};                  
     presetLoc["logical_camera_12"] = {gantry.shelf8_1_, gantry.shelf8_2_, gantry.shelf8_3_};
+    presetLoc["logical_camera_14"] = {gantry.shelf5_1_, gantry.shelf5_4_, gantry.shelf5_5_};
     presetLoc["logical_camera_15"] = {gantry.shelf8_1_, gantry.shelf8_2_, gantry.shelf8_3_};
     presetLoc["logical_camera_13"] = {gantry.shelf11_1_, gantry.shelf11_2_, gantry.shelf11_3_};
     presetLoc["logical_camera_16"] = {gantry.shelf11_1_, gantry.shelf11_2_, gantry.shelf11_3_};
@@ -211,8 +212,9 @@ void processPart(product prod, GantryControl &gantry, Camera &camera, bool prior
 
 
                 if (flip_flag && int(my_part_in_tray.pose.orientation.x) == 1) {                                   //Flip part if part needs to be flipped
-                    moveToLocation(presetLoc,prod.agv_id+"_flipped",gantry);                                       //go to location to flip pulley
+                    //moveToLocation(presetLoc,prod.agv_id+"_flipped",gantry);                                       //go to location to flip pulley
                     flipPart(gantry, my_part_in_tray, prod);
+                    moveToLocation(presetLoc,prod.agv_id+"_flipped",gantry);
                 }
                 else
                     moveToLocation(presetLoc, prod.agv_id, gantry);                                                //move to desired agv id
@@ -249,7 +251,13 @@ void removeFaultyProduct(Camera &camera, GantryControl &gantry, product &prod) {
     temp.pose = camera.get_faulty_pose();
     temp.type = prod.type;
     gantry.pickPart(temp);
+    //TODO-Change preset locations
+    if(prod.agv_id == "agv2")
+        moveToLocation(presetLoc,"agv2_flipped",gantry);
+    else
+        moveToLocation(presetLoc,"agv1_flipped",gantry);
     gantry.deactivateGripper("left_arm");
+    camera.reset_is_faulty();
 }
 
 
@@ -260,6 +268,11 @@ void removeProduct(Camera &camera, GantryControl &gantry, product &prod) {
     temp.pose = camera.get_faulty_pose();
     temp.type = prod.type;
     gantry.pickPart(temp);
+    //TODO -chang preset locations
+    if(prod.agv_id == "agv2")
+        moveToLocation(presetLoc,"agv2_flipped",gantry);
+    else
+        moveToLocation(presetLoc,"agv1_flipped",gantry);
     gantry.deactivateGripper("left_arm");
 }
 
@@ -270,7 +283,7 @@ void processHPOrder(nist_gear::Order &order,Camera &camera, GantryControl &gantr
     product prod;
     bool wanted = true;
 
-    for(int j=0; j<=order.shipments.size(); j++){
+    for(int j=0; j<order.shipments.size(); j++){
         auto ship = order.shipments[j];
 
         for (int k=0; k<ship.products.size(); k++){
@@ -283,7 +296,7 @@ void processHPOrder(nist_gear::Order &order,Camera &camera, GantryControl &gantr
             prod.arm_name = "left_arm";
 
             if(wanted){
-                processPart(prod, gantry, camera, false, false);
+                processPart(prod, gantry, camera, false, false);   
                 ros::spinOnce();
                 ros::spinOnce();
                 if(camera.get_is_faulty()) {
@@ -294,7 +307,9 @@ void processHPOrder(nist_gear::Order &order,Camera &camera, GantryControl &gantr
                 removeProduct(camera,gantry,prod);
 
             moveFromLocationToStart(presetLoc,"start",gantry);
+            ROS_INFO("HELLO1");
         }
+        ROS_INFO("HELLO2");
     }
 
 }
@@ -357,17 +372,31 @@ int main(int argc, char ** argv) {
                 prod.arm_name = "left_arm";
 
                 //High priority Order
-                if(comp.getOrders().size()<=1)
-                    processPart(prod, gantry, camera, false, false);
-                else
+                //TODO- place agv in high priority order
+                ROS_INFO_STREAM(comp.getOrders().size());
+                ROS_INFO_STREAM(HighPriorityOrderInitiated);
+                if(comp.getOrders().size()>1 && HighPriorityOrderInitiated == false){  
                     processHPOrder(comp.getOrders()[1],camera,gantry);
+                    ROS_INFO_STREAM("I am here1243");
+                    HighPriorityOrderInitiated = true;
+                    ROS_INFO_STREAM(comp.getOrders().size());
+                    ROS_INFO_STREAM(HighPriorityOrderInitiated);
+                    k--;
+                }
+                else
+                    processPart(prod, gantry, camera, false, true);             // Remove flip_flag after degugging
+                
 
+                //TODO - Make checker for faulty more robust
                 ROS_INFO_STREAM("heere 1");
+                ros::Duration(3.0).sleep();
                 ros::spinOnce();
                 ros::spinOnce();
                 if(camera.get_is_faulty()) {
+                    ROS_INFO_STREAM("fAULTY");
                     removeFaultyProduct(camera,gantry,prod);
-                    k--;                                                                                                 //process product again
+                    k--; 
+                                                                                                                    //process product again
                 }
                 ROS_INFO_STREAM("heere 2");
                 moveFromLocationToStart(presetLoc,"start",gantry);
