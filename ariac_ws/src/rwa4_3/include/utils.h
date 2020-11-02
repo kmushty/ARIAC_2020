@@ -55,7 +55,7 @@ typedef struct PresetLocation {
     std::vector<double> left_arm;
     std::vector<double> right_arm;
 } start, bin3, agv2, agv1, agv1_faultyG, agv2_faultyG, bin13, bin16, shelf5_1, shelf5_2, shelf5_3, shelf5_4, shelf5_5,shelf11_1, shelf11_2, shelf11_3,
-shelf8_1, shelf8_2, shelf8_3, go_to_flipped_pulley,agv2_flipped, agv2_flipped1,agv1_flipped, agv1_flipped1;
+shelf8_1, shelf8_2, shelf8_3, go_to_flipped_pulley,agv2_flipped, agv2_flipped1,agv1_flipped, agv1_flipped1, agv1_drop, agv2_drop;
 
 
 typedef struct Part {

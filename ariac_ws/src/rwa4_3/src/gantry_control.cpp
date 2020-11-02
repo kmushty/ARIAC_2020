@@ -200,6 +200,14 @@ void GantryControl::init() {
     agv1_flipped_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
     agv1_flipped_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
 
+    agv1_drop_.gantry = {0.6, -6.58, 0};
+    agv1_drop_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
+    agv1_drop_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+    agv2_drop_.gantry = {0.6, 6.58, 0};
+    agv2_drop_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
+    agv2_drop_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
     /*
      //--start location
     start_.gantry = {0,0,0};

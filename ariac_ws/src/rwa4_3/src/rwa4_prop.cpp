@@ -85,6 +85,8 @@ void initWayPoints(std::map<std::string,std::vector<PresetLocation>> &presetLoc,
     presetLoc["flipped_pulley_"] = {gantry.go_to_flipped_pulley_};
     presetLoc["agv2_flipped"]  = {gantry.agv2_flipped_};
     presetLoc["agv1_flipped"]  = {gantry.agv1_flipped_};
+    presetLoc["agv2_drop"]  = {gantry.agv2_drop_};
+    presetLoc["agv1_drop"]  = {gantry.agv1_drop_};
 }
 
 
@@ -253,9 +255,9 @@ void removeFaultyProduct(Camera &camera, GantryControl &gantry, product &prod) {
     gantry.pickPart(temp);
     //TODO-Change preset locations
     if(prod.agv_id == "agv2")
-        moveToLocation(presetLoc,"agv2_flipped",gantry);
+        moveToLocation(presetLoc,"agv2_drop",gantry);
     else
-        moveToLocation(presetLoc,"agv1_flipped",gantry);
+        moveToLocation(presetLoc,"agv1_drop",gantry);
     gantry.deactivateGripper("left_arm");
     camera.reset_is_faulty();
 }
