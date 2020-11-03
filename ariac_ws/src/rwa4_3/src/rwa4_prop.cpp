@@ -458,11 +458,15 @@ int main(int argc, char ** argv) {
                             break;
                         }
                     }
+                    if(camera.get_break_beam()) {
+                        camera.reset_break_beam();
+                        continue;
+                    }
                 }
-                if(camera.get_break_beam()) {
-                    camera.reset_break_beam();
-                    continue;
-                }
+                // if(camera.get_break_beam()) {
+                //     camera.reset_break_beam();
+                //     continue;
+                // }
             
                 ROS_INFO_STREAM(comp.getOrders().size());
                 ROS_INFO_STREAM(HighPriorityOrderInitiated);
