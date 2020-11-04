@@ -82,11 +82,19 @@ void initWayPoints(std::map<std::string,std::vector<PresetLocation>> &presetLoc,
     presetLoc["agv1"] = {gantry.agv1_};
     presetLoc["agv2_faultyG"] = {gantry.agv2_faultyG_};
     presetLoc["agv1_faultyG"] = {gantry.agv1_faultyG_};
-    presetLoc["flipped_pulley_"] = {gantry.go_to_flipped_pulley_};
-    presetLoc["agv2_flipped"]  = {gantry.agv2_flipped_};
-    presetLoc["agv1_flipped"]  = {gantry.agv1_flipped_};
-    presetLoc["agv2_drop"]  = {gantry.agv2_drop_};
-    presetLoc["agv1_drop"]  = {gantry.agv1_drop_};
+//    presetLoc["flipped_pulley_"] = {gantry.go_to_flipped_pulley_};
+//    presetLoc["agv2_flipped"]  = {gantry.agv2_flipped_};
+//    presetLoc["agv1_flipped"]  = {gantry.agv1_flipped_};
+//    presetLoc["agv2_drop"]  = {gantry.agv2_drop_};
+//    presetLoc["agv1_drop"]  = {gantry.agv1_drop_};
+    presetLoc["flipped_pulley_agv2"] = {gantry.agv2_go_to_flipped_pulley_};//verified
+    presetLoc["flipped_pulley_agv1"] = {gantry.agv1_go_to_flipped_pulley_};//verified
+    presetLoc["agv2_flipped_final"]  = {gantry.agv2_flipped1_};//verified
+    presetLoc["agv1_flipped_final"]  = {gantry.agv1_flipped1_};//verified
+    presetLoc["agv2_right_arm_drop_flip"]  = {gantry.agv2_flipped_};//verified
+    presetLoc["agv1_right_arm_drop_flip"]  = {gantry.agv1_flipped_};//verified
+    presetLoc["agv2_left_arm_drop"]  = {gantry.agv2_drop_};//verified
+    presetLoc["agv1_left_arm_drop"]  = {gantry.agv1_drop_};//verified
 }
 
 
@@ -246,19 +254,44 @@ void processPart(product prod, GantryControl &gantry, Camera &camera, bool prior
 
 
 
+//void removeFaultyProduct(Camera &camera, GantryControl &gantry, product &prod) {
+//    ROS_INFO_STREAM("IN faulty part");
+//    part temp;
+//
+//    if(pr)
+//    temp.pose = camera.get_faulty_pose();
+//    temp.type = prod.type;
+//    gantry.pickPart(temp);
+//    //TODO-Change preset locations
+//    if(prod.agv_id == "agv2")
+//        moveToLocation(presetLoc,"agv2_drop",gantry);
+//    else
+//        moveToLocation(presetLoc,"agv1_drop",gantry);
+//    gantry.deactivateGripper("left_arm");
+//    camera.reset_is_faulty();
+//}
+
 void removeFaultyProduct(Camera &camera, GantryControl &gantry, product &prod) {
     ROS_INFO_STREAM("IN faulty part");
     part temp;
 
-    temp.pose = camera.get_faulty_pose();
+    temp.pose = camera.get_faulty_pose(prod.agv_id);
     temp.type = prod.type;
+    moveToLocation(presetLoc, prod.agv_id, gantry);
     gantry.pickPart(temp);
     //TODO-Change preset locations
-    if(prod.agv_id == "agv2")
-        moveToLocation(presetLoc,"agv2_drop",gantry);
-    else
-        moveToLocation(presetLoc,"agv1_drop",gantry);
-    gantry.deactivateGripper("left_arm");
+    if (prod.agv_id == "agv2") {
+        if (prod.arm_name == "left_arm")
+            moveToLocation(presetLoc, "agv2_left_arm_drop", gantry);
+        else
+            moveToLocation(presetLoc, "agv2_right_arm_drop_flip", gantry);
+    } else {
+        if (prod.arm_name == "left_arm")
+            moveToLocation(presetLoc, "agv1_left_arm_drop", gantry);
+        else
+            moveToLocation(presetLoc, "agv1_right_arm_drop_flip", gantry);
+    }
+    gantry.deactivateGripper(prod.arm_name);
     camera.reset_is_faulty();
 }
 
@@ -267,7 +300,7 @@ void removeFaultyProduct(Camera &camera, GantryControl &gantry, product &prod) {
 void removeProduct(Camera &camera, GantryControl &gantry, product &prod) {
     ROS_INFO_STREAM("IN faulty part");
     part temp;
-    temp.pose = camera.get_faulty_pose();
+    temp.pose = camera.get_faulty_pose(prod.agv_id);
     temp.type = prod.type;
     gantry.pickPart(temp);
     //TODO -chang preset locations
@@ -301,7 +334,7 @@ void processHPOrder(nist_gear::Order &order,Camera &camera, GantryControl &gantr
                 processPart(prod, gantry, camera, false, false);   
                 ros::spinOnce();
                 ros::spinOnce();
-                if(camera.get_is_faulty()) {
+                if(camera.get_is_faulty(prod.agv_id)) {
                     removeFaultyProduct(camera,gantry,prod);
                     k--;                                                                                         //process product again
                 }
@@ -397,7 +430,7 @@ int main(int argc, char ** argv) {
                 ros::Duration(3.0).sleep();
                 ros::spinOnce();
                 ros::spinOnce();
-                if(camera.get_is_faulty()) {
+                if(camera.get_is_faulty(prod.agv_id)) {
                     ROS_INFO_STREAM("fAULTY");
                     removeFaultyProduct(camera,gantry,prod);
                     k--; 

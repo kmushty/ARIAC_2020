@@ -92,11 +92,14 @@ class GantryControl {
     /** -------------**/
     shelf5_4 shelf5_4_;
     shelf5_5 shelf5_5_;
-    go_to_flipped_pulley go_to_flipped_pulley_;
+    agv2_go_to_flipped_pulley agv2_go_to_flipped_pulley_;
+    agv1_go_to_flipped_pulley agv1_go_to_flipped_pulley_;
     agv2_flipped agv2_flipped_;
     agv2_flipped1 agv2_flipped1_;
     agv1_flipped agv1_flipped_;
     agv1_flipped1 agv1_flipped1_;
+    movingPart movingPart_;
+    movingPart1 movingPart1_;
 
 
   private:

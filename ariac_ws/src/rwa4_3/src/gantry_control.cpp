@@ -178,35 +178,47 @@ void GantryControl::init() {
     shelf11_3_.left_arm = {-1.78, -PI/4, PI/2, -PI/4, -0.20, 0};
     shelf11_3_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
 
-    go_to_flipped_pulley_.gantry = {0, 6.2, 0};
-    go_to_flipped_pulley_.left_arm = {1.84, -2.73, -1.88, -0.2, 1.63, 0};
-    go_to_flipped_pulley_.right_arm = {1.75, -3.35, -1.4, 0.13, 1.51, 0};
+    agv2_go_to_flipped_pulley_.gantry = {0, 6.2, 0};
+    agv2_go_to_flipped_pulley_.left_arm = {1.84, -2.73, -1.88, -0.2, 1.63, 0};
+    agv2_go_to_flipped_pulley_.right_arm = {1.75, -3.35, -1.4, 0.13, 1.51, 0};
+
+    agv1_go_to_flipped_pulley_.gantry = {0, -6.2, 3.14};
+    agv1_go_to_flipped_pulley_.left_arm = {1.84, -2.73, -1.88, -0.2, 1.63, 0};
+    agv1_go_to_flipped_pulley_.right_arm = {1.75, -3.35, -1.4, 0.13, 1.51, 0};
 
     agv2_flipped1_.gantry = {0.6, 6.9, 0};
     agv2_flipped1_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
     // agv2_flipped1_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
     agv2_flipped1_.right_arm =  {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
 
-    agv2_flipped_.gantry = {0.6, 6.58, 0};
+    agv2_flipped_.gantry = {0.6, 6.30, 0};
     agv2_flipped_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
     agv2_flipped_.right_arm = {1.57, -1.57, -2.26, 0.13, 0, 0.13};
 
-    agv1_flipped1_.gantry = {0.6, -6.9, 0};
+    agv1_flipped1_.gantry = {-0.6, -6.9, 3.14};
     agv1_flipped1_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
     // agv2_flipped1_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
     agv1_flipped1_.right_arm =  {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
 
-    agv1_flipped_.gantry = {0.6, -6.58, 0};
+    agv1_flipped_.gantry = {-0.6, -6.30, PI};
     agv1_flipped_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
-    agv1_flipped_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+    agv1_flipped_.right_arm = {1.57, -1.57, -2.26, 0.13, 0, 0.13};
 
-    agv1_drop_.gantry = {0.6, -6.58, 0};
+    agv1_drop_.gantry = {-0.6, -6.30, 0};
     agv1_drop_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
     agv1_drop_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
 
-    agv2_drop_.gantry = {0.6, 6.58, 0};
+    agv2_drop_.gantry = {0.6, 6.30, 0};
     agv2_drop_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
     agv2_drop_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+//    movingPart_.gantry = {-0.16, -0.22, -1.57};
+//    movingPart_.left_arm = {0.0, -0.63, 1.38, -0.73, PI/2, 0};
+//    movingPart_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+//
+//    movingPart1_.gantry = {-0.16, -0.22, -1.57};
+//    movingPart1_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
+//    movingPart1_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
 
     /*
      //--start location
