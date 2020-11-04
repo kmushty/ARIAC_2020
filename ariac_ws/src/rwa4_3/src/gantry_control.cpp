@@ -200,7 +200,7 @@ void GantryControl::init() {
     // agv2_flipped1_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
     agv1_flipped1_.right_arm =  {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
 
-    agv1_flipped_.gantry = {-0.6, -6.30, PI};
+    agv1_flipped_.gantry = {-0.6, -6.45, PI};
     agv1_flipped_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
     agv1_flipped_.right_arm = {1.57, -1.57, -2.26, 0.13, 0, 0.13};
 
@@ -473,6 +473,97 @@ geometry_msgs::Pose GantryControl::getTargetWorldPose(geometry_msgs::Pose target
     return world_target;
 }
  
+////TODO- make pick part more robust. Sometimes fails to pick part
+//bool GantryControl::pickPart(part part){
+//    //--Activate gripper
+//    activateGripper("left_arm");
+//
+////    ros::AsyncSpinner spinner(1);
+////    spinner.start();
+//
+////    left_arm_group_.setPoseReferenceFrame("world");
+//    geometry_msgs::Pose currentPose = left_arm_group_.getCurrentPose().pose;
+//
+////    ROS_INFO_STREAM("[left_arm_group_]= " << currentPose.position.x << ", " << currentPose.position.y << "," << currentPose.position.z);
+//
+//    part.pose.position.z = part.pose.position.z + model_height.at(part.type) + GRIPPER_HEIGHT - EPSILON;
+//    part.pose.orientation.x = currentPose.orientation.x;
+//    part.pose.orientation.y = currentPose.orientation.y;
+//    part.pose.orientation.z = currentPose.orientation.z;
+//    part.pose.orientation.w = currentPose.orientation.w;
+////    ROS_INFO_STREAM("["<< part.type<<"]= " << part.pose.position.x << ", " << part.pose.position.y << "," << part.pose.position.z << "," << part.pose.orientation.x << "," << part.pose.orientation.y << "," << part.pose.orientation.z << "," << part.pose.orientation.w);
+//
+//
+//    auto state = getGripperState("left_arm");
+//    if (state.enabled) {
+//        ROS_INFO_STREAM("[Gripper] = enabled");
+//        //--Move arm to part
+//        left_arm_group_.setPoseTarget(part.pose);
+//        left_arm_group_.move();
+//        auto state = getGripperState("left_arm");
+//        if (state.attached) {
+//            ROS_INFO_STREAM("[Gripper] = object attached");
+//            //--Move arm to previous position
+//            left_arm_group_.setPoseTarget(currentPose);
+//            left_arm_group_.move();
+//            /*goToPresetLocation(start_);*/
+//            return true;
+//        }
+//        else {
+//            ROS_INFO_STREAM("[Gripper] = object not attached");
+//            int max_attempts{5};
+//            int current_attempt{0};
+//            while(!state.attached) {
+//                left_arm_group_.setPoseTarget(currentPose);
+//                left_arm_group_.move();
+//                ros::Duration(0.5).sleep();
+//                left_arm_group_.setPoseTarget(part.pose);
+//                left_arm_group_.move();
+//                activateGripper("left_arm");
+//                ROS_INFO_STREAM(state.attached);
+//                state = getGripperState("left_arm");
+//              // ros::spinOnce();
+//        }
+//     }
+//    }
+//    else {
+//        ROS_INFO_STREAM("[Gripper] = not enabled");
+//    }
+//    return false;
+//
+//    /**
+//     * We want the Cartesian path to be interpolated at a resolution of 1 cm which is why
+//     * we will specify 0.01 as the max step in Cartesian translation.
+//     * We will specify the jump threshold as 0.0, effectively disabling it.
+//     */
+//    //--define a set of waypoints
+////    geometry_msgs::Pose near_pick_pose;
+////    geometry_msgs::Pose pick_pose;
+////    near_pick_pose = part.pose;
+////    pick_pose = part.pose;
+////
+////    near_pick_pose.position.z += 0.1;
+////    pick_pose.position.z += 0.015;
+////
+////    //--waypoints
+////    ROS_INFO_STREAM("[near_pick_pose]= " << near_pick_pose.position.x << "," << near_pick_pose.position.y << "," << near_pick_pose.position.z << "," << near_pick_pose.orientation.x << "," << near_pick_pose.orientation.y << "," << near_pick_pose.orientation.z << "," << near_pick_pose.orientation.w);
+////    ROS_INFO_STREAM("[pick_pose]= " << pick_pose.position.x << "," << pick_pose.position.y << "," << pick_pose.position.z << "," << pick_pose.orientation.x << "," << pick_pose.orientation.y << "," << pick_pose.orientation.z << "," << pick_pose.orientation.w);
+////    std::vector<geometry_msgs::Pose> waypoints;
+////    waypoints.push_back(near_pick_pose);
+////    waypoints.push_back(pick_pose);
+//
+////    moveit_msgs::RobotTrajectory trajectory;
+////    const double jump_threshold = 0.0;
+////    const double eef_step = 0.001;
+////    double fraction = left_arm_group_.computeCartesianPath(waypoints, eef_step, jump_threshold, trajectory);
+////
+////    moveit::planning_interface::MoveGroupInterface::Plan my_plan;
+////    bool success = (left_arm_group_.plan(my_plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS);
+////    if (success)
+////        left_arm_group_.move();
+////    ros::waitForShutdown();
+//}
+
 //TODO- make pick part more robust. Sometimes fails to pick part
 bool GantryControl::pickPart(part part){
     //--Activate gripper
@@ -495,73 +586,41 @@ bool GantryControl::pickPart(part part){
 
 
     auto state = getGripperState("left_arm");
-    if (state.enabled) {
-        ROS_INFO_STREAM("[Gripper] = enabled");
-        //--Move arm to part
-        left_arm_group_.setPoseTarget(part.pose);
+    while(!state.enabled){
+        ROS_INFO_STREAM("Activating Gripper again");
+        activateGripper("left_arm");
+    }
+//    if (state.enabled) {
+    ROS_INFO_STREAM("[Gripper] = enabled");
+    //--Move arm to part
+    left_arm_group_.setPoseTarget(part.pose);
+    left_arm_group_.move();
+    state = getGripperState("left_arm");
+    if (state.attached) {
+        ROS_INFO_STREAM("[Gripper] = object attached");
+        //--Move arm to previous position
+        left_arm_group_.setPoseTarget(currentPose);
         left_arm_group_.move();
-        auto state = getGripperState("left_arm");
-        if (state.attached) {
-            ROS_INFO_STREAM("[Gripper] = object attached");
-            //--Move arm to previous position
-            left_arm_group_.setPoseTarget(currentPose);
-            left_arm_group_.move();
-            /*goToPresetLocation(start_);*/
-            return true;
-        }
-        else {
-            ROS_INFO_STREAM("[Gripper] = object not attached");
-            int max_attempts{5};
-            int current_attempt{0};
-            while(!state.attached) {
-                left_arm_group_.setPoseTarget(currentPose);
-                left_arm_group_.move();
-                ros::Duration(0.5).sleep();
-                left_arm_group_.setPoseTarget(part.pose);
-                left_arm_group_.move();
-                activateGripper("left_arm");
-                ROS_INFO_STREAM(state.attached);
-                state = getGripperState("left_arm");
-              // ros::spinOnce();
-        }
-     }
+        /*goToPresetLocation(start_);*/
+        return true;
     }
     else {
-        ROS_INFO_STREAM("[Gripper] = not enabled");
+        ROS_INFO_STREAM("[Gripper] = object not attached");
+        int max_attempts{5};
+        int current_attempt{0};
+        while(!state.attached) {
+            left_arm_group_.setPoseTarget(currentPose);
+            left_arm_group_.move();
+            ros::Duration(0.5).sleep();
+            left_arm_group_.setPoseTarget(part.pose);
+            left_arm_group_.move();
+            activateGripper("left_arm");
+            ROS_INFO_STREAM(state.attached);
+            state = getGripperState("left_arm");
+            // ros::spinOnce();
+        }
     }
     return false;
-
-    /**
-     * We want the Cartesian path to be interpolated at a resolution of 1 cm which is why
-     * we will specify 0.01 as the max step in Cartesian translation.
-     * We will specify the jump threshold as 0.0, effectively disabling it.
-     */
-    //--define a set of waypoints
-//    geometry_msgs::Pose near_pick_pose;
-//    geometry_msgs::Pose pick_pose;
-//    near_pick_pose = part.pose;
-//    pick_pose = part.pose;
-//
-//    near_pick_pose.position.z += 0.1;
-//    pick_pose.position.z += 0.015;
-//
-//    //--waypoints
-//    ROS_INFO_STREAM("[near_pick_pose]= " << near_pick_pose.position.x << "," << near_pick_pose.position.y << "," << near_pick_pose.position.z << "," << near_pick_pose.orientation.x << "," << near_pick_pose.orientation.y << "," << near_pick_pose.orientation.z << "," << near_pick_pose.orientation.w);
-//    ROS_INFO_STREAM("[pick_pose]= " << pick_pose.position.x << "," << pick_pose.position.y << "," << pick_pose.position.z << "," << pick_pose.orientation.x << "," << pick_pose.orientation.y << "," << pick_pose.orientation.z << "," << pick_pose.orientation.w);
-//    std::vector<geometry_msgs::Pose> waypoints;
-//    waypoints.push_back(near_pick_pose);
-//    waypoints.push_back(pick_pose);
-
-//    moveit_msgs::RobotTrajectory trajectory;
-//    const double jump_threshold = 0.0;
-//    const double eef_step = 0.001;
-//    double fraction = left_arm_group_.computeCartesianPath(waypoints, eef_step, jump_threshold, trajectory);
-//
-//    moveit::planning_interface::MoveGroupInterface::Plan my_plan;
-//    bool success = (left_arm_group_.plan(my_plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS);
-//    if (success)
-//        left_arm_group_.move();
-//    ros::waitForShutdown();
 }
 
 
