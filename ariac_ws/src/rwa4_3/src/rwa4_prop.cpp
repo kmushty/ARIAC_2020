@@ -331,7 +331,8 @@ void processHPOrder(nist_gear::Order &order,Camera &camera, GantryControl &gantr
             prod.arm_name = "left_arm";
 
             if(wanted){
-                processPart(prod, gantry, camera, false, false);   
+                processPart(prod, gantry, camera, false, false);
+                ros::Duration(3.0).sleep();
                 ros::spinOnce();
                 ros::spinOnce();
                 if(camera.get_is_faulty(prod.agv_id)) {

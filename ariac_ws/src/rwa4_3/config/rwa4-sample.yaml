@@ -112,46 +112,46 @@ belt_models:
         rpy: [0, 0, 'pi/2']
 
 #Faulty gripper
-#drops:
-#  drop_regions:
-#    shipping_box_0_impeding:
-#      frame: agv1::kit_tray_1
-#      min:
-#        xyz: [-0.3, -0.3, 0.0]
-#      max:
-#        xyz: [0.3, 0.3, 0.5]
-#      destination:
-#        xyz: [0.2, 0.3, 0.05]
-#        rpy: [0, 0, 0.2]
-#      product_type_to_drop: gasket_part_green
-#    shipping_box_1_impeding:
-#      frame: agv2::kit_tray_2
-#      min:
-#        xyz: [-0.3, -0.3, 0.0]
-#      max:
-#        xyz: [0.3, 0.3, 0.5]
-#      destination:
-#        xyz: [0.15, 0.15, 0.05]
-#        rpy: [0, 0, 0.2]
-#      product_type_to_drop: disk_part_green
+drops:
+  drop_regions:
+    shipping_box_0_impeding:
+      frame: agv1::kit_tray_1
+      min:
+        xyz: [-0.3, -0.3, 0.0]
+      max:
+        xyz: [0.3, 0.3, 0.5]
+      destination:
+        xyz: [0.2, 0.3, 0.05]
+        rpy: [0, 0, 0.2]
+      product_type_to_drop: gasket_part_green
+    shipping_box_1_impeding:
+      frame: agv2::kit_tray_2
+      min:
+        xyz: [-0.3, -0.3, 0.0]
+      max:
+        xyz: [0.3, 0.3, 0.5]
+      destination:
+        xyz: [0.15, 0.15, 0.05]
+        rpy: [0, 0, 0.2]
+      product_type_to_drop: disk_part_green
 
 #Faulty products
 faulty_products:
 #  - disk_part_green_2
-  - disk_part_green_9
-
-  - disk_part_green_1
-  - gasket_part_blue_3
-  - gasket_part_blue_1
-
-  - gasket_part_green_1
-  - gasket_part_green_2
-  - gasket_part_green_3
-  - gasket_part_green_4
-  - gasket_part_green_5
-
+#  - disk_part_green_9
+#
+#  - disk_part_green_1
+#  - gasket_part_blue_3
+#  - gasket_part_blue_1
+#
+#  - gasket_part_green_1
+#  - gasket_part_green_2
+#  - gasket_part_green_3
+#  - gasket_part_green_4
 #  - gasket_part_green_5
-  - gasket_part_green_6
+#
+##  - gasket_part_green_5
+#  - gasket_part_green_6
 
 
 
