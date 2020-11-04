@@ -100,6 +100,7 @@ class GantryControl {
     agv1_flipped1 agv1_flipped1_;
     movingPart movingPart_;
     movingPart1 movingPart1_;
+    agv1_gasket_part_green agv1_gasket_part_green_;
 
 
   private:

@@ -97,6 +97,8 @@ void initWayPoints(std::map<std::string,std::vector<PresetLocation>> &presetLoc,
     presetLoc["agv1_left_arm_drop"]  = {gantry.agv1_drop_};//verified
     presetLoc["movingPart"] = {gantry.movingPart_};
     presetLoc["pickmovingPart"] = {gantry.movingPart1_, gantry.movingPart_};
+    presetLoc["agv1_gasket_part_green"] = {gantry.agv1_gasket_part_green_};
+    presetLoc["agv2_disk_part_green"] = {gantry.agv2_};
 }
 
 
@@ -167,21 +169,23 @@ void faultyGripper(GantryControl &gantry,product &prod,Camera &camera, part my_p
     else
         placed_part = camera.get_detected_parts()["logical_camera_8"];
 
-    actual_part.type = prod.type;
+//    actual_part.type = prod.type;
     armState = gantry.getGripperState(prod.arm_name);
-    actual_part.pose = gantry.getTargetWorldPose(my_part_in_tray.pose, prod.agv_id, prod.arm_name);
+//    actual_part.pose = gantry.getTargetWorldPose(my_part_in_tray.pose, prod.agv_id, prod.arm_name);
 
-    if(prod.agv_id == "agv2")
-        moveToLocation(presetLoc, "agv2_faultyG", gantry);                                                     //change arm configuration for both left and right arm
-    else
-        moveToLocation(presetLoc, "agv1_faultyG", gantry);
+//    if(prod.agv_id == "agv2")
+//        moveToLocation(presetLoc, "agv2_faultyG", gantry);                                                     //change arm configuration for both left and right arm
+//    else
+//        moveToLocation(presetLoc, "agv1_faultyG", gantry);
 
-    ros::Duration(5).sleep();
+//    ros::Duration(2).sleep();
     ROS_INFO("Faulty Gripper Detected");
     ROS_INFO("Re-picking and replacing the part");
+    moveToLocation(presetLoc,prod.agv_id+"_"+prod.type, gantry);
+    ROS_INFO_STREAM(prod.agv_id+"_"+prod.type);
     gantry.pickPart(placed_part);
     moveToLocation(presetLoc, prod.agv_id, gantry);
-    gantry.placePart(actual_part, prod.agv_id, prod.arm_name);
+    gantry.placePart(my_part_in_tray, prod.agv_id, prod.arm_name);
 }
 
 
@@ -451,18 +455,18 @@ int main(int argc, char ** argv) {
 
 
                 //Conveyor Impementation
-                if(k == 0) {
-                    while (true) {
-                        if (camera.get_break_beam()) {
-                            conveyor(camera, gantry, prod);
-                            break;
-                        }
-                    }
-                    if(camera.get_break_beam()) {
-                        camera.reset_break_beam();
-                        continue;
-                    }
-                }
+//                if(k == 0) {
+//                    while (true) {
+//                        if (camera.get_break_beam()) {
+//                            conveyor(camera, gantry, prod);
+//                            break;
+//                        }
+//                    }
+//                    if(camera.get_break_beam()) {
+//                        camera.reset_break_beam();
+//                        continue;
+//                    }
+//                }
                 // if(camera.get_break_beam()) {
                 //     camera.reset_break_beam();
                 //     continue;

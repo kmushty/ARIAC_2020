@@ -220,6 +220,10 @@ void GantryControl::init() {
    movingPart1_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
    movingPart1_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
 
+   agv1_gasket_part_green_.gantry = {-0.7, -6.65, 0.01};
+   agv1_gasket_part_green_.left_arm = {0.0, -PI/4, PI/2, -0.78, 1.63, 0};
+   agv1_gasket_part_green_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
     /*
      //--start location
     start_.gantry = {0,0,0};
@@ -627,7 +631,7 @@ bool GantryControl::pickPart(part part){
 void GantryControl::placePart(part part, std::string agv, std::string arm){
     auto target_pose_in_tray = getTargetWorldPose(part.pose, agv, arm);
     target_pose_in_tray.position.z += (ABOVE_TARGET + 1.5*model_height[part.type]);
-    
+    ROS_INFO_STREAM(target_pose_in_tray);
     //target_pose_in_tray.orientation.x = -0.710413;
     //target_pose_in_tray.orientation.y = 0.00131;
     //target_pose_in_tray.orientation.z = 0.7037;
