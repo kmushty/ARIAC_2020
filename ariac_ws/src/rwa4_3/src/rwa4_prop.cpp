@@ -184,6 +184,7 @@ void faultyGripper(GantryControl &gantry,product &prod,Camera &camera, part my_p
     moveToLocation(presetLoc,prod.agv_id+"_"+prod.type, gantry);
     ROS_INFO_STREAM(prod.agv_id+"_"+prod.type);
     gantry.pickPart(placed_part);
+    moveToLocation(presetLoc,prod.agv_id+"_"+prod.type, gantry);
     moveToLocation(presetLoc, prod.agv_id, gantry);
     gantry.placePart(my_part_in_tray, prod.agv_id, prod.arm_name);
 }
@@ -455,22 +456,18 @@ int main(int argc, char ** argv) {
 
 
                 //Conveyor Impementation
-//                if(k == 0) {
-//                    while (true) {
-//                        if (camera.get_break_beam()) {
-//                            conveyor(camera, gantry, prod);
-//                            break;
-//                        }
-//                    }
-//                    if(camera.get_break_beam()) {
-//                        camera.reset_break_beam();
-//                        continue;
-//                    }
-//                }
-                // if(camera.get_break_beam()) {
-                //     camera.reset_break_beam();
-                //     continue;
-                // }
+              if(k == 0) {
+                   while (true) {
+                       if (camera.get_break_beam()) {
+                           conveyor(camera, gantry, prod);
+                           break;
+                       }
+                   }
+                   if(camera.get_break_beam()) {
+                       camera.reset_break_beam();
+                       continue;
+                   }
+              }
             
                 ROS_INFO_STREAM(comp.getOrders().size());
                 ROS_INFO_STREAM(HighPriorityOrderInitiated);

@@ -593,6 +593,7 @@ bool GantryControl::pickPart(part part){
     while(!state.enabled){
         ROS_INFO_STREAM("Activating Gripper again");
         activateGripper("left_arm");
+        state = getGripperState("left_arm");
     }
 //    if (state.enabled) {
     ROS_INFO_STREAM("[Gripper] = enabled");
