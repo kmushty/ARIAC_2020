@@ -59,8 +59,10 @@ const nist_gear::LogicalCameraImage::ConstPtr &msg, int index) {
 
 
 void Camera::break_beam_callback(const nist_gear::Proximity::ConstPtr &msg) {
-    if (msg->object_detected)  // If there is an object in proximity.
-        ROS_WARN("Break beam triggered.");
+    if (msg->object_detected) {  // If there is an object in proximity.
+        break_beam_triggered = true;
+        ROS_WARN_ONCE("Break beam triggered.");
+    }
 }
 
 
@@ -102,7 +104,8 @@ void Camera::init(ros::NodeHandle & node){
        "/ariac/quality_control_sensor_2", 1, &Camera::quality_control_sensor_callback2,this
        );
 
-
+  breakbeam_1_sensor_subscriber = node.subscribe("/ariac/breakbeam_1",1, &Camera::break_beam_callback, this);
+  break_beam_triggered = false;
   is_faulty1 = false;
   is_faulty2 = false;
 }
@@ -191,3 +194,10 @@ geometry_msgs::Pose Camera::get_faulty_pose(std::string agv) {
     return faulty_pose2;
 }
 
+void Camera::reset_break_beam(){
+    break_beam_triggered = false;
+}
+
+bool Camera::get_break_beam(){
+    return break_beam_triggered;
+}

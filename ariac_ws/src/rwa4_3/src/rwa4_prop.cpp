@@ -95,6 +95,8 @@ void initWayPoints(std::map<std::string,std::vector<PresetLocation>> &presetLoc,
     presetLoc["agv1_right_arm_drop_flip"]  = {gantry.agv1_flipped_};//verified
     presetLoc["agv2_left_arm_drop"]  = {gantry.agv2_drop_};//verified
     presetLoc["agv1_left_arm_drop"]  = {gantry.agv1_drop_};//verified
+    presetLoc["movingPart"] = {gantry.movingPart_};
+    presetLoc["pickmovingPart"] = {gantry.movingPart1_, gantry.movingPart_};
 }
 
 
@@ -184,16 +186,15 @@ void faultyGripper(GantryControl &gantry,product &prod,Camera &camera, part my_p
 
 
 void flipPart(GantryControl &gantry, part &my_part_in_tray, product &prod){
-     moveToLocation(presetLoc,"flipped_pulley_",gantry);                                                    //set arms to desired configuration to flip
-     gantry.activateGripper("right_arm");                                                                   //activate and deactivate gripper
-     gantry.deactivateGripper("left_arm");
+    moveToLocation(presetLoc,"flipped_pulley_"+prod.agv_id,gantry);                                                    //set arms to desired configuration to flip
+    gantry.activateGripper("right_arm");                                                                   //activate and deactivate gripper
+    gantry.deactivateGripper("left_arm");
+    moveToLocation(presetLoc,prod.agv_id+"_right_arm_drop_flip",gantry);
+    my_part_in_tray.pose.orientation.x = 0;                                                                //modify pose orientation
+    my_part_in_tray.pose.orientation.w = 1;
 
-     my_part_in_tray.pose.orientation.x = 0;                                                                //modify pose orientation
-     my_part_in_tray.pose.orientation.w = 1;
-
-     prod.arm_name = "right_arm";
+    prod.arm_name = "right_arm";
 }
-
 
 void processPart(product prod, GantryControl &gantry, Camera &camera, bool priority_flag,  bool flip_flag) {
     part my_part, my_part_in_tray, placed_part, actual_part;
@@ -354,7 +355,44 @@ void processHPOrder(nist_gear::Order &order,Camera &camera, GantryControl &gantr
 
 }
 
+void conveyor(Camera &camera, GantryControl &gantry, product prod){
+    ROS_INFO_STREAM("Break beam triggered");
+    moveToLocation(presetLoc, "movingPart", gantry);
+    nist_gear::VacuumGripperState armState;
+    part imgPart, my_part_in_tray;
+    my_part_in_tray.type = prod.type;
+    my_part_in_tray.pose = prod.pose;
+    imgPart.type = prod.type;
+    imgPart.pose.orientation.x = 0;
+    imgPart.pose.orientation.y = 0;
+    imgPart.pose.orientation.z = 0;
+    imgPart.pose.orientation.w = 1;
 
+    imgPart.pose.position.x = 0;
+    imgPart.pose.position.y = -0.272441;
+    imgPart.pose.position.z = 0.875004;
+    ROS_INFO_STREAM("Picking Part from conveynor");
+    gantry.pickPart(imgPart);
+    moveFromLocationToStart(presetLoc, "pickmovingPart", gantry);
+
+    if (int(my_part_in_tray.pose.orientation.x) == 1) {                                   //Flip part if part needs to be flipped
+        moveToLocation(presetLoc,prod.agv_id+"_flipped",gantry);                                       //go to location to flip pulley
+        flipPart(gantry, my_part_in_tray, prod);
+    }
+    else
+        moveToLocation(presetLoc, prod.agv_id, gantry);                                                //move to desired agv id
+
+//    armState = gantry.getGripperState(prod.arm_name);
+//    if (!armState.attached)                                                                            //object accidentally fell on the tray
+//        faultyGripper(gantry, prod, camera, my_part_in_tray);
+//    else
+//        gantry.placePart(my_part_in_tray, prod.agv_id, prod.arm_name);                                 //place part on the tray
+
+    gantry.placePart(my_part_in_tray, prod.agv_id, prod.arm_name);
+
+    moveFromLocationToStart(presetLoc, "start", gantry);
+
+}
 
 
 int main(int argc, char ** argv) {
@@ -411,6 +449,20 @@ int main(int argc, char ** argv) {
                 prod.agv_id = ship.agv_id;
                 prod.arm_name = "left_arm";
 
+
+                //Conveyor Impementation
+                if(k == 0) {
+                    while (true) {
+                        if (camera.get_break_beam()) {
+                            conveyor(camera, gantry, prod);
+                            break;
+                        }
+                    }
+                }
+                if(camera.get_break_beam()) {
+                    camera.reset_break_beam();
+                    continue;
+                }
             
                 ROS_INFO_STREAM(comp.getOrders().size());
                 ROS_INFO_STREAM(HighPriorityOrderInitiated);

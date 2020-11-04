@@ -45,6 +45,10 @@ class Camera{
     void reset_is_faulty();
 
     bool get_is_faulty(std::string agv);
+
+    void reset_break_beam();
+
+    bool get_break_beam();
     
     geometry_msgs::Pose get_faulty_pose(std::string agv);
 
@@ -60,8 +64,10 @@ class Camera{
     // vector of parts for agv logical cameras
      
     ros::Subscriber quality_sensor_subscriber_1;
-    ros::Subscriber quality_sensor_subscriber_2;  
+    ros::Subscriber quality_sensor_subscriber_2;
+    ros::Subscriber breakbeam_1_sensor_subscriber;
     bool is_faulty1, is_faulty2;
+    bool break_beam_triggered;
     
     geometry_msgs::Pose faulty_pose1, faulty_pose2;
 };
