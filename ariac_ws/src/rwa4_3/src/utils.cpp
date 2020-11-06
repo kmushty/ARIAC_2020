@@ -17,3 +17,7 @@ std::unordered_map<std::string, double> model_height = {
         {"disk_part_green", 0.023},
         {"disk_part_blue", 0.023}
 };
+
+Product::Product() {
+
+}

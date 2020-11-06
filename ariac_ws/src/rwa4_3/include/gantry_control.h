@@ -71,16 +71,36 @@ class GantryControl {
     start start_;
     bin3 bin3_;
     agv2 agv2_;
+    agv1 agv1_;
+    agv2_faultyG agv2_faultyG_;
+    agv1_faultyG agv1_faultyG_;
+    agv1_drop agv1_drop_;
+    agv2_drop agv2_drop_;
     bin13 bin13_;
     bin16 bin16_;
     shelf5_1 shelf5_1_;
     shelf5_2 shelf5_2_;
     shelf5_3 shelf5_3_;
+    // Added coordinates for shelf 8 to test faulty gripper functionality
+    shelf8_1 shelf8_1_;
+    shelf8_2 shelf8_2_;
+    shelf8_3 shelf8_3_;
+
+    shelf11_1 shelf11_1_;
+    shelf11_2 shelf11_2_;
+    shelf11_3 shelf11_3_;
+    /** -------------**/
     shelf5_4 shelf5_4_;
     shelf5_5 shelf5_5_;
-    go_to_flipped_pulley go_to_flipped_pulley_;
+    agv2_go_to_flipped_pulley agv2_go_to_flipped_pulley_;
+    agv1_go_to_flipped_pulley agv1_go_to_flipped_pulley_;
     agv2_flipped agv2_flipped_;
     agv2_flipped1 agv2_flipped1_;
+    agv1_flipped agv1_flipped_;
+    agv1_flipped1 agv1_flipped1_;
+    movingPart movingPart_;
+    movingPart1 movingPart1_;
+    agv1_gasket_part_green agv1_gasket_part_green_;
 
 
   private:

@@ -59,6 +59,25 @@ void GantryControl::init() {
     agv2_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
     agv2_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
 
+    //--agv1
+    agv1_.gantry = {-0.6, -6.9, 0.0};
+    agv1_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
+    agv1_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+    //--agv2_1 for faulty gripper
+//    agv2_faultyG_.gantry = {0.6, 6.9, PI};
+//    agv2_faultyG_.left_arm = {0.0, -1.01, 1.76, -PI/4, PI/2, 0};
+//    agv2_faultyG_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+    agv2_faultyG_.gantry = {0.7, 6.9, PI};
+    agv2_faultyG_.left_arm = {0.0, -1.38, 2.14, -PI/4, PI/2, 0};
+    agv2_faultyG_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+    agv1_faultyG_.gantry = {-0.7, -6.9, 0.0};
+    agv1_faultyG_.left_arm = {0.0, -1.38, 2.14, -PI/4, PI/2, 0};
+    agv1_faultyG_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+
 //    agv2_.gantry = {0, 6.30, 0};
 //    agv2_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
 //    agv2_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
@@ -68,11 +87,18 @@ void GantryControl::init() {
 //     bin13_.left_arm = {0, -0.63, 1.26, -0.78, PI/2, 0};
 //     bin13_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
 
+//    //--bin13
+//    bin13_.gantry = {1.85, 2.14,0};//, 2.10};
+//    // bin13_.left_arm = {0, -1.45, 1.58, -0.13, PI/2, -0.88};
+//    bin13_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
+//    bin13_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
     //--bin13
-    bin13_.gantry = {1.85, 2.14,0};//, 2.10};
+    bin13_.gantry = {2.10, 2.25,0};//, 2.10};
     // bin13_.left_arm = {0, -1.45, 1.58, -0.13, PI/2, -0.88};
-    bin13_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
+    bin13_.left_arm = {0.0, -PI/4, PI/2, -0.80, PI/2, 0};
     bin13_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
 
 //   //--bin16
 //    bin16_.gantry = {6.25, 1.96, -3.14};
@@ -119,18 +145,84 @@ void GantryControl::init() {
     shelf5_5_.left_arm = {-1.39, -0.75, 1.26, 0, 0.28, 1.38};
     shelf5_5_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
 
-    go_to_flipped_pulley_.gantry = {0, 6.2, 0};
-    go_to_flipped_pulley_.left_arm = {1.84, -2.73, -1.88, -0.2, 1.63, 0};
-    go_to_flipped_pulley_.right_arm = {1.75, -3.35, -1.4, 0.13, 1.51, 0};
+    //--shelf8 - waypoint 1
+    shelf8_1_.gantry = {0.18, -1.50, 0};
+    shelf8_1_.left_arm = {-2.39, -PI/4, PI/2, -PI/4, 0, 0};
+    shelf8_1_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+    shelf8_2_.gantry = {-14.68, -1.50, 0};
+    shelf8_2_.left_arm = {-2.39, -PI/4, PI/2, -PI/4, 0, 0};
+    shelf8_2_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+    // shelf8_3_.gantry = {-14.07, -1.14, 0};
+    // shelf8_3_.left_arm = {-1.24, -PI/4, PI/2, -PI/4, 0.30, 0};
+    // shelf8_3_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+    // shelf8_3_.gantry = {-14.55, -1.14, 0};
+    // shelf8_3_.left_arm = {-1.57, -PI/4, PI/2, -PI/4, 0.0, 0};
+    // shelf8_3_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+    shelf8_3_.gantry = {-14.55, -1.2, 0};
+    shelf8_3_.left_arm = {-1.78, -PI/4, PI/2, -PI/4, -0.20, 0};
+    shelf8_3_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+    shelf11_1_.gantry = {0.18, 1.50, 0};
+    shelf11_1_.left_arm = {-2.39, -PI/4, PI/2, -PI/4, 0, 0};
+    shelf11_1_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+    shelf11_2_.gantry = {-14.68, 1.50, 0};
+    shelf11_2_.left_arm = {-2.39, -PI/4, PI/2, -PI/4, 0, 0};
+    shelf11_2_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+    shelf11_3_.gantry = {-14.55, 1.8, 0};
+    shelf11_3_.left_arm = {-1.78, -PI/4, PI/2, -PI/4, -0.20, 0};
+    shelf11_3_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+    agv2_go_to_flipped_pulley_.gantry = {0, 6.2, 0};
+    agv2_go_to_flipped_pulley_.left_arm = {1.84, -2.73, -1.88, -0.2, 1.63, 0};
+    agv2_go_to_flipped_pulley_.right_arm = {1.75, -3.35, -1.4, 0.13, 1.51, 0};
+
+    agv1_go_to_flipped_pulley_.gantry = {0, -6.2, 3.14};
+    agv1_go_to_flipped_pulley_.left_arm = {1.84, -2.73, -1.88, -0.2, 1.63, 0};
+    agv1_go_to_flipped_pulley_.right_arm = {1.75, -3.35, -1.4, 0.13, 1.51, 0};
 
     agv2_flipped1_.gantry = {0.6, 6.9, 0};
     agv2_flipped1_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
     // agv2_flipped1_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
     agv2_flipped1_.right_arm =  {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
 
-    agv2_flipped_.gantry = {0.6, 6.58, 0};
+    agv2_flipped_.gantry = {0.6, 6.30, 0};
     agv2_flipped_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
     agv2_flipped_.right_arm = {1.57, -1.57, -2.26, 0.13, 0, 0.13};
+
+    agv1_flipped1_.gantry = {-0.6, -6.9, 3.14};
+    agv1_flipped1_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
+    // agv2_flipped1_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+    agv1_flipped1_.right_arm =  {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+    agv1_flipped_.gantry = {-0.6, -6.45, PI};
+    agv1_flipped_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
+    agv1_flipped_.right_arm = {1.57, -1.57, -2.26, 0.13, 0, 0.13};
+
+    agv1_drop_.gantry = {-0.6, -6.30, 0};
+    agv1_drop_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
+    agv1_drop_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+    agv2_drop_.gantry = {0.6, 6.30, 0};
+    agv2_drop_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
+    agv2_drop_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+   movingPart_.gantry = {-0.16, -0.22, -1.57};
+   movingPart_.left_arm = {0.0, -0.63, 1.38, -0.73, PI/2, 0};
+   movingPart_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+   movingPart1_.gantry = {-0.16, -0.22, -1.57};
+   movingPart1_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
+   movingPart1_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+   agv1_gasket_part_green_.gantry = {-0.7, -6.65, 0.01};
+   agv1_gasket_part_green_.left_arm = {0.0, -PI/4, PI/2, -0.78, 1.63, 0};
+   agv1_gasket_part_green_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
 
     /*
      //--start location
@@ -384,7 +476,99 @@ geometry_msgs::Pose GantryControl::getTargetWorldPose(geometry_msgs::Pose target
 
     return world_target;
 }
+ 
+////TODO- make pick part more robust. Sometimes fails to pick part
+//bool GantryControl::pickPart(part part){
+//    //--Activate gripper
+//    activateGripper("left_arm");
+//
+////    ros::AsyncSpinner spinner(1);
+////    spinner.start();
+//
+////    left_arm_group_.setPoseReferenceFrame("world");
+//    geometry_msgs::Pose currentPose = left_arm_group_.getCurrentPose().pose;
+//
+////    ROS_INFO_STREAM("[left_arm_group_]= " << currentPose.position.x << ", " << currentPose.position.y << "," << currentPose.position.z);
+//
+//    part.pose.position.z = part.pose.position.z + model_height.at(part.type) + GRIPPER_HEIGHT - EPSILON;
+//    part.pose.orientation.x = currentPose.orientation.x;
+//    part.pose.orientation.y = currentPose.orientation.y;
+//    part.pose.orientation.z = currentPose.orientation.z;
+//    part.pose.orientation.w = currentPose.orientation.w;
+////    ROS_INFO_STREAM("["<< part.type<<"]= " << part.pose.position.x << ", " << part.pose.position.y << "," << part.pose.position.z << "," << part.pose.orientation.x << "," << part.pose.orientation.y << "," << part.pose.orientation.z << "," << part.pose.orientation.w);
+//
+//
+//    auto state = getGripperState("left_arm");
+//    if (state.enabled) {
+//        ROS_INFO_STREAM("[Gripper] = enabled");
+//        //--Move arm to part
+//        left_arm_group_.setPoseTarget(part.pose);
+//        left_arm_group_.move();
+//        auto state = getGripperState("left_arm");
+//        if (state.attached) {
+//            ROS_INFO_STREAM("[Gripper] = object attached");
+//            //--Move arm to previous position
+//            left_arm_group_.setPoseTarget(currentPose);
+//            left_arm_group_.move();
+//            /*goToPresetLocation(start_);*/
+//            return true;
+//        }
+//        else {
+//            ROS_INFO_STREAM("[Gripper] = object not attached");
+//            int max_attempts{5};
+//            int current_attempt{0};
+//            while(!state.attached) {
+//                left_arm_group_.setPoseTarget(currentPose);
+//                left_arm_group_.move();
+//                ros::Duration(0.5).sleep();
+//                left_arm_group_.setPoseTarget(part.pose);
+//                left_arm_group_.move();
+//                activateGripper("left_arm");
+//                ROS_INFO_STREAM(state.attached);
+//                state = getGripperState("left_arm");
+//              // ros::spinOnce();
+//        }
+//     }
+//    }
+//    else {
+//        ROS_INFO_STREAM("[Gripper] = not enabled");
+//    }
+//    return false;
+//
+//    /**
+//     * We want the Cartesian path to be interpolated at a resolution of 1 cm which is why
+//     * we will specify 0.01 as the max step in Cartesian translation.
+//     * We will specify the jump threshold as 0.0, effectively disabling it.
+//     */
+//    //--define a set of waypoints
+////    geometry_msgs::Pose near_pick_pose;
+////    geometry_msgs::Pose pick_pose;
+////    near_pick_pose = part.pose;
+////    pick_pose = part.pose;
+////
+////    near_pick_pose.position.z += 0.1;
+////    pick_pose.position.z += 0.015;
+////
+////    //--waypoints
+////    ROS_INFO_STREAM("[near_pick_pose]= " << near_pick_pose.position.x << "," << near_pick_pose.position.y << "," << near_pick_pose.position.z << "," << near_pick_pose.orientation.x << "," << near_pick_pose.orientation.y << "," << near_pick_pose.orientation.z << "," << near_pick_pose.orientation.w);
+////    ROS_INFO_STREAM("[pick_pose]= " << pick_pose.position.x << "," << pick_pose.position.y << "," << pick_pose.position.z << "," << pick_pose.orientation.x << "," << pick_pose.orientation.y << "," << pick_pose.orientation.z << "," << pick_pose.orientation.w);
+////    std::vector<geometry_msgs::Pose> waypoints;
+////    waypoints.push_back(near_pick_pose);
+////    waypoints.push_back(pick_pose);
+//
+////    moveit_msgs::RobotTrajectory trajectory;
+////    const double jump_threshold = 0.0;
+////    const double eef_step = 0.001;
+////    double fraction = left_arm_group_.computeCartesianPath(waypoints, eef_step, jump_threshold, trajectory);
+////
+////    moveit::planning_interface::MoveGroupInterface::Plan my_plan;
+////    bool success = (left_arm_group_.plan(my_plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS);
+////    if (success)
+////        left_arm_group_.move();
+////    ros::waitForShutdown();
+//}
 
+//TODO- make pick part more robust. Sometimes fails to pick part
 bool GantryControl::pickPart(part part){
     //--Activate gripper
     activateGripper("left_arm");
@@ -406,117 +590,66 @@ bool GantryControl::pickPart(part part){
 
 
     auto state = getGripperState("left_arm");
-    if (state.enabled) {
-        ROS_INFO_STREAM("[Gripper] = enabled");
-        //--Move arm to part
-        left_arm_group_.setPoseTarget(part.pose);
+    while(!state.enabled){
+        ROS_INFO_STREAM("Activating Gripper again");
+        activateGripper("left_arm");
+        state = getGripperState("left_arm");
+    }
+//    if (state.enabled) {
+    ROS_INFO_STREAM("[Gripper] = enabled");
+    //--Move arm to part
+    left_arm_group_.setPoseTarget(part.pose);
+    left_arm_group_.move();
+    state = getGripperState("left_arm");
+    if (state.attached) {
+        ROS_INFO_STREAM("[Gripper] = object attached");
+        //--Move arm to previous position
+        left_arm_group_.setPoseTarget(currentPose);
         left_arm_group_.move();
-        auto state = getGripperState("left_arm");
-        if (state.attached) {
-            ROS_INFO_STREAM("[Gripper] = object attached");
-            //--Move arm to previous position
-            left_arm_group_.setPoseTarget(currentPose);
-            left_arm_group_.move();
-            /*goToPresetLocation(start_);*/
-            return true;
-        }
-        else {
-            ROS_INFO_STREAM("[Gripper] = object not attached");
-            int max_attempts{5};
-            int current_attempt{0};
-            while(!state.attached) {
-                left_arm_group_.setPoseTarget(currentPose);
-                left_arm_group_.move();
-                ros::Duration(0.5).sleep();
-                left_arm_group_.setPoseTarget(part.pose);
-                left_arm_group_.move();
-                activateGripper("left_arm");
-                ROS_INFO_STREAM(state.attached);
-                state = getGripperState("left_arm");
-              // ros::spinOnce();
-        }
-     }
+        /*goToPresetLocation(start_);*/
+        return true;
     }
     else {
-        ROS_INFO_STREAM("[Gripper] = not enabled");
+        ROS_INFO_STREAM("[Gripper] = object not attached");
+        int max_attempts{5};
+        int current_attempt{0};
+        while(!state.attached) {
+            left_arm_group_.setPoseTarget(currentPose);
+            left_arm_group_.move();
+            ros::Duration(0.5).sleep();
+            left_arm_group_.setPoseTarget(part.pose);
+            left_arm_group_.move();
+            activateGripper("left_arm");
+            ROS_INFO_STREAM(state.attached);
+            state = getGripperState("left_arm");
+            // ros::spinOnce();
+        }
     }
     return false;
-
-    /**
-     * We want the Cartesian path to be interpolated at a resolution of 1 cm which is why
-     * we will specify 0.01 as the max step in Cartesian translation.
-     * We will specify the jump threshold as 0.0, effectively disabling it.
-     */
-    //--define a set of waypoints
-//    geometry_msgs::Pose near_pick_pose;
-//    geometry_msgs::Pose pick_pose;
-//    near_pick_pose = part.pose;
-//    pick_pose = part.pose;
-//
-//    near_pick_pose.position.z += 0.1;
-//    pick_pose.position.z += 0.015;
-//
-//    //--waypoints
-//    ROS_INFO_STREAM("[near_pick_pose]= " << near_pick_pose.position.x << "," << near_pick_pose.position.y << "," << near_pick_pose.position.z << "," << near_pick_pose.orientation.x << "," << near_pick_pose.orientation.y << "," << near_pick_pose.orientation.z << "," << near_pick_pose.orientation.w);
-//    ROS_INFO_STREAM("[pick_pose]= " << pick_pose.position.x << "," << pick_pose.position.y << "," << pick_pose.position.z << "," << pick_pose.orientation.x << "," << pick_pose.orientation.y << "," << pick_pose.orientation.z << "," << pick_pose.orientation.w);
-//    std::vector<geometry_msgs::Pose> waypoints;
-//    waypoints.push_back(near_pick_pose);
-//    waypoints.push_back(pick_pose);
-
-//    moveit_msgs::RobotTrajectory trajectory;
-//    const double jump_threshold = 0.0;
-//    const double eef_step = 0.001;
-//    double fraction = left_arm_group_.computeCartesianPath(waypoints, eef_step, jump_threshold, trajectory);
-//
-//    moveit::planning_interface::MoveGroupInterface::Plan my_plan;
-//    bool success = (left_arm_group_.plan(my_plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS);
-//    if (success)
-//        left_arm_group_.move();
-//    ros::waitForShutdown();
 }
 
 
 void GantryControl::placePart(part part, std::string agv, std::string arm){
     auto target_pose_in_tray = getTargetWorldPose(part.pose, agv, arm);
-    ros::Duration(3.0).sleep();
-    goToPresetLocation(agv2_);
     target_pose_in_tray.position.z += (ABOVE_TARGET + 1.5*model_height[part.type]);
-
-    left_arm_group_.setPoseTarget(target_pose_in_tray);
-    left_arm_group_.move();
-    deactivateGripper("left_arm");
-    auto state = getGripperState("left_arm");
-    // if (state.attached)
-    //     goToPresetLocation(start_);
+    ROS_INFO_STREAM(target_pose_in_tray);
+    //target_pose_in_tray.orientation.x = -0.710413;
+    //target_pose_in_tray.orientation.y = 0.00131;
+    //target_pose_in_tray.orientation.z = 0.7037;
+    //target_pose_in_tray.orientation.w = -0.0018;
+    
+    if(arm == "left_arm"){
+       left_arm_group_.setPoseTarget(target_pose_in_tray);
+       left_arm_group_.move();
+    }else {
+       right_arm_group_.setPoseTarget(target_pose_in_tray);
+       right_arm_group_.move();
+    }
+    deactivateGripper(arm);
+    auto state = getGripperState(arm);
 }
 
-void GantryControl::placeFlippedPart(part part, std::string agv, std::string arm){
-    ROS_INFO_STREAM("target Pose is"<< part.pose);
-    auto target_pose_in_tray = getTargetWorldPose(part.pose, agv, arm);
 
-    target_pose_in_tray.orientation.x = -0.710413;
-    target_pose_in_tray.orientation.y = 0.00131;
-    target_pose_in_tray.orientation.z = 0.7037;
-    target_pose_in_tray.orientation.w = -0.0018;
-
-    ROS_INFO_STREAM("target Pose in tray is"<< target_pose_in_tray);
-
-    ros::Duration(3.0).sleep();
-    goToPresetLocation(agv2_flipped1_);
-    // target_pose_in_tray.position.z += (ABOVE_TARGET + 1.5*model_height[part.type]);
-
-    target_pose_in_tray.position.z += (ABOVE_TARGET + 1.5*model_height[part.type]);
-
-//    target_pose_in_tray.orientation.x = 0;
-    ROS_INFO("Target orientation");
-    ROS_INFO_STREAM(target_pose_in_tray.orientation);
-    right_arm_group_.setPoseTarget(target_pose_in_tray);
-    right_arm_group_.move();
-    deactivateGripper("right_arm");
-    auto state = getGripperState("right_arm");
-    // if (state.attached)
-    //     goToPresetLocation(start_);
-}
 
 
 

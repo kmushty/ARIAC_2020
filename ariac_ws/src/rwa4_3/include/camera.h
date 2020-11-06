@@ -29,7 +29,9 @@ class Camera{
 
     void laser_profiler_callback(const sensor_msgs::LaserScan::ConstPtr & msg);
     
-    void quality_control_sensor_callback(const nist_gear::LogicalCameraImage &msg);
+    void quality_control_sensor_callback1(const nist_gear::LogicalCameraImage &msg);
+
+    void quality_control_sensor_callback2(const nist_gear::LogicalCameraImage &msg);
 
     void init(ros::NodeHandle & node);
 
@@ -42,9 +44,13 @@ class Camera{
 
     void reset_is_faulty();
 
-    bool get_is_faulty();
+    bool get_is_faulty(std::string agv);
+
+    void reset_break_beam();
+
+    bool get_break_beam();
     
-    geometry_msgs::Pose get_faulty_pose();
+    geometry_msgs::Pose get_faulty_pose(std::string agv);
 
 
  
@@ -55,10 +61,15 @@ class Camera{
 
     std::map<std::string,part> detected_parts;
 
-    ros::Subscriber quality_sensor_subscriber;  
-    bool is_faulty;
+    // vector of parts for agv logical cameras
+     
+    ros::Subscriber quality_sensor_subscriber_1;
+    ros::Subscriber quality_sensor_subscriber_2;
+    ros::Subscriber breakbeam_1_sensor_subscriber;
+    bool is_faulty1, is_faulty2;
+    bool break_beam_triggered;
     
-    geometry_msgs::Pose faulty_pose;
+    geometry_msgs::Pose faulty_pose1, faulty_pose2;
 };
 
 
