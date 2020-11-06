@@ -1,0 +1,133 @@
+sensors:
+  # 17 logical sensors
+  logical_camera_0: #opp back shelf r
+    type: logical_camera
+    pose:
+      xyz: [ 4.95, 3.66, 2.49 ]
+      rpy: [ 0, 'pi/2', 'pi/2' ]
+
+  logical_camera_1:
+    type: logical_camera
+    pose:
+      xyz: [ 5, 1.750927, 1.82 ]
+      rpy: [ 0, 'pi/2', 'pi/2' ]
+
+  logical_camera_2:
+    type: logical_camera
+    pose:
+      xyz: [ 5, -1.76, 1.82 ]
+      rpy: [ 0, 'pi/2', 'pi/2' ]
+
+  logical_camera_3: #back shelf r
+    type: logical_camera
+    pose:
+      xyz: [ 4.95, -3.55, 2.49 ]
+      rpy: [ 0, 'pi/2', 'pi/2' ]
+
+  logical_camera_4: #opp back shelf r
+    type: logical_camera
+    pose:
+      xyz: [ 3.05, 3.66, 2.49 ]
+      rpy: [ 0, 'pi/2', 'pi/2' ]
+
+
+  logical_camera_5: #bin 1
+    type: logical_camera
+    pose:
+      xyz: [3.082385, 1.750927, 1.82]
+      rpy: [0, 'pi/2', 0]
+
+  logical_camera_6: #bin 1
+    type: logical_camera
+    pose:
+      xyz: [3.082385, -1.750927, 1.82]
+      rpy: [0, 'pi/2', 0]
+
+  logical_camera_7: #back shelf l
+    type: logical_camera
+    pose:
+      xyz: [ 3.05, -3.55, 2.49 ]
+      rpy: [ 0, 'pi/2', 'pi/2' ]
+
+  logical_camera_8: #bin2
+    type: logical_camera
+    pose:
+      xyz: [ 0, 7.46, 1.82 ]
+      rpy: [ 0, 'pi/2', 0 ]
+
+  logical_camera_9: # conveyor
+    type: logical_camera
+    pose:
+      xyz: [ -0.14, -1.82, 1.96 ]
+      rpy: [ 0, 'pi/2', 0 ]
+
+  logical_camera_10: #bin1
+    type: logical_camera
+    pose:
+      xyz: [0, -7.46, 1.82]
+      rpy: [0, 'pi/2', 0]
+
+  logical_camera_11: #front shelf l
+    type: logical_camera
+    pose:
+      xyz: [ -13.54, 3.01, 2.49 ]
+      rpy: [ 0, 'pi/2', 'pi/2' ]
+
+  logical_camera_12: #middle shelf r
+    type: logical_camera
+    pose:
+      xyz: [ -13.54, 0, 2.49 ]
+      rpy: [ 0, 'pi/2', 'pi/2' ]
+
+  logical_camera_13: #back shelf l
+    type: logical_camera
+    pose:
+      xyz: [ -13.54, -3.01, 2.49 ]
+      rpy: [ 0, 'pi/2', 'pi/2' ]
+
+  logical_camera_14: #front shelf r
+    type: logical_camera
+    pose:
+      xyz: [ -15.44, 3.01, 2.49 ]
+      rpy: [ 0, 'pi/2', 'pi/2' ]
+
+  logical_camera_15: # middle shelf l over shelf
+    type: logical_camera
+    pose:
+      xyz: [-3.25 - 6*2.04, 0, 2.49]
+      rpy: [0, 'pi/2', 'pi/2']
+
+  logical_camera_16: #back shelf r
+    type: logical_camera
+    pose:
+      xyz: [-15.44, -3.01, 2.49]
+      rpy: [0, 'pi/2', 'pi/2']
+
+  laser_profiler_0:
+    type: laser_profiler
+    pose:
+      xyz: [ 0., 1.486, 1.526 ]
+      rpy: [ 'pi/2', 'pi/2', 0 ]
+
+  range_finder_0:
+    type: proximity_sensor
+    pose:
+      xyz: [ 0, 2.840000, 0.970000 ]
+      rpy: [ 1.570796, 0.524365, 1.570796 ]
+
+  breakbeam_0:
+    type: break_beam
+    pose:
+      xyz: [ -0.004795, 4.492549, 0.879306 ]
+      rpy: [ 0, 0, -1.557900 ]
+
+  breakbeam_1:
+    type: break_beam
+    pose:
+      xyz: [ 0.184308, -0.501289, 0.879306 ]
+      rpy: [ 0, 0, 1.906282 ]
+
+
+
+
+
