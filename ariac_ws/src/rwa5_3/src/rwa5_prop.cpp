@@ -82,11 +82,6 @@ void initWayPoints(std::map<std::string,std::vector<PresetLocation>> &presetLoc,
     presetLoc["agv1"] = {gantry.agv1_};
     presetLoc["agv2_faultyG"] = {gantry.agv2_faultyG_};
     presetLoc["agv1_faultyG"] = {gantry.agv1_faultyG_};
-//    presetLoc["flipped_pulley_"] = {gantry.go_to_flipped_pulley_};
-//    presetLoc["agv2_flipped"]  = {gantry.agv2_flipped_};
-//    presetLoc["agv1_flipped"]  = {gantry.agv1_flipped_};
-//    presetLoc["agv2_drop"]  = {gantry.agv2_drop_};
-//    presetLoc["agv1_drop"]  = {gantry.agv1_drop_};
     presetLoc["flipped_pulley_agv2"] = {gantry.agv2_go_to_flipped_pulley_};//verified
     presetLoc["flipped_pulley_agv1"] = {gantry.agv1_go_to_flipped_pulley_};//verified
     presetLoc["agv2_flipped_final"]  = {gantry.agv2_flipped1_};//verified
@@ -169,16 +164,8 @@ void faultyGripper(GantryControl &gantry,product &prod,Camera &camera, part my_p
     else
         placed_part = camera.get_detected_parts()["logical_camera_8"];
 
-//    actual_part.type = prod.type;
     armState = gantry.getGripperState(prod.arm_name);
-//    actual_part.pose = gantry.getTargetWorldPose(my_part_in_tray.pose, prod.agv_id, prod.arm_name);
 
-//    if(prod.agv_id == "agv2")
-//        moveToLocation(presetLoc, "agv2_faultyG", gantry);                                                     //change arm configuration for both left and right arm
-//    else
-//        moveToLocation(presetLoc, "agv1_faultyG", gantry);
-
-//    ros::Duration(2).sleep();
     ROS_INFO("Faulty Gripper Detected");
     ROS_INFO("Re-picking and replacing the part");
     moveToLocation(presetLoc,prod.agv_id+"_"+prod.type, gantry);
@@ -257,25 +244,6 @@ void processPart(product prod, GantryControl &gantry, Camera &camera, bool prior
         }
     }
 }
-
-
-
-//void removeFaultyProduct(Camera &camera, GantryControl &gantry, product &prod) {
-//    ROS_INFO_STREAM("IN faulty part");
-//    part temp;
-//
-//    if(pr)
-//    temp.pose = camera.get_faulty_pose();
-//    temp.type = prod.type;
-//    gantry.pickPart(temp);
-//    //TODO-Change preset locations
-//    if(prod.agv_id == "agv2")
-//        moveToLocation(presetLoc,"agv2_drop",gantry);
-//    else
-//        moveToLocation(presetLoc,"agv1_drop",gantry);
-//    gantry.deactivateGripper("left_arm");
-//    camera.reset_is_faulty();
-//}
 
 void removeFaultyProduct(Camera &camera, GantryControl &gantry, product &prod) {
     ROS_INFO_STREAM("IN faulty part");
@@ -387,16 +355,32 @@ void conveyor(Camera &camera, GantryControl &gantry, product prod){
     else
         moveToLocation(presetLoc, prod.agv_id, gantry);                                                //move to desired agv id
 
-//    armState = gantry.getGripperState(prod.arm_name);
-//    if (!armState.attached)                                                                            //object accidentally fell on the tray
-//        faultyGripper(gantry, prod, camera, my_part_in_tray);
-//    else
-//        gantry.placePart(my_part_in_tray, prod.agv_id, prod.arm_name);                                 //place part on the tray
-
     gantry.placePart(my_part_in_tray, prod.agv_id, prod.arm_name);
 
     moveFromLocationToStart(presetLoc, "start", gantry);
 
+}
+
+void determineGaps(){
+    tf2_ros::Buffer tfBuffer;
+    tf2_ros::TransformListener tfListener(tfBuffer);
+    ros::Duration timeout(5.0);
+    geometry_msgs::TransformStamped T_w_l;
+    geometry_msgs::PoseStamped p_w, p_l;
+
+
+    std::string name = "shelf1_frame";
+
+    try {
+        T_w_l = tfBuffer.lookupTransform("world", name,
+                                         ros::Time(0), timeout);
+    }
+    catch (tf2::TransformException &ex) {
+        ROS_WARN("%s", ex.what());
+        ros::Duration(1.0).sleep();
+    }
+
+    ROS_INFO_STREAM(T_w_l.transform);
 }
 
 
@@ -437,80 +421,79 @@ int main(int argc, char ** argv) {
 
     product prod;
 
-    for(int i = 0; i< orders.size(); i++){
-        auto order = orders[i];
-
-
-        for(int j=0; j<order.shipments.size(); j++){
-            auto ship = order.shipments[j];
-
-
-            for (int k=0; k<ship.products.size(); k++){
-                auto product = ship.products[k];
-
-                ROS_INFO_STREAM(product.type);
-                prod.type = product.type;
-                prod.pose = product.pose;
-                prod.agv_id = ship.agv_id;
-                prod.arm_name = "left_arm";
-
-
-                //Conveyor Impementation
-                if(k == 0) {
-                    while (true) {
-                        if (camera.get_break_beam()) {
-                            conveyor(camera, gantry, prod);
-                            break;
-                        }
-                    }
-                    if(camera.get_break_beam()) {
-                        camera.reset_break_beam();
-                        continue;
-                    }
-                }
-
-                ROS_INFO_STREAM(comp.getOrders().size());
-                ROS_INFO_STREAM(HighPriorityOrderInitiated);
-                if(comp.getOrders().size()>1 && HighPriorityOrderInitiated == false){
-                    processHPOrder(comp.getOrders()[1],camera,gantry, agv2Delivery, agv1Delivery);
-                    ROS_INFO_STREAM("I am here1243");
-                    HighPriorityOrderInitiated = true;
-                    ROS_INFO_STREAM(comp.getOrders().size());
-                    ROS_INFO_STREAM(HighPriorityOrderInitiated);
-                    k--;
-                }
-                else
-                    processPart(prod, gantry, camera, false, true);             // Remove flip_flag after degugging
-
-
-                //TODO - Make checker for faulty more robust
-                ROS_INFO_STREAM("heere 1");
-                ros::Duration(3.0).sleep();
-                ros::spinOnce();
-                ros::spinOnce();
-                if(camera.get_is_faulty(prod.agv_id)) {
-                    ROS_INFO_STREAM("fAULTY");
-                    removeFaultyProduct(camera,gantry,prod);
-                    k--;
-                    //process product again
-                }
-                ROS_INFO_STREAM("heere 2");
-                moveFromLocationToStart(presetLoc,"start",gantry);
-                ROS_INFO_STREAM("heere x");
-            }
-            ROS_INFO_STREAM("herex1");
-            if(prod.agv_id == "agv2")
-                agvDeliveryService(agv2Delivery, order.shipments[j].shipment_type);
-            else
-                agvDeliveryService(agv1Delivery, order.shipments[j].shipment_type);
-        }
-        ROS_INFO_STREAM("here3");
-
-    }
-
-    comp.endCompetition();
-    spinner.stop();
-    ros::shutdown();
+//    for(int i = 0; i< orders.size(); i++){
+//        auto order = orders[i];
+//
+//
+//        for(int j=0; j<order.shipments.size(); j++){
+//            auto ship = order.shipments[j];
+//
+//
+//            for (int k=0; k<ship.products.size(); k++){
+//                auto product = ship.products[k];
+//
+//                ROS_INFO_STREAM(product.type);
+//                prod.type = product.type;
+//                prod.pose = product.pose;
+//                prod.agv_id = ship.agv_id;
+//                prod.arm_name = "left_arm";
+//
+//                                                                                    //Conveyor Impementation
+//                if(k == 0) {
+//                    while (true) {
+//                        if (camera.get_break_beam()) {
+//                            conveyor(camera, gantry, prod);
+//                            break;
+//                        }
+//                    }
+//                    if(camera.get_break_beam()) {
+//                        camera.reset_break_beam();
+//                        continue;
+//                    }
+//                }
+//
+//                ROS_INFO_STREAM(comp.getOrders().size());
+//                ROS_INFO_STREAM(HighPriorityOrderInitiated);
+//                if(comp.getOrders().size()>1 && !HighPriorityOrderInitiated){
+//                    processHPOrder(comp.getOrders()[1],camera,gantry, agv2Delivery, agv1Delivery);
+//                    ROS_INFO_STREAM("I am here1243");
+//                    HighPriorityOrderInitiated = true;
+//                    ROS_INFO_STREAM(comp.getOrders().size());
+//                    ROS_INFO_STREAM(HighPriorityOrderInitiated);
+//                    k--;
+//                }
+//                else
+//                    processPart(prod, gantry, camera, false, true);             // Remove flip_flag after degugging
+//
+//
+//                //TODO - Make checker for faulty more robust
+//                ROS_INFO_STREAM("heere 1");
+//                ros::Duration(3.0).sleep();
+//                ros::spinOnce();
+//                ros::spinOnce();
+//                if(camera.get_is_faulty(prod.agv_id)) {
+//                    ROS_INFO_STREAM("fAULTY");
+//                    removeFaultyProduct(camera,gantry,prod);
+//                    k--;                                                                    //process product again
+//                }
+//                ROS_INFO_STREAM("heere 2");
+//                moveFromLocationToStart(presetLoc,"start",gantry);
+//                ROS_INFO_STREAM("heere x");
+//            }
+//            ROS_INFO_STREAM("herex1");
+//            if(prod.agv_id == "agv2")
+//                agvDeliveryService(agv2Delivery, order.shipments[j].shipment_type);
+//            else
+//                agvDeliveryService(agv1Delivery, order.shipments[j].shipment_type);
+//        }
+//        ROS_INFO_STREAM("here3");
+//
+//    }
+//
+//    comp.endCompetition();
+//    spinner.stop();
+//    ros::shutdown();
+    determineGaps();
     return 0;
 }
 
