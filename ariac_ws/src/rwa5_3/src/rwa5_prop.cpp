@@ -361,26 +361,54 @@ void conveyor(Camera &camera, GantryControl &gantry, product prod){
 
 }
 
-void determineGaps(){
+geometry_msgs::TransformStamped shelfPosition(std::string shelf){
     tf2_ros::Buffer tfBuffer;
     tf2_ros::TransformListener tfListener(tfBuffer);
     ros::Duration timeout(5.0);
     geometry_msgs::TransformStamped T_w_l;
-    geometry_msgs::PoseStamped p_w, p_l;
-
-
-    std::string name = "shelf1_frame";
 
     try {
-        T_w_l = tfBuffer.lookupTransform("world", name,
+        T_w_l = tfBuffer.lookupTransform("world", shelf,            // Determining shelf position in world frame
                                          ros::Time(0), timeout);
     }
     catch (tf2::TransformException &ex) {
         ROS_WARN("%s", ex.what());
         ros::Duration(1.0).sleep();
     }
+    return T_w_l;
+}
 
-    ROS_INFO_STREAM(T_w_l.transform);
+double shelfDistance(std::string shelf1, std::string shelf2){                   // Determining distance between adjacent shelves
+    geometry_msgs::TransformStamped s1;
+    geometry_msgs::TransformStamped s2;
+    s1 = shelfPosition(shelf1);
+    s2 = shelfPosition(shelf2);
+    return double(abs(abs(s1.transform.translation.x) - abs(s2.transform.translation.x)));
+}
+
+std::vector<std::string> determineGaps(){                                       // Function returning gap postions in the form of string
+    std::vector<std::string> gap;
+    std::vector<double> gapThreshold = {6.299163, 6.299173};
+    std::vector<std::string> shelfSide = {"left_side_gap_", "right_side_gap_"};
+    std::string temp;
+    int count = 0;
+    std::string name1;
+    std::string name2;
+    int shelfStartIndex = 3;
+    int shelfEndIndex = 11;
+
+    for(int shelf = shelfStartIndex; shelf <= shelfEndIndex; shelf = shelf + 2*shelfStartIndex){
+        count ++;
+        for(int row = shelf; row < (shelf + shelfStartIndex)-1; row++){
+            name1 = "shelf"+std::to_string(row)+"_frame";
+            name2 = "shelf"+std::to_string(row+1)+"_frame";
+
+            if(shelfDistance(name1, name2) >= gapThreshold[0] && shelfDistance(name1, name2) <= gapThreshold[1]){
+                gap.push_back(shelfSide[count-1] + std::to_string(row % shelfStartIndex));
+            }
+        }
+    }
+    return gap;
 }
 
 
@@ -421,78 +449,84 @@ int main(int argc, char ** argv) {
 
     product prod;
 
-//    for(int i = 0; i< orders.size(); i++){
-//        auto order = orders[i];
-//
-//
-//        for(int j=0; j<order.shipments.size(); j++){
-//            auto ship = order.shipments[j];
-//
-//
-//            for (int k=0; k<ship.products.size(); k++){
-//                auto product = ship.products[k];
-//
-//                ROS_INFO_STREAM(product.type);
-//                prod.type = product.type;
-//                prod.pose = product.pose;
-//                prod.agv_id = ship.agv_id;
-//                prod.arm_name = "left_arm";
-//
-//                                                                                    //Conveyor Impementation
-//                if(k == 0) {
-//                    while (true) {
-//                        if (camera.get_break_beam()) {
-//                            conveyor(camera, gantry, prod);
-//                            break;
-//                        }
-//                    }
-//                    if(camera.get_break_beam()) {
-//                        camera.reset_break_beam();
-//                        continue;
-//                    }
-//                }
-//
-//                ROS_INFO_STREAM(comp.getOrders().size());
-//                ROS_INFO_STREAM(HighPriorityOrderInitiated);
-//                if(comp.getOrders().size()>1 && !HighPriorityOrderInitiated){
-//                    processHPOrder(comp.getOrders()[1],camera,gantry, agv2Delivery, agv1Delivery);
-//                    ROS_INFO_STREAM("I am here1243");
-//                    HighPriorityOrderInitiated = true;
-//                    ROS_INFO_STREAM(comp.getOrders().size());
-//                    ROS_INFO_STREAM(HighPriorityOrderInitiated);
-//                    k--;
-//                }
-//                else
-//                    processPart(prod, gantry, camera, false, true);             // Remove flip_flag after degugging
-//
-//
-//                //TODO - Make checker for faulty more robust
-//                ROS_INFO_STREAM("heere 1");
-//                ros::Duration(3.0).sleep();
-//                ros::spinOnce();
-//                ros::spinOnce();
-//                if(camera.get_is_faulty(prod.agv_id)) {
-//                    ROS_INFO_STREAM("fAULTY");
-//                    removeFaultyProduct(camera,gantry,prod);
-//                    k--;                                                                    //process product again
-//                }
-//                ROS_INFO_STREAM("heere 2");
-//                moveFromLocationToStart(presetLoc,"start",gantry);
-//                ROS_INFO_STREAM("heere x");
-//            }
-//            ROS_INFO_STREAM("herex1");
-//            if(prod.agv_id == "agv2")
-//                agvDeliveryService(agv2Delivery, order.shipments[j].shipment_type);
-//            else
-//                agvDeliveryService(agv1Delivery, order.shipments[j].shipment_type);
-//        }
-//        ROS_INFO_STREAM("here3");
-//
-//    }
-//
-//    comp.endCompetition();
-//    spinner.stop();
-//    ros::shutdown();
+    for(int i = 0; i< orders.size(); i++){
+        auto order = orders[i];
+
+
+        for(int j=0; j<order.shipments.size(); j++){
+            auto ship = order.shipments[j];
+
+
+            for (int k=0; k<ship.products.size(); k++){
+                auto product = ship.products[k];
+
+                ROS_INFO_STREAM(product.type);
+                prod.type = product.type;
+                prod.pose = product.pose;
+                prod.agv_id = ship.agv_id;
+                prod.arm_name = "left_arm";
+
+                                                                                    //Conveyor Impementation
+                if(k == 0) {
+                    while (true) {
+                        if (camera.get_break_beam()) {
+                            conveyor(camera, gantry, prod);
+                            break;
+                        }
+                    }
+                    if(camera.get_break_beam()) {
+                        camera.reset_break_beam();
+                        continue;
+                    }
+                }
+
+                ROS_INFO_STREAM(comp.getOrders().size());
+                ROS_INFO_STREAM(HighPriorityOrderInitiated);
+                if(comp.getOrders().size()>1 && !HighPriorityOrderInitiated){
+                    processHPOrder(comp.getOrders()[1],camera,gantry, agv2Delivery, agv1Delivery);
+                    ROS_INFO_STREAM("I am here1243");
+                    HighPriorityOrderInitiated = true;
+                    ROS_INFO_STREAM(comp.getOrders().size());
+                    ROS_INFO_STREAM(HighPriorityOrderInitiated);
+                    k--;
+                }
+                else
+                    processPart(prod, gantry, camera, false, true);             // Remove flip_flag after degugging
+
+
+                //TODO - Make checker for faulty more robust
+                ROS_INFO_STREAM("heere 1");
+                ros::Duration(3.0).sleep();
+                ros::spinOnce();
+                ros::spinOnce();
+                if(camera.get_is_faulty(prod.agv_id)) {
+                    ROS_INFO_STREAM("fAULTY");
+                    removeFaultyProduct(camera,gantry,prod);
+                    k--;                                                                    //process product again
+                }
+                ROS_INFO_STREAM("heere 2");
+                moveFromLocationToStart(presetLoc,"start",gantry);
+                ROS_INFO_STREAM("heere x");
+            }
+            ROS_INFO_STREAM("herex1");
+            if(prod.agv_id == "agv2")
+                agvDeliveryService(agv2Delivery, order.shipments[j].shipment_type);
+            else
+                agvDeliveryService(agv1Delivery, order.shipments[j].shipment_type);
+        }
+        ROS_INFO_STREAM("here3");
+
+    }
+
+    std::vector<std::string> gap;
+    gap = determineGaps();
+    for(auto val:gap)                                                               // printing the gap positions
+        ROS_INFO_STREAM(val);
+
+
+    comp.endCompetition();
+    spinner.stop();
+    ros::shutdown();
     determineGaps();
     return 0;
 }
