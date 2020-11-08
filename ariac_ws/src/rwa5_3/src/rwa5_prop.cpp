@@ -39,7 +39,8 @@
 #include <tf2/LinearMath/Quaternion.h>
 
 
-std::vector<bool> ObstacleInAisle;
+const int NUM_LOGICAL_CAMERAS_PER_AISLE = 4;
+std::vector<bool> ObstacleInAisle(4,false);
 std::vector<double>  velocityOfObstacles;
 
 bool HighPriorityOrderInitiated;
@@ -433,21 +434,30 @@ std::vector<std::string> determineGaps(){                                       
 //}
 
 
+
+/*
 void estimateVelocityOfObstacles(){ 
     detectAislesWithObstacles();
-}
+
+    for(int i = 0; i<ObstacleInAisle.size(); i++) {
+        if(ObstacleInAisle[i] == true)
+           
+            //estimate velocity of obstacle
+    }
+}*/
 
 
 void detectAislesWithObstacles(Camera &camera){
-  std::vector<bool> shelf_cameras = camera.get_shelf_breakbeams()
+  std::vector<bool> shelf_cameras = camera.get_shelf_breakbeams();
   
-  for(int i = 0; i<shelf_cameras.size(); i++)
-      if(i < 4 && shelf_cameras[i] == true)
-          ObstacleInAisle[0] = true
+  for(int i = 0; i<shelf_cameras.size(); i++){
+      if(i < NUM_LOGICAL_CAMERAS_PER_AISLE && shelf_cameras[i] == true) {
+          ObstacleInAisle[0] = true;
             
-      else if(i>= 4 && i <= 7 && shelf_cameras[i] == true) {
-          ObstacleInAisle[1] = true
+      }else if(i>= NUM_LOGICAL_CAMERAS_PER_AISLE && i < 2*NUM_LOGICAL_CAMERAS_PER_AISLE && shelf_cameras[i] == true) {
+          ObstacleInAisle[1] = true;
       }
+  }
 }
 
 
@@ -482,7 +492,6 @@ int main(int argc, char ** argv) {
 
 
     HighPriorityOrderInitiated  = false;                                                                     //setting up flag
-    ObstacleInAisle(4,false);                                                                                
 
 
     auto orders = comp.getOrders();                                                                          //Wait for order

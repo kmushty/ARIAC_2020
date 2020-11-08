@@ -126,7 +126,7 @@ void Camera::init(ros::NodeHandle & node){
     break_beam_triggered = false;
     is_faulty1 = false;
     is_faulty2 = false;
-    triggered_shelf_breakbeams(NUM_SHELF_BREAKBEAM,false);
+    triggered_shelf_breakbeams = std::vector<bool> (NUM_SHELF_BREAKBEAM,false);
 }
 
 

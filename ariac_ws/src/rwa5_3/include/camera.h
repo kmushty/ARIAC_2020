@@ -56,7 +56,7 @@ public:
 
     void reset_is_faulty();
     void reset_break_beam();
-    void reset_shelf_breakbeams()
+    void reset_shelf_breakbeams();
 
 
 private:
