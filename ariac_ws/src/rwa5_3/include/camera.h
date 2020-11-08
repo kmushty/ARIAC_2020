@@ -18,17 +18,21 @@
 
 
 const int NUM_LOGICAL_CAMERAS = 17;
+const int NUM_SHELF_BREAKBEAM = 8;
 
 class Camera{
 
-  public:
+public:
     void logical_camera_callback(
     const nist_gear::LogicalCameraImage::ConstPtr &msg, int index);
 
     void break_beam_callback(const nist_gear::Proximity::ConstPtr &msg);
 
+    void shelf_breakbeam_callback(
+    const nist_gear::Proximity::ConstPtr &msg, int index);
+
     void laser_profiler_callback(const sensor_msgs::LaserScan::ConstPtr & msg);
-    
+
     void quality_control_sensor_callback1(const nist_gear::LogicalCameraImage &msg);
 
     void quality_control_sensor_callback2(const nist_gear::LogicalCameraImage &msg);
@@ -49,12 +53,12 @@ class Camera{
     void reset_break_beam();
 
     bool get_break_beam();
-    
+
     geometry_msgs::Pose get_faulty_pose(std::string agv);
 
 
- 
-  private:
+
+private:
     ros::Subscriber logical_camera_subscriber[NUM_LOGICAL_CAMERAS];
     //std::map<std::string,std::vector<geometry_msgs::PoseStamped>> detected_parts;
     //std::map<std::string,std::vector<part>> detected_parts;
@@ -62,18 +66,16 @@ class Camera{
     std::map<std::string,part> detected_parts;
 
     // vector of parts for agv logical cameras
-     
+
     ros::Subscriber quality_sensor_subscriber_1;
     ros::Subscriber quality_sensor_subscriber_2;
     ros::Subscriber breakbeam_1_sensor_subscriber;
+    ros::Subscriber shelf_breakbeam_sensor_subscriber[NUM_SHELF_BREAKBEAM];
     bool is_faulty1, is_faulty2;
     bool break_beam_triggered;
-    
+
     geometry_msgs::Pose faulty_pose1, faulty_pose2;
 };
-
-
-
 
 
 

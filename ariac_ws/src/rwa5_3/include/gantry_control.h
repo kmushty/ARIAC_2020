@@ -89,6 +89,21 @@ class GantryControl {
     shelf11_1 shelf11_1_;
     shelf11_2 shelf11_2_;
     shelf11_3 shelf11_3_;
+
+    shelf8_obs_green1 shelf8_obs_green1_;
+    shelf8_obs_green2 shelf8_obs_green2_;
+    shelf8_obs_green3 shelf8_obs_green3_;
+    shelf8_obs_green4 shelf8_obs_green4_;
+    shelf8_obs_green5 shelf8_obs_green5_;
+
+    shelf8_obs_blue1 shelf8_obs_blue1_;
+    shelf8_obs_blue2 shelf8_obs_blue2_;
+    shelf8_obs_blue3 shelf8_obs_blue3_;
+    shelf8_obs_blue4 shelf8_obs_blue4_;
+    shelf8_obs_blue5 shelf8_obs_blue5_;
+    shelf8_obs_blue6 shelf8_obs_blue6_;
+
+
     /** -------------**/
     shelf5_4 shelf5_4_;
     shelf5_5 shelf5_5_;

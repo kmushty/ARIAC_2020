@@ -224,6 +224,115 @@ void GantryControl::init() {
    agv1_gasket_part_green_.left_arm = {0.0, -PI/4, PI/2, -0.78, 1.63, 0};
    agv1_gasket_part_green_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
 
+
+    // shel8_obs_green - waypoint 1
+    shelf8_obs_green1_.gantry = {0.0, -5.18, 0};
+    shelf8_obs_green1_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
+    shelf8_obs_green1_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+// shel8_obs_green - waypoint 2
+    shelf8_obs_green2_.gantry = {-11.3, -5.18, 1.57};
+    shelf8_obs_green2_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
+    shelf8_obs_green2_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+// shel8_obs_green - waypoint 3
+    shelf8_obs_green3_.gantry = {-11.3, -3.5, 1.57};
+    shelf8_obs_green3_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
+    shelf8_obs_green3_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+// shel8_obs_green - waypoint 4
+    shelf8_obs_green4_.gantry = {-11.3, -1.50, 0};
+    shelf8_obs_green4_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
+    shelf8_obs_green4_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+// shel8_obs_green - waypoint 5
+    shelf8_obs_green5_.gantry = {-14.55, -1.2, 0};
+    shelf8_obs_green5_.left_arm = {-1.78, -PI/4, PI/2, -PI/4, -0.20, 0};
+    shelf8_obs_green5_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+    // shel8_obs_blue - waypoint 1
+    shelf8_obs_blue1_.gantry = {0.0, 5.18, 0};
+    shelf8_obs_blue1_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
+    shelf8_obs_blue1_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+    // shel8_obs_blue - waypoint 2
+    shelf8_obs_blue2_.gantry = {-11.3, 5.18, -1.57};
+    shelf8_obs_blue2_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
+    shelf8_obs_blue2_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+    // shel8_obs_blue - waypoint 3
+    shelf8_obs_blue3_.gantry = {-11.32, 3.5, -1.57};
+    shelf8_obs_blue3_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
+    shelf8_obs_blue3_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+    // shel8_obs_blue - waypoint 4
+    shelf8_obs_blue4_.gantry = {-11.3, 1.50, 3.14};
+    shelf8_obs_blue4_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
+    shelf8_obs_blue4_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+    // shel8_obs_blue - waypoint 5
+    shelf8_obs_blue5_.gantry = {-15.00, 1.5, 3.14};
+    shelf8_obs_blue5_.left_arm = {-1.78, -PI/4, PI/2, -PI/4, -0.20, 0};
+    shelf8_obs_blue5_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+    // shel8_obs_blue - waypoint 6
+    shelf8_obs_blue6_.gantry = {-15.00, 1.3, 3.14};
+    shelf8_obs_blue6_.left_arm = {-1.78, -PI/4, PI/2, -PI/4, -0.20, 0};
+    shelf8_obs_blue6_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};// shel8_obs_green - waypoint 1
+    shelf8_obs_green1_.gantry = {0.0, -5.18, 0};
+    shelf8_obs_green1_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
+    shelf8_obs_green1_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+// shel8_obs_green - waypoint 2
+    shelf8_obs_green2_.gantry = {-11.3, -5.18, 1.57};
+    shelf8_obs_green2_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
+    shelf8_obs_green2_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+// shel8_obs_green - waypoint 3
+    shelf8_obs_green3_.gantry = {-11.3, -3.5, 1.57};
+    shelf8_obs_green3_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
+    shelf8_obs_green3_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+// shel8_obs_green - waypoint 4
+    shelf8_obs_green4_.gantry = {-11.3, -1.50, 0};
+    shelf8_obs_green4_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
+    shelf8_obs_green4_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+// shel8_obs_green - waypoint 5
+    shelf8_obs_green5_.gantry = {-14.55, -1.2, 0};
+    shelf8_obs_green5_.left_arm = {-1.78, -PI/4, PI/2, -PI/4, -0.20, 0};
+    shelf8_obs_green5_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+    // shel8_obs_blue - waypoint 1
+    shelf8_obs_blue1_.gantry = {0.0, 5.18, 0};
+    shelf8_obs_blue1_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
+    shelf8_obs_blue1_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+    // shel8_obs_blue - waypoint 2
+    shelf8_obs_blue2_.gantry = {-11.3, 5.18, -1.57};
+    shelf8_obs_blue2_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
+    shelf8_obs_blue2_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+    // shel8_obs_blue - waypoint 3
+    shelf8_obs_blue3_.gantry = {-11.32, 3.5, -1.57};
+    shelf8_obs_blue3_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
+    shelf8_obs_blue3_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+    // shel8_obs_blue - waypoint 4
+    shelf8_obs_blue4_.gantry = {-11.3, 1.50, 3.14};
+    shelf8_obs_blue4_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
+    shelf8_obs_blue4_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+    // shel8_obs_blue - waypoint 5
+    shelf8_obs_blue5_.gantry = {-15.00, 1.5, 3.14};
+    shelf8_obs_blue5_.left_arm = {-1.78, -PI/4, PI/2, -PI/4, -0.20, 0};
+    shelf8_obs_blue5_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+    // shel8_obs_blue - waypoint 6
+    shelf8_obs_blue6_.gantry = {-15.00, 1.3, 3.14};
+    shelf8_obs_blue6_.left_arm = {-1.78, -PI/4, PI/2, -PI/4, -0.20, 0};
+    shelf8_obs_blue6_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
     /*
      //--start location
     start_.gantry = {0,0,0};

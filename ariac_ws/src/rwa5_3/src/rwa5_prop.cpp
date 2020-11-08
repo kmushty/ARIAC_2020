@@ -71,11 +71,13 @@ void initWayPoints(std::map<std::string,std::vector<PresetLocation>> &presetLoc,
     presetLoc["logical_camera_2"] = {gantry.bin16_};                                                          // waypoints from start position position to logical_camera
     presetLoc["logical_camera_6"] = {gantry.bin13_};
     presetLoc["logical_camera_11"] = {gantry.shelf5_1_, gantry.shelf5_2_, gantry.shelf5_3_};
-    presetLoc["logical_camera_12"] = {gantry.shelf8_1_, gantry.shelf8_2_, gantry.shelf8_3_};
+//    presetLoc["logical_camera_12"] = {gantry.shelf8_1_, gantry.shelf8_2_, gantry.shelf8_3_};
     presetLoc["logical_camera_14"] = {gantry.shelf5_1_, gantry.shelf5_4_, gantry.shelf5_5_};
-    presetLoc["logical_camera_15"] = {gantry.shelf8_1_, gantry.shelf8_2_, gantry.shelf8_3_};
+//    presetLoc["logical_camera_15"] = {gantry.shelf8_1_, gantry.shelf8_2_, gantry.shelf8_3_};
     presetLoc["logical_camera_13"] = {gantry.shelf11_1_, gantry.shelf11_2_, gantry.shelf11_3_};
     presetLoc["logical_camera_16"] = {gantry.shelf11_1_, gantry.shelf11_2_, gantry.shelf11_3_};
+    presetLoc["logical_camera_15"] = {gantry.shelf8_obs_blue1_, gantry.shelf8_obs_blue2_, gantry.shelf8_obs_blue3_, gantry.shelf8_obs_blue4_, gantry.shelf8_obs_blue5_, gantry.shelf8_obs_blue6_};
+    presetLoc["logical_camera_12"] = {gantry.shelf8_obs_green1_, gantry.shelf8_obs_green2_, gantry.shelf8_obs_green3_, gantry.shelf8_obs_green4_, gantry.shelf8_obs_green5_};
 
     presetLoc["start"] = {gantry.start_};                                                                     // useful presetloc
     presetLoc["agv2"] = {gantry.agv2_};
@@ -455,6 +457,7 @@ int main(int argc, char ** argv) {
     for(auto val:gap)                                                               // printing the gap positions
         ROS_INFO_STREAM(val);
 
+
     for(int i = 0; i< orders.size(); i++){
         auto order = orders[i];
 
@@ -473,18 +476,18 @@ int main(int argc, char ** argv) {
                 prod.arm_name = "left_arm";
 
                                                                                     //Conveyor Impementation
-                if(k == 0) {
-                    while (true) {
-                        if (camera.get_break_beam()) {
-                            conveyor(camera, gantry, prod);
-                            break;
-                        }
-                    }
-                    if(camera.get_break_beam()) {
-                        camera.reset_break_beam();
-                        continue;
-                    }
-                }
+//                if(k == 0) {
+//                    while (true) {
+//                        if (camera.get_break_beam()) {
+//                            conveyor(camera, gantry, prod);
+//                            break;
+//                        }
+//                    }
+//                    if(camera.get_break_beam()) {
+//                        camera.reset_break_beam();
+//                        continue;
+//                    }
+//                }
 
                 ROS_INFO_STREAM(comp.getOrders().size());
                 ROS_INFO_STREAM(HighPriorityOrderInitiated);
