@@ -46,16 +46,17 @@ public:
 
     //void remove_part(std::string logical_camera, int index);
 
-    void reset_is_faulty();
-
-    bool get_is_faulty(std::string agv);
-
-    void reset_break_beam();
-
-    bool get_break_beam();
-
     geometry_msgs::Pose get_faulty_pose(std::string agv);
 
+
+    bool get_is_faulty(std::string agv);
+    bool get_break_beam();
+    std::vector<bool> get_shelf_breakbeams();
+    
+
+    void reset_is_faulty();
+    void reset_break_beam();
+    void reset_shelf_breakbeams()
 
 
 private:
@@ -71,11 +72,17 @@ private:
     ros::Subscriber quality_sensor_subscriber_2;
     ros::Subscriber breakbeam_1_sensor_subscriber;
     ros::Subscriber shelf_breakbeam_sensor_subscriber[NUM_SHELF_BREAKBEAM];
+
     bool is_faulty1, is_faulty2;
     bool break_beam_triggered;
+    std::vector<bool> triggered_shelf_breakbeams;
 
     geometry_msgs::Pose faulty_pose1, faulty_pose2;
 };
+
+
+
+
 
 
 

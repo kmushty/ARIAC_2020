@@ -39,7 +39,11 @@
 #include <tf2/LinearMath/Quaternion.h>
 
 
+std::vector<bool> ObstacleInAisle;
+std::vector<double>  velocityOfObstacles;
+
 bool HighPriorityOrderInitiated;
+
 std::map<std::string,std::vector<PresetLocation>> presetLoc;
 
 
@@ -388,6 +392,7 @@ double shelfDistance(std::string shelf1, std::string shelf2){                   
     return double(abs(abs(s1.transform.translation.x) - abs(s2.transform.translation.x)));
 }
 
+
 std::vector<std::string> determineGaps(){                                       // Function returning gap postions in the form of string
     std::vector<std::string> gap;
     std::vector<double> gapThreshold = {6.299163, 6.299173};
@@ -412,6 +417,41 @@ std::vector<std::string> determineGaps(){                                       
     }
     return gap;
 }
+
+
+
+
+
+//std::string estimateDirection(){
+
+//}
+
+
+//int estimatePosition(){
+
+  //return 0;
+//}
+
+
+void estimateVelocityOfObstacles(){ 
+    detectAislesWithObstacles();
+}
+
+
+void detectAislesWithObstacles(Camera &camera){
+  std::vector<bool> shelf_cameras = camera.get_shelf_breakbeams()
+  
+  for(int i = 0; i<shelf_cameras.size(); i++)
+      if(i < 4 && shelf_cameras[i] == true)
+          ObstacleInAisle[0] = true
+            
+      else if(i>= 4 && i <= 7 && shelf_cameras[i] == true) {
+          ObstacleInAisle[1] = true
+      }
+}
+
+
+
 
 
 int main(int argc, char ** argv) {
@@ -442,6 +482,7 @@ int main(int argc, char ** argv) {
 
 
     HighPriorityOrderInitiated  = false;                                                                     //setting up flag
+    ObstacleInAisle(4,false);                                                                                
 
 
     auto orders = comp.getOrders();                                                                          //Wait for order
@@ -454,10 +495,11 @@ int main(int argc, char ** argv) {
 
     std::vector<std::string> gap;
     gap = determineGaps();
-    for(auto val:gap)                                                               // printing the gap positions
+    for(auto val:gap)                                                                                        // printing the gap positions
         ROS_INFO_STREAM(val);
 
 
+    /**
     for(int i = 0; i< orders.size(); i++){
         auto order = orders[i];
 
@@ -475,7 +517,7 @@ int main(int argc, char ** argv) {
                 prod.agv_id = ship.agv_id;
                 prod.arm_name = "left_arm";
 
-                                                                                    //Conveyor Impementation
+                                                                                                                //Conveyor Impementation
 //                if(k == 0) {
 //                    while (true) {
 //                        if (camera.get_break_beam()) {
@@ -525,13 +567,12 @@ int main(int argc, char ** argv) {
         }
         ROS_INFO_STREAM("here3");
 
-    }
+    }**/
 
 
     comp.endCompetition();
     spinner.stop();
     ros::shutdown();
-    determineGaps();
     return 0;
 }
 

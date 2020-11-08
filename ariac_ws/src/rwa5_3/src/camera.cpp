@@ -69,6 +69,7 @@ void Camera::shelf_breakbeam_callback(
 const nist_gear::Proximity::ConstPtr &msg, int index){
     if (msg->object_detected) {  // If there is an object in proximity.
         ROS_INFO_STREAM("Break beam " + std::to_string(index) +"  triggered.");
+        triggered_shelf_breakbeams[index] = true;
     }
 }
 
@@ -121,9 +122,11 @@ void Camera::init(ros::NodeHandle & node){
     );
 
     breakbeam_1_sensor_subscriber = node.subscribe("/ariac/breakbeam_1",1, &Camera::break_beam_callback, this);
+    
     break_beam_triggered = false;
     is_faulty1 = false;
     is_faulty2 = false;
+    triggered_shelf_breakbeams(NUM_SHELF_BREAKBEAM,false);
 }
 
 
@@ -217,3 +220,15 @@ void Camera::reset_break_beam(){
 bool Camera::get_break_beam(){
     return break_beam_triggered;
 }
+
+
+void Camera::reset_shelf_breakbeams() {
+  triggered_shelf_breakbeams = std::vector<bool>(NUM_SHELF_BREAKBEAM,false);
+}
+
+
+std::vector<bool> Camera::get_shelf_breakbeams() {
+  return  triggered_shelf_breakbeams;
+}
+
+
