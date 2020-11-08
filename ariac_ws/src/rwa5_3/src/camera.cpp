@@ -104,11 +104,11 @@ void Camera::init(ros::NodeHandle & node){
 
     for(int index = 0; index < NUM_SHELF_BREAKBEAM; index++) {
         otopic.str(""); otopic.clear();
-        otopic << "/ariac/shelf_breakbeam_" << (index);
+        otopic << "/ariac/shelf_breakbeam_" << (index) << "_change";
         topic = otopic.str();
 
         shelf_breakbeam_sensor_subscriber[index]= node.subscribe<nist_gear::Proximity>(
-        topic, 10, boost::bind(&Camera::shelf_breakbeam_callback, this, _1, index+1));
+        topic, 1, boost::bind(&Camera::shelf_breakbeam_callback, this, _1, index));
     }
 
 

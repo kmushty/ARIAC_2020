@@ -434,22 +434,15 @@ std::vector<std::string> determineGaps(){                                       
 //}
 
 
-
-/*
-void estimateVelocityOfObstacles(){ 
-    detectAislesWithObstacles();
-
-    for(int i = 0; i<ObstacleInAisle.size(); i++) {
-        if(ObstacleInAisle[i] == true)
-           
-            //estimate velocity of obstacle
-    }
-}*/
-
-
 void detectAislesWithObstacles(Camera &camera){
-  std::vector<bool> shelf_cameras = camera.get_shelf_breakbeams();
+  camera.reset_shelf_breakbeams();
+  ObstacleInAisle = std::vector<bool> (4,false);
   
+
+  ROS_INFO_STREAM("Detecting obstacles in aisles");
+
+  std::vector<bool> shelf_cameras = camera.get_shelf_breakbeams();
+
   for(int i = 0; i<shelf_cameras.size(); i++){
       if(i < NUM_LOGICAL_CAMERAS_PER_AISLE && shelf_cameras[i] == true) {
           ObstacleInAisle[0] = true;
@@ -458,7 +451,28 @@ void detectAislesWithObstacles(Camera &camera){
           ObstacleInAisle[1] = true;
       }
   }
+
+   
+  for(int i= 0; i<ObstacleInAisle.size(); i++){
+    if(ObstacleInAisle[i] == 0)
+      ROS_INFO_STREAM("Obstacle in Aisle"<< i);
+  }
+  
+  ROS_INFO_STREAM("Finished Detecting Obstacles in aisles");
 }
+
+
+
+void estimateVelocityOfObstacles(Camera &camera){ 
+    detectAislesWithObstacles(camera);
+
+    for(int i = 0; i<ObstacleInAisle.size(); i++) {
+        if(ObstacleInAisle[i] == true){}
+          //estimate velocity of obstacle
+    }
+}
+
+
 
 
 
@@ -507,6 +521,8 @@ int main(int argc, char ** argv) {
     for(auto val:gap)                                                                                        // printing the gap positions
         ROS_INFO_STREAM(val);
 
+    
+    while(true){}
 
     /**
     for(int i = 0; i< orders.size(); i++){
