@@ -449,6 +449,12 @@ int main(int argc, char ** argv) {
 
     product prod;
 
+
+    std::vector<std::string> gap;
+    gap = determineGaps();
+    for(auto val:gap)                                                               // printing the gap positions
+        ROS_INFO_STREAM(val);
+
     for(int i = 0; i< orders.size(); i++){
         auto order = orders[i];
 
@@ -517,11 +523,6 @@ int main(int argc, char ** argv) {
         ROS_INFO_STREAM("here3");
 
     }
-
-    std::vector<std::string> gap;
-    gap = determineGaps();
-    for(auto val:gap)                                                               // printing the gap positions
-        ROS_INFO_STREAM(val);
 
 
     comp.endCompetition();
