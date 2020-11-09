@@ -43,11 +43,11 @@ const double LENGTH_OF_AISLE = 14.2;
 const int NUM_LOGICAL_CAMERAS_PER_AISLE = 4;
 std::vector<bool> ObstacleInAisle(4,false);
 std::vector<double> velocityOfObstacles(4,0.0);
+std::vector<obstacle>  obstacleAssociatedWithAisle;
 
 bool HighPriorityOrderInitiated;
 
 std::map<std::string,std::vector<PresetLocation>> presetLoc;
-
 
 
 void agvDeliveryService(ros::ServiceClient &agvDelivery, std::string shipmentType){
@@ -419,8 +419,13 @@ std::vector<std::string> determineGaps(){                                       
     return gap;
 }
 
-
-
+double calc_remainder(double x, double y){
+  std::string s = std::to_string(x/y);
+  s = s.substr(0,s.find('.'));
+  int q = std::stoi(s);
+  double result  = x - q*y;
+  return result;
+}
 
 
 //void detectAislesWithObstacles(Camera &camera){
@@ -472,19 +477,46 @@ void detectaisleswithobstacles(Camera &camera){
   ROS_INFO_STREAM("Finished Printing Break Beam Msgs");
 **/
 
+//TODO
+void estimateLocation(int aisle_num, double t){
+   if(!obstacleAssociatedWithAisle[aisle_num].is_valid_obstacle);
+        return;
 
-//double estimateLocation(int obstacle, double t){
-   //double x, x0 = LENGTH_OF_AISLE; 
-   //double t0 = 0; 
-   //x = x0 + velocityOfObstacles[obstacle](t-t0);
-   //x = x%LENGTH_OF_AISLE;
-   //return x;
-//}
+   double move_time = obstacleAssociatedWithAisle[aisle_num].move_time;
+   double wait_time = obstacleAssociatedWithAisle[aisle_num].wait_time;
+   double time_stamp1 = obstacleAssociatedWithAisle[aisle_num].time_stamp1;
+   double x;
+  
+   double td = t - time_stamp1;                                                   //number of seconds from time_stamp
+   double tf = move_time + wait_time;                                             // time take to go from end to end
+
+   // find remaining time after time of flight(time taken to go and come back)
+   td  = calc_remainder(td,2*tf);                                                                         
+
+   if(td > tf) {
+       td  -= tf; 
+       if(td <= wait_time) {
+          ROS_INFO_STREAM("waiting near conveyor belt with" << (wait_time - td) << " left");
+       }else {
+        x = (LENGTH_OF_AISLE/move_time)*td;
+        ROS_INFO_STREAM("Moving away from conveyor belt");
+        ROS_INFO_STREAM("currently at position " << x);
+       }
+   }else {
+       if(td < wait_time) {
+          ROS_INFO_STREAM("waiting at the opposite end of conveyor belt with " << (wait_time - td) << " left");
+       }else {
+          x = (LENGTH_OF_AISLE/move_time)*td;
+          ROS_INFO_STREAM("Moving towards conveyor belt");
+          ROS_INFO_STREAM("currently at position " << x);
+       }
+   }
+}
 
 
 
 //TODO make velocity more robust, adjust the camera
-void estimateVelocityOfObstacle(Camera &camera) {
+void estimateObstacleAttributes(Camera &camera) {
   auto aisle_breakbeam_msgs  = camera.get_aisle_breakbeam_msgs();
 
   for(int i = 0; i<4; i++) {
@@ -526,6 +558,13 @@ void estimateVelocityOfObstacle(Camera &camera) {
 
        double velocity = LENGTH_OF_AISLE/move_time;
 
+       obstacle human;
+       human.wait_time = wait_time;
+       human.move_time = move_time;
+       human.time_stamp1 = sec1;
+       human.is_valid_obstacle = true;
+         
+       obstacleAssociatedWithAisle[i] = human;
        velocityOfObstacles[i] = velocity;
        ROS_INFO_STREAM("Printing time interval");
        ROS_INFO_STREAM("sec1 is " << sec1);
@@ -568,6 +607,10 @@ int main(int argc, char ** argv) {
     HighPriorityOrderInitiated  = false;                                                                     //setting up flag
 
 
+    obstacle temp;                                                                                           //Initializing obstacle
+    obstacleAssociatedWithAisle = std::vector<obstacle> (4,temp);                                             
+
+
     auto orders = comp.getOrders();                                                                          //Wait for order
     while(orders.size()<=0)
         orders = comp.getOrders();
@@ -590,7 +633,8 @@ int main(int argc, char ** argv) {
          ObstacleInAisle[2] = true;
          ObstacleInAisle[3] = true;
          ObstacleInAisle[0] = true;
-         estimateVelocityOfObstacle(camera);
+         estimateObstacleAttributes(camera);
+         estimateLocation(1,30);
     }
 
     /**
