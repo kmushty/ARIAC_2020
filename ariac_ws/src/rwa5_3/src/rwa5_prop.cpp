@@ -473,13 +473,13 @@ void detectaisleswithobstacles(Camera &camera){
 **/
 
 
-double estimateLocation(int obstacle, double t){
-   double x, x0 = LENGTH_OF_AISLE; 
-   double t0 = 0; 
-   x = x0 + velocityOfObstacles[obstacle](t-t0);
-   x = x%LENGTH_OF_AISLE;
-   return x;
-}
+//double estimateLocation(int obstacle, double t){
+   //double x, x0 = LENGTH_OF_AISLE; 
+   //double t0 = 0; 
+   //x = x0 + velocityOfObstacles[obstacle](t-t0);
+   //x = x%LENGTH_OF_AISLE;
+   //return x;
+//}
 
 
 
@@ -489,7 +489,7 @@ void estimateVelocityOfObstacle(Camera &camera) {
 
   for(int i = 0; i<4; i++) {
     auto vec = aisle_breakbeam_msgs[i];
-    if(ObstacleInAisle[i] == true  && velocityOfObstacles[i] == 0 && vec.size() > 20) {
+    if(ObstacleInAisle[i] == true  && velocityOfObstacles[i] == 0 && vec.size() > 16) {
        ROS_INFO_STREAM("estimating velocity for aisle" << i);
        ROS_INFO_STREAM("vector size is " << vec.size());
        auto it = std::find_if(vec.begin(), vec.end(),
@@ -499,33 +499,28 @@ void estimateVelocityOfObstacle(Camera &camera) {
        auto it2 = std::find_if(it, vec.end(),
                          [&str = "shelf_breakbeam_4_frame"] 
                          (nist_gear::Proximity::ConstPtr &msg){return (msg->header).frame_id == str && msg->object_detected; });    
-
-<<<<<<< HEAD
+        
+       ROS_INFO_STREAM("aisle number is "<< i);
        if(it != vec.end()){
          ROS_INFO_STREAM("it something");
+         ROS_INFO_STREAM(std::distance(vec.begin(),it));
        }else{
          ROS_INFO_STREAM("it nothing");
+         continue;
        }
 
        if(it2 != vec.end()){
          ROS_INFO_STREAM("it2 something");
+         ROS_INFO_STREAM(std::distance(vec.begin(),it2));
        }else{
          ROS_INFO_STREAM("it2 nothing");
+         continue;
        }
         
        double sec1 = double((*it)->header.stamp.sec) + double((*it)->header.stamp.nsec)*1e-9;
        double sec2 = double((*(it+1))->header.stamp.sec) + double((*(it+1))->header.stamp.nsec)*1e-9;
        double sec3 = double((*it2)->header.stamp.sec) + double((*it2)->header.stamp.nsec)*1e-9;
 
-=======
-       ROS_INFO_STREAM("What the hell");
-       double sec1 = double((*it)->header.stamp.sec) + double((*it)->header.stamp.nsec)*1e-10;
-       ROS_INFO_STREAM("hello1");
-       double sec2 = double((*(it+1))->header.stamp.sec) + double((*(it+1))->header.stamp.nsec)*1e-10;
-       ROS_INFO_STREAM("hello2");
-       double sec3 = double((*it2)->header.stamp.sec) + double((*it2)->header.stamp.nsec)*1e-10;
-       ROS_INFO_STREAM("hello3");
->>>>>>> e25721750265c178598d21850a6e52368d48b3c2
        double wait_time = sec2 - sec1;
        double move_time = sec3 - sec1 - wait_time; 
 
