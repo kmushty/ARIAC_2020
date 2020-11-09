@@ -39,9 +39,10 @@
 #include <tf2/LinearMath/Quaternion.h>
 
 
+const double LENGTH_OF_AISLE = 14.2;
 const int NUM_LOGICAL_CAMERAS_PER_AISLE = 4;
 std::vector<bool> ObstacleInAisle(4,false);
-std::vector<double>  velocityOfObstacles;
+std::vector<double> velocityOfObstacles(4,0.0);
 
 bool HighPriorityOrderInitiated;
 
@@ -423,59 +424,93 @@ std::vector<std::string> determineGaps(){                                       
 
 
 
-//std::string estimateDirection(){
-
-//}
-
-
-//int estimatePosition(){
-
-  //return 0;
-//}
-
-
-void detectAislesWithObstacles(Camera &camera){
-  camera.reset_shelf_breakbeams();
-  ObstacleInAisle = std::vector<bool> (4,false);
+//void detectAislesWithObstacles(Camera &camera){
+  //camera.reset_shelf_breakbeams();
+  //ObstacleInAisle = std::vector<bool> (4,false);
   
 
-  ROS_INFO_STREAM("Detecting obstacles in aisles");
+  //ROS_INFO_STREAM("Detecting obstacles in aisles");
 
-  std::vector<bool> shelf_cameras = camera.get_shelf_breakbeams();
+  //std::vector<bool> shelf_cameras = camera.get_shelf_breakbeams();
 
-  for(int i = 0; i<shelf_cameras.size(); i++){
-      if(i < NUM_LOGICAL_CAMERAS_PER_AISLE && shelf_cameras[i] == true) {
-          ObstacleInAisle[0] = true;
+  //for(int i = 0; i<shelf_cameras.size(); i++){
+      //if(i < NUM_LOGICAL_CAMERAS_PER_AISLE && shelf_cameras[i] == true) {
+          //ObstacleInAisle[0] = true;
             
-      }else if(i>= NUM_LOGICAL_CAMERAS_PER_AISLE && i < 2*NUM_LOGICAL_CAMERAS_PER_AISLE && shelf_cameras[i] == true) {
-          ObstacleInAisle[1] = true;
-      }
-  }
+      //}else if(i>= NUM_LOGICAL_CAMERAS_PER_AISLE && i < 2*NUM_LOGICAL_CAMERAS_PER_AISLE && shelf_cameras[i] == true) {
+          //ObstacleInAisle[1] = true;
+      //}
+  //}
 
    
-  for(int i= 0; i<ObstacleInAisle.size(); i++){
-    if(ObstacleInAisle[i] == 0)
-      ROS_INFO_STREAM("Obstacle in Aisle"<< i);
-  }
+  //for(int i= 0; i<ObstacleInAisle.size(); i++){
+    //if(ObstacleInAisle[i] == 0)
+      //ROS_INFO_STREAM("Obstacle in Aisle"<< i);
+  //}
   
-  ROS_INFO_STREAM("Finished Detecting Obstacles in aisles");
+  //ROS_INFO_STREAM("Finished Detecting Obstacles in aisles");
+//}
+
+
+
+/**
+void detectaisleswithobstacles(Camera &camera){
+  auto aisle_breakbeam_msgs  = camera.get_aisle_breakbeam_msgs();
+  
+  ROS_INFO_STREAM("Print break beam Msgs");
+  for(int i = 0;i<4;i++){
+     auto vec = aisle_breakbeam_msgs[i];
+     ROS_INFO_STREAM("aisle "<< i << "  "<< vec.size()<< " msgs obtained");
+     if(vec.size()>= 5) {
+       for(auto msg:vec){
+         ROS_INFO_STREAM((msg->header).stamp);
+         //ROS_INFO_STREAM(msg->);
+         //ROS_INFO_STREAM(msg->object_detected);
+       }
+     }
+  }
+  ROS_INFO_STREAM("Finished Printing Break Beam Msgs");
 }
+**/
 
 
 
-void estimateVelocityOfObstacles(Camera &camera){ 
-    detectAislesWithObstacles(camera);
+void estimateVelocityOfObstacle(Camera &camera) {
+  auto aisle_breakbeam_msgs  = camera.get_aisle_breakbeam_msgs();
 
-    for(int i = 0; i<ObstacleInAisle.size(); i++) {
-        if(ObstacleInAisle[i] == true){}
-          //estimate velocity of obstacle
+  for(int i = 0; i<4; i++) {
+    auto vec = aisle_breakbeam_msgs[i];
+    if(ObstacleInAisle[i] == true  && velocityOfObstacles[i] == 0 && vec.size() > 16) {
+       ROS_INFO_STREAM("estimating velocity for aisle" << i);
+       ROS_INFO_STREAM("vector size is " << vec.size());
+       auto it = std::find_if(vec.begin(), vec.end(),
+                         [&str = "shelf_breakbeam_7_frame"] 
+                         (nist_gear::Proximity::ConstPtr &msg){return (msg->header).frame_id == str && msg->object_detected; });    
+
+       auto it2 = std::find_if(it, vec.end(),
+                         [&str = "shelf_breakbeam_4_frame"] 
+                         (nist_gear::Proximity::ConstPtr &msg){return (msg->header).frame_id == str && msg->object_detected; });    
+
+        
+       double sec1 = double((*it)->header.stamp.sec) + double((*it)->header.stamp.nsec)*1e-10;
+       double sec2 = double((*(it+1))->header.stamp.sec) + double((*(it+1))->header.stamp.nsec)*1e-10;
+       double sec3 = double((*it2)->header.stamp.sec) + double((*it2)->header.stamp.nsec)*1e-10;
+
+       double wait_time = sec2 - sec1;
+       double move_time = sec3 - sec1 - wait_time; 
+
+       double velocity = LENGTH_OF_AISLE/move_time;
+
+       velocityOfObstacles[i] = velocity;
+       ROS_INFO_STREAM("Printing time interval");
+       ROS_INFO_STREAM("sec1 is " << sec1);
+       ROS_INFO_STREAM("sec2 is " << sec2);
+       ROS_INFO_STREAM("sec3 is " << sec3);
+       ROS_INFO_STREAM("wait time is " << wait_time);
+       ROS_INFO_STREAM("move time is " << move_time);
     }
+  }
 }
-
-
-
-
-
 
 
 int main(int argc, char ** argv) {
@@ -522,7 +557,16 @@ int main(int argc, char ** argv) {
         ROS_INFO_STREAM(val);
 
     
-    while(true){}
+
+    while(true){
+         //detectaisleswithobstacles(camera);
+
+         ObstacleInAisle[1] = true;
+         ObstacleInAisle[2] = true;
+         ObstacleInAisle[3] = true;
+         ObstacleInAisle[0] = true;
+         estimateVelocityOfObstacle(camera);
+    }
 
     /**
     for(int i = 0; i< orders.size(); i++){

@@ -57,6 +57,9 @@ public:
     void reset_is_faulty();
     void reset_break_beam();
     void reset_shelf_breakbeams();
+    
+    std::map<int,std::vector<nist_gear::Proximity::ConstPtr>> get_aisle_breakbeam_msgs(); 
+    
 
 
 private:
@@ -76,6 +79,7 @@ private:
     bool is_faulty1, is_faulty2;
     bool break_beam_triggered;
     std::vector<bool> triggered_shelf_breakbeams;
+    std::map<int,std::vector<nist_gear::Proximity::ConstPtr>> aisle_breakbeam_msgs;  
 
     geometry_msgs::Pose faulty_pose1, faulty_pose2;
 };

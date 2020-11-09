@@ -65,12 +65,22 @@ void Camera::break_beam_callback(const nist_gear::Proximity::ConstPtr &msg) {
     }
 }
 
+
 void Camera::shelf_breakbeam_callback(
 const nist_gear::Proximity::ConstPtr &msg, int index){
+    /*
     if (msg->object_detected) {  // If there is an object in proximity.
         ROS_INFO_STREAM("Break beam " + std::to_string(index) +"  triggered.");
-        triggered_shelf_breakbeams[index] = true;
-    }
+        //triggered_shelf_breakbeams[index] = true;
+        }
+    }*/
+    
+   if(index < 4){
+       aisle_breakbeam_msgs[0].push_back(msg);
+   }else if(index >=4 && index < 8)
+       aisle_breakbeam_msgs[1].push_back(msg);
+ 
+
 }
 
 
@@ -127,6 +137,10 @@ void Camera::init(ros::NodeHandle & node){
     is_faulty1 = false;
     is_faulty2 = false;
     triggered_shelf_breakbeams = std::vector<bool> (NUM_SHELF_BREAKBEAM,false);
+   
+    for(int i = 0; i<4; i++){
+       aisle_breakbeam_msgs[i] = {};
+    }
 }
 
 
@@ -231,4 +245,10 @@ std::vector<bool> Camera::get_shelf_breakbeams() {
   return  triggered_shelf_breakbeams;
 }
 
+
+std::map<int,std::vector<nist_gear::Proximity::ConstPtr>> Camera::get_aisle_breakbeam_msgs() {
+  return aisle_breakbeam_msgs;
+}
+    
+    
 
