@@ -500,6 +500,7 @@ void estimateVelocityOfObstacle(Camera &camera) {
                          [&str = "shelf_breakbeam_4_frame"] 
                          (nist_gear::Proximity::ConstPtr &msg){return (msg->header).frame_id == str && msg->object_detected; });    
 
+<<<<<<< HEAD
        if(it != vec.end()){
          ROS_INFO_STREAM("it something");
        }else{
@@ -516,6 +517,15 @@ void estimateVelocityOfObstacle(Camera &camera) {
        double sec2 = double((*(it+1))->header.stamp.sec) + double((*(it+1))->header.stamp.nsec)*1e-9;
        double sec3 = double((*it2)->header.stamp.sec) + double((*it2)->header.stamp.nsec)*1e-9;
 
+=======
+       ROS_INFO_STREAM("What the hell");
+       double sec1 = double((*it)->header.stamp.sec) + double((*it)->header.stamp.nsec)*1e-10;
+       ROS_INFO_STREAM("hello1");
+       double sec2 = double((*(it+1))->header.stamp.sec) + double((*(it+1))->header.stamp.nsec)*1e-10;
+       ROS_INFO_STREAM("hello2");
+       double sec3 = double((*it2)->header.stamp.sec) + double((*it2)->header.stamp.nsec)*1e-10;
+       ROS_INFO_STREAM("hello3");
+>>>>>>> e25721750265c178598d21850a6e52368d48b3c2
        double wait_time = sec2 - sec1;
        double move_time = sec3 - sec1 - wait_time; 
 
