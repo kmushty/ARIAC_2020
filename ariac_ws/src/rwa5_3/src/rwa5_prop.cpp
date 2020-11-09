@@ -366,7 +366,6 @@ void conveyor(Camera &camera, GantryControl &gantry, product prod){
     gantry.placePart(my_part_in_tray, prod.agv_id, prod.arm_name);
 
     moveFromLocationToStart(presetLoc, "start", gantry);
-
 }
 
 geometry_msgs::TransformStamped shelfPosition(std::string shelf){
@@ -469,18 +468,28 @@ void detectaisleswithobstacles(Camera &camera){
        }
      }
   }
+  }
   ROS_INFO_STREAM("Finished Printing Break Beam Msgs");
-}
 **/
 
 
+double estimateLocation(int obstacle, double t){
+   double x, x0 = LENGTH_OF_AISLE; 
+   double t0 = 0; 
+   x = x0 + velocityOfObstacles[obstacle](t-t0);
+   x = x%LENGTH_OF_AISLE;
+   return x;
+}
 
+
+
+//TODO make velocity more robust, adjust the camera
 void estimateVelocityOfObstacle(Camera &camera) {
   auto aisle_breakbeam_msgs  = camera.get_aisle_breakbeam_msgs();
 
   for(int i = 0; i<4; i++) {
     auto vec = aisle_breakbeam_msgs[i];
-    if(ObstacleInAisle[i] == true  && velocityOfObstacles[i] == 0 && vec.size() > 16) {
+    if(ObstacleInAisle[i] == true  && velocityOfObstacles[i] == 0 && vec.size() > 20) {
        ROS_INFO_STREAM("estimating velocity for aisle" << i);
        ROS_INFO_STREAM("vector size is " << vec.size());
        auto it = std::find_if(vec.begin(), vec.end(),
@@ -491,10 +500,21 @@ void estimateVelocityOfObstacle(Camera &camera) {
                          [&str = "shelf_breakbeam_4_frame"] 
                          (nist_gear::Proximity::ConstPtr &msg){return (msg->header).frame_id == str && msg->object_detected; });    
 
+       if(it != vec.end()){
+         ROS_INFO_STREAM("it something");
+       }else{
+         ROS_INFO_STREAM("it nothing");
+       }
+
+       if(it2 != vec.end()){
+         ROS_INFO_STREAM("it2 something");
+       }else{
+         ROS_INFO_STREAM("it2 nothing");
+       }
         
-       double sec1 = double((*it)->header.stamp.sec) + double((*it)->header.stamp.nsec)*1e-10;
-       double sec2 = double((*(it+1))->header.stamp.sec) + double((*(it+1))->header.stamp.nsec)*1e-10;
-       double sec3 = double((*it2)->header.stamp.sec) + double((*it2)->header.stamp.nsec)*1e-10;
+       double sec1 = double((*it)->header.stamp.sec) + double((*it)->header.stamp.nsec)*1e-9;
+       double sec2 = double((*(it+1))->header.stamp.sec) + double((*(it+1))->header.stamp.nsec)*1e-9;
+       double sec3 = double((*it2)->header.stamp.sec) + double((*it2)->header.stamp.nsec)*1e-9;
 
        double wait_time = sec2 - sec1;
        double move_time = sec3 - sec1 - wait_time; 
