@@ -6,28 +6,21 @@ Sensor blackout
 
 Human Presence
    eashwar
-   Determine Gaps 
-      1st approach
-      -->Subscribing to frames for shelves to note the positions(tf )  --> get shelf positions
-      -->compare shelf positions and note adjacent positions. For shelves greater than some threshold there is a gap
+   1. Detecting the direction of the human
+   2. Robustness and debugging
 
-      ---> verification
-      --->compare gap coordintaes with gazebo
+   akwasi
+   2. Detecting the location of the human
+   3. Rectifying the segmentation fault error
+   4. Refactoring
 
-   
-   #akwasi
-   Determine human location- for only specific location
-
-
-   #shantam
-   --placing break sensor  --place on all the shelves 
-   -- create all subscribers for all break beams
-
-   #Kaushik
-   -- detect when a break beam is triggered
-   -- preset locations for different configurations
+   kaushik
+   4. Obstacle Avoidance
+        a. Identify which obstacle to avoid in the aisle
 
 
+   shantam
+        b. Detecting which aisle has human
 
 
 
