@@ -115,4 +115,15 @@ typedef struct Stats {
 } stats;
 
 
+typedef struct Obstacle{
+   bool   is_valid_obstacle = false;              //checker for whether obstacle is valid
+   double wait_time;                              //wait_time of obstacle
+   double move_time;                              //move_time of obstacle
+   double time_stamp1;                            //useful time stamps for estimating position
+   double time_stamp2;      
+   double time_stamp3;      
+}obstacle;
 #endif
+
+
+

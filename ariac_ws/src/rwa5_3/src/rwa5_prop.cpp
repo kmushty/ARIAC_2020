@@ -479,9 +479,10 @@ void detectaisleswithobstacles(Camera &camera){
 
 //TODO
 void estimateLocation(int aisle_num, double t){
-   if(!obstacleAssociatedWithAisle[aisle_num].is_valid_obstacle);
+   ROS_INFO_STREAM("obstacle is valid or invalid ");
+   ROS_INFO_STREAM(obstacleAssociatedWithAisle[aisle_num].is_valid_obstacle);
+   if(!obstacleAssociatedWithAisle[aisle_num].is_valid_obstacle)
         return;
-
    double move_time = obstacleAssociatedWithAisle[aisle_num].move_time;
    double wait_time = obstacleAssociatedWithAisle[aisle_num].wait_time;
    double time_stamp1 = obstacleAssociatedWithAisle[aisle_num].time_stamp1;
@@ -516,6 +517,7 @@ void estimateLocation(int aisle_num, double t){
 
 
 //TODO make velocity more robust, adjust the camera
+//     rectify error
 void estimateObstacleAttributes(Camera &camera) {
   auto aisle_breakbeam_msgs  = camera.get_aisle_breakbeam_msgs();
 
@@ -528,10 +530,6 @@ void estimateObstacleAttributes(Camera &camera) {
                          [&str = "shelf_breakbeam_7_frame"] 
                          (nist_gear::Proximity::ConstPtr &msg){return (msg->header).frame_id == str && msg->object_detected; });    
 
-       auto it2 = std::find_if(it, vec.end(),
-                         [&str = "shelf_breakbeam_4_frame"] 
-                         (nist_gear::Proximity::ConstPtr &msg){return (msg->header).frame_id == str && msg->object_detected; });    
-        
        ROS_INFO_STREAM("aisle number is "<< i);
        if(it != vec.end()){
          ROS_INFO_STREAM("it something");
@@ -540,6 +538,10 @@ void estimateObstacleAttributes(Camera &camera) {
          ROS_INFO_STREAM("it nothing");
          continue;
        }
+
+       auto it2 = std::find_if(it, vec.end(),
+                         [&str = "shelf_breakbeam_4_frame"] 
+                         (nist_gear::Proximity::ConstPtr &msg){return (msg->header).frame_id == str && msg->object_detected; });    
 
        if(it2 != vec.end()){
          ROS_INFO_STREAM("it2 something");
@@ -572,6 +574,7 @@ void estimateObstacleAttributes(Camera &camera) {
        ROS_INFO_STREAM("sec3 is " << sec3);
        ROS_INFO_STREAM("wait time is " << wait_time);
        ROS_INFO_STREAM("move time is " << move_time);
+       estimateLocation(1,30);
     }
   }
 }
@@ -634,7 +637,6 @@ int main(int argc, char ** argv) {
          ObstacleInAisle[3] = true;
          ObstacleInAisle[0] = true;
          estimateObstacleAttributes(camera);
-         estimateLocation(1,30);
     }
 
     /**
