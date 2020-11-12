@@ -6,21 +6,18 @@ Sensor blackout
 
 Human Presence
    eashwar
-   1. Detecting the direction of the human
-   2. Robustness and debugging
+   1. Test Direction
+   2. Preset locations for gaps(all gaps)
+   3. Change detectgaps function to detect all gaps.
+   4. Detecting the location of the human (test)
 
-   akwasi
-   2. Detecting the location of the human
-   3. Rectifying the segmentation fault error
+   akwasi & shantam
+   1. Rounding the move time and wait time
    4. Refactoring
 
    kaushik
-   4. Obstacle Avoidance
-        a. Identify which obstacle to avoid in the aisle
+   1. Preset locations for gaps(all gaps)
 
-
-   shantam
-        b. Detecting which aisle has human
 
 
 
