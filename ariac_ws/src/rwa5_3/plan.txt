@@ -7,7 +7,7 @@ Sensor blackout
 Human Presence
    eashwar
    1. Test Direction
-   2. Preset locations for gaps(all gaps)
+   2. Preset locations for gaps(all gaps)   -- done
    3. Change detectgaps function to detect all gaps.
    4. Detecting the location of the human (test)
 
@@ -16,7 +16,7 @@ Human Presence
    4. Refactoring
 
    kaushik
-   1. Preset locations for gaps(all gaps)
+   1. Preset locations for gaps(all gaps) -- done
 
 
 

@@ -118,6 +118,36 @@ class GantryControl {
     agv1_gasket_part_green agv1_gasket_part_green_;
 
 
+    // gaps
+    left_gap_default left_gap_default_;
+    left_gap_0_2 left_gap_0_2_;
+    left_gap_1_2 left_gap_1_2_;
+    left_gap_1_3 left_gap_1_3_;
+    left_gap_2_2 left_gap_2_2_;
+    left_gap_2_3 left_gap_2_3_;
+    left_gap_3_2 left_gap_3_2_;
+    left_gap_3_3 left_gap_3_3_;
+
+    middle_gap_default middle_gap_default_;
+    middle_gap_0_2 middle_gap_0_2_;
+    middle_gap_1_2 middle_gap_1_2_;
+    middle_gap_1_3 middle_gap_1_3_;
+    middle_gap_2_2 middle_gap_2_2_;
+    middle_gap_2_3 middle_gap_2_3_;
+    middle_gap_3_2 middle_gap_3_2_;
+    middle_gap_3_3 middle_gap_3_3_;
+
+    right_gap_default right_gap_default_;
+    right_gap_0_2 right_gap_0_2_;
+    right_gap_1_2 right_gap_1_2_;
+    right_gap_1_3 right_gap_1_3_;
+    right_gap_2_2 right_gap_2_2_;
+    right_gap_2_3 right_gap_2_3_;
+    right_gap_3_2 right_gap_3_2_;
+    right_gap_3_3 right_gap_3_3_;
+
+
+
   private:
     std::vector<double> joint_group_positions_;
     ros::NodeHandle node_;

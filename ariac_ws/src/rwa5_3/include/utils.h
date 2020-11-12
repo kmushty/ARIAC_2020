@@ -57,7 +57,10 @@ typedef struct PresetLocation {
 } start, bin3, agv2, agv1, agv1_faultyG, agv2_faultyG, bin13, bin16, shelf5_1, shelf5_2, shelf5_3, shelf5_4, shelf5_5,shelf11_1, shelf11_2, shelf11_3,
 shelf8_1, shelf8_2, shelf8_3, agv2_go_to_flipped_pulley, agv1_go_to_flipped_pulley,agv2_flipped, agv2_flipped1,agv1_flipped, agv1_flipped1, agv1_drop,
 agv2_drop, movingPart, movingPart1, agv1_gasket_part_green,shelf8_obs_green1, shelf8_obs_green2, shelf8_obs_green3, shelf8_obs_green4, shelf8_obs_green5,
-shelf8_obs_blue1, shelf8_obs_blue2, shelf8_obs_blue3, shelf8_obs_blue4, shelf8_obs_blue5, shelf8_obs_blue6;
+shelf8_obs_blue1, shelf8_obs_blue2, shelf8_obs_blue3, shelf8_obs_blue4, shelf8_obs_blue5, shelf8_obs_blue6, left_gap_default, middle_gap_default, right_gap_default,
+left_gap_0_2, left_gap_1_2, left_gap_1_3, left_gap_2_2, left_gap_2_3, left_gap_3_2, left_gap_3_3,
+middle_gap_0_2, middle_gap_1_2, middle_gap_1_3, middle_gap_2_2, middle_gap_2_3, middle_gap_3_2, middle_gap_3_3,
+right_gap_0_2, right_gap_1_2, right_gap_1_3, right_gap_2_2, right_gap_2_3, right_gap_3_2, right_gap_3_3;
 
 typedef struct Part {
   std::string type; // model type
