@@ -102,6 +102,22 @@ void initWayPoints(std::map<std::string,std::vector<PresetLocation>> &presetLoc,
     presetLoc["pickmovingPart"] = {gantry.movingPart1_, gantry.movingPart_};
     presetLoc["agv1_gasket_part_green"] = {gantry.agv1_gasket_part_green_};
     presetLoc["agv2_disk_part_green"] = {gantry.agv2_};
+
+    // gaps
+    presetLoc["left_gap_0"] = {gantry.left_gap_default_, gantry.left_gap_0_2_};
+    presetLoc["left_gap_1"] = {gantry.left_gap_default_, gantry.left_gap_1_2_, gantry.left_gap_1_3_};
+    presetLoc["left_gap_2"] = {gantry.left_gap_default_, gantry.left_gap_2_2_, gantry.left_gap_2_3_};
+    presetLoc["left_gap_3"] = {gantry.left_gap_default_, gantry.left_gap_3_2_, gantry.left_gap_3_3_};
+
+    presetLoc["middle_gap_0"] = {gantry.middle_gap_default_, gantry.middle_gap_0_2_};
+    presetLoc["middle_gap_1"] = {gantry.middle_gap_default_, gantry.middle_gap_1_2_, gantry.middle_gap_1_3_};
+    presetLoc["middle_gap_2"] = {gantry.middle_gap_default_, gantry.middle_gap_2_2_, gantry.middle_gap_2_3_};
+    presetLoc["middle_gap_3"] = {gantry.middle_gap_default_, gantry.middle_gap_3_2_, gantry.middle_gap_3_3_};
+
+    presetLoc["right_gap_0"] = {gantry.right_gap_default_, gantry.right_gap_0_2_};
+    presetLoc["right_gap_1"] = {gantry.right_gap_default_, gantry.right_gap_1_2_, gantry.right_gap_1_3_};
+    presetLoc["right_gap_2"] = {gantry.right_gap_default_, gantry.right_gap_2_2_, gantry.right_gap_2_3_};
+    presetLoc["right_gap_3"] = {gantry.right_gap_default_, gantry.right_gap_3_2_, gantry.right_gap_3_3_};
 }
 
 
