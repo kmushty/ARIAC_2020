@@ -76,9 +76,9 @@ const nist_gear::Proximity::ConstPtr &msg, int index){
     }*/
     
    if(index < 4){
-       aisle_breakbeam_msgs[0].push_back(msg);
-   }else if(index >=4 && index < 8)
        aisle_breakbeam_msgs[1].push_back(msg);
+   }else if(index >=4 && index < 8)
+       aisle_breakbeam_msgs[2].push_back(msg);
  
 
 }

@@ -394,6 +394,43 @@ double shelfDistance(std::string shelf1, std::string shelf2){                   
 }
 
 
+void obstacleForPart(product prod){
+    std::string aisle;
+    std::string obstacleNumInAisle;
+    part my_part;
+    my_part.type = prod.type;
+    my_part.pose = prod.pose;
+//    ObstacleInAisle = std::vector<bool> (4,false);
+    ROS_INFO_STREAM(double(my_part.pose.position.y));
+    if(double(my_part.pose.position.y) <= 0.6 && double(my_part.pose.position.y)>0){
+        ROS_INFO_STREAM("aisle2");
+        ROS_INFO_STREAM("person1");
+    }
+    else if(double(my_part.pose.position.y) >= -0.7 && double(my_part.pose.position.y)<0){
+        ROS_INFO_STREAM("aisle3");
+        ROS_INFO_STREAM("person2");
+    }
+    else if(double(my_part.pose.position.y) <= -2.3 && double(my_part.pose.position.y)> -2.9){
+        ROS_INFO_STREAM("aisle3");
+        ROS_INFO_STREAM("person2");
+    }
+    else if(double(my_part.pose.position.y) <= -2.9 && double(my_part.pose.position.y)> -3.5){
+        ROS_INFO_STREAM("aisle4");
+        ROS_INFO_STREAM("person2");
+    }
+    else if(double(my_part.pose.position.y) >= 2.6 && double(my_part.pose.position.y)< 3.2){
+        ROS_INFO_STREAM("aisle2");
+        ROS_INFO_STREAM("person1");
+    }
+    else{
+        ROS_INFO_STREAM("aisle1");
+        ROS_INFO_STREAM("person1");
+    }
+}
+
+
+
+
 std::vector<std::string> determineGaps(){                                       // Function returning gap postions in the form of string
     std::vector<std::string> gap;
     std::vector<double> gapThreshold = {6.299163, 6.299173};
@@ -427,6 +464,15 @@ double calc_remainder(double x, double y){
   return result;
 }
 
+void AislesWithObstacles(Camera &camera) {
+    auto eashwar = camera.get_aisle_breakbeam_msgs();
+    for(int i=0;i<eashwar.size();i++){
+        if(eashwar[i].size()) {
+            ObstacleInAisle[i] = true;
+            ROS_INFO_STREAM(i);
+        }
+    }
+}
 
 //void detectAislesWithObstacles(Camera &camera){
   //camera.reset_shelf_breakbeams();
@@ -627,19 +673,22 @@ int main(int argc, char ** argv) {
     for(auto val:gap)                                                                                        // printing the gap positions
         ROS_INFO_STREAM(val);
 
+    ros::Duration(3.0).sleep();
+    AislesWithObstacles(camera);
+
     
 
-    while(true){
-         //detectaisleswithobstacles(camera);
+//    while(true){
+//         //detectaisleswithobstacles(camera);
+//
+//         ObstacleInAisle[1] = true;
+//         ObstacleInAisle[2] = true;
+//         ObstacleInAisle[3] = true;
+//         ObstacleInAisle[0] = true;
+//         estimateObstacleAttributes(camera);
+//    }
 
-         ObstacleInAisle[1] = true;
-         ObstacleInAisle[2] = true;
-         ObstacleInAisle[3] = true;
-         ObstacleInAisle[0] = true;
-         estimateObstacleAttributes(camera);
-    }
 
-    /**
     for(int i = 0; i< orders.size(); i++){
         auto order = orders[i];
 
@@ -656,6 +705,7 @@ int main(int argc, char ** argv) {
                 prod.pose = product.pose;
                 prod.agv_id = ship.agv_id;
                 prod.arm_name = "left_arm";
+                obstacleForPart(prod);
 
                                                                                                                 //Conveyor Impementation
 //                if(k == 0) {
@@ -707,7 +757,7 @@ int main(int argc, char ** argv) {
         }
         ROS_INFO_STREAM("here3");
 
-    }**/
+    }
 
 
     comp.endCompetition();
