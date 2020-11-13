@@ -450,23 +450,34 @@ void obstacleForPart(product prod){
 std::vector<std::string> determineGaps(){                                       // Function returning gap postions in the form of string
     std::vector<std::string> gap;
     std::vector<double> gapThreshold = {6.299163, 6.299173};
-    std::vector<std::string> shelfSide = {"left_side_gap_", "right_side_gap_"};
+    std::vector<std::string> shelfSide = {"left_gap_","middle_gap_", "right_gap_"};
     std::string temp;
     int count = 0;
+    int countFlag = 0;
     std::string name1;
     std::string name2;
     int shelfStartIndex = 3;
     int shelfEndIndex = 11;
 
-    for(int shelf = shelfStartIndex; shelf <= shelfEndIndex; shelf = shelf + 2*shelfStartIndex){
+    for(int shelf = shelfStartIndex; shelf <= shelfEndIndex; shelf = shelf + shelfStartIndex){
         count ++;
+        countFlag = 0;
         for(int row = shelf; row < (shelf + shelfStartIndex)-1; row++){
             name1 = "shelf"+std::to_string(row)+"_frame";
             name2 = "shelf"+std::to_string(row+1)+"_frame";
 
             if(shelfDistance(name1, name2) >= gapThreshold[0] && shelfDistance(name1, name2) <= gapThreshold[1]){
-                gap.push_back(shelfSide[count-1] + std::to_string(row % shelfStartIndex));
+                gap.push_back(shelfSide[count-1] + std::to_string((row+1) % shelfStartIndex));
+                countFlag += 1;
             }
+        }
+        if(countFlag == 0){
+            if(shelfPosition("shelf"+std::to_string(shelf)+"_frame").transform.translation.x >= -2.093989 &&
+               shelfPosition("shelf"+std::to_string(shelf)+"_frame").transform.translation.x <= -2.093979){
+                gap.push_back(shelfSide[count-1] + std::to_string((shelfStartIndex - countFlag)));
+            }
+            else
+                gap.push_back(shelfSide[count-1] + std::to_string((countFlag)));
         }
     }
     return gap;
@@ -617,8 +628,10 @@ void estimateObstacleAttributes(Camera &camera) {
        double sec2 = double((*(it+1))->header.stamp.sec) + double((*(it+1))->header.stamp.nsec)*1e-9;
        double sec3 = double((*it2)->header.stamp.sec) + double((*it2)->header.stamp.nsec)*1e-9;
 
-       double wait_time = sec2 - sec1;
-       double move_time = sec3 - sec1 - wait_time; 
+       ROS_INFO_STREAM(sec2 - sec1);
+       double wait_time = round(sec2 - sec1);
+       double move_time = round(sec3 - sec1 - wait_time);
+       ROS_INFO_STREAM(sec3 - sec2);
 
        double velocity = LENGTH_OF_AISLE/move_time;
 
@@ -689,20 +702,20 @@ int main(int argc, char ** argv) {
     for(auto val:gap)                                                                                        // printing the gap positions
         ROS_INFO_STREAM(val);
 
-    ros::Duration(3.0).sleep();
-    AislesWithObstacles(camera);
+//    ros::Duration(3.0).sleep();
+//    AislesWithObstacles(camera);
 
     
 
-//    while(true){
-//         //detectaisleswithobstacles(camera);
-//
-//         ObstacleInAisle[1] = true;
-//         ObstacleInAisle[2] = true;
-//         ObstacleInAisle[3] = true;
-//         ObstacleInAisle[0] = true;
-//         estimateObstacleAttributes(camera);
-//    }
+    while(true){
+         //detectaisleswithobstacles(camera);
+
+         ObstacleInAisle[1] = true;
+         ObstacleInAisle[2] = true;
+         ObstacleInAisle[3] = true;
+         ObstacleInAisle[0] = true;
+         estimateObstacleAttributes(camera);
+    }
 
 
     for(int i = 0; i< orders.size(); i++){
