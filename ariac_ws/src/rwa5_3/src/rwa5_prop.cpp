@@ -41,7 +41,7 @@
 
 const double LENGTH_OF_AISLE = 14.2;
 const int NUM_LOGICAL_CAMERAS_PER_AISLE = 4;
-std::vector<bool> ObstacleInAisle(4,false);
+std::vector<bool> obstacleInAisle(4,false);
 std::vector<double> velocityOfObstacles(4,0.0);
 std::vector<obstacle>  obstacleAssociatedWithAisle;
 
@@ -73,8 +73,9 @@ void agvDeliveryService(ros::ServiceClient &agvDelivery, std::string shipmentTyp
 
 
 void initWayPoints(std::map<std::string,std::vector<PresetLocation>> &presetLoc, GantryControl &gantry){
-
-    presetLoc["logical_camera_2"] = {gantry.bin16_};                                                          // waypoints from start position position to logical_camera
+    
+    // waypoints from start position position to logical_camera
+    presetLoc["logical_camera_2"] = {gantry.bin16_};                                                          
     presetLoc["logical_camera_6"] = {gantry.bin13_};
     presetLoc["logical_camera_11"] = {gantry.shelf5_1_, gantry.shelf5_2_, gantry.shelf5_3_};
 //    presetLoc["logical_camera_12"] = {gantry.shelf8_1_, gantry.shelf8_2_, gantry.shelf8_3_};
@@ -84,8 +85,9 @@ void initWayPoints(std::map<std::string,std::vector<PresetLocation>> &presetLoc,
     presetLoc["logical_camera_16"] = {gantry.shelf11_1_, gantry.shelf11_2_, gantry.shelf11_3_};
     presetLoc["logical_camera_15"] = {gantry.shelf8_obs_blue1_, gantry.shelf8_obs_blue2_, gantry.shelf8_obs_blue3_, gantry.shelf8_obs_blue4_, gantry.shelf8_obs_blue5_, gantry.shelf8_obs_blue6_};
     presetLoc["logical_camera_12"] = {gantry.shelf8_obs_green1_, gantry.shelf8_obs_green2_, gantry.shelf8_obs_green3_, gantry.shelf8_obs_green4_, gantry.shelf8_obs_green5_};
-
-    presetLoc["start"] = {gantry.start_};                                                                     // useful presetloc
+    
+    // useful presetloc
+    presetLoc["start"] = {gantry.start_};                                                                     
     presetLoc["agv2"] = {gantry.agv2_};
     presetLoc["agv1"] = {gantry.agv1_};
     presetLoc["agv2_faultyG"] = {gantry.agv2_faultyG_};
@@ -128,6 +130,11 @@ void moveToLocation(std::map<std::string,std::vector<PresetLocation>> &presetLoc
         gantry.goToPresetLocation(waypoint);
 }
 
+void retraceSteps(std::map<std::string,std::vector<PresetLocation>> &presetLoc, std::string location,GantryControl &gantry) {
+    auto vec = presetLoc[location];
+    for(int i=vec.size()-1; i>=0;i--)
+        gantry.goToPresetLocation(vec[i]);
+}
 
 void moveFromLocationToStart(std::map<std::string,std::vector<PresetLocation>> &presetLoc, std::string location,GantryControl &gantry) {
     auto vec = presetLoc[location];
@@ -380,7 +387,6 @@ void conveyor(Camera &camera, GantryControl &gantry, product prod){
         moveToLocation(presetLoc, prod.agv_id, gantry);                                                //move to desired agv id
 
     gantry.placePart(my_part_in_tray, prod.agv_id, prod.arm_name);
-
     moveFromLocationToStart(presetLoc, "start", gantry);
 }
 
@@ -401,7 +407,7 @@ geometry_msgs::TransformStamped shelfPosition(std::string shelf){
     return T_w_l;
 }
 
-double shelfDistance(std::string shelf1, std::string shelf2){                   // Determining distance between adjacent shelves
+double shelfDistance(std::string shelf1, std::string shelf2){                      // Determining distance between adjacent shelves
     geometry_msgs::TransformStamped s1;
     geometry_msgs::TransformStamped s2;
     s1 = shelfPosition(shelf1);
@@ -445,9 +451,7 @@ void obstacleForPart(product prod){
 }
 
 
-
-
-std::vector<std::string> determineGaps(){                                       // Function returning gap postions in the form of string
+std::vector<std::string> determineGaps(){                                                   // Function returning gap postions in the form of string
     std::vector<std::string> gap;
     std::vector<double> gapThreshold = {6.299163, 6.299173};
     std::vector<std::string> shelfSide = {"left_gap_","middle_gap_", "right_gap_"};
@@ -480,8 +484,12 @@ std::vector<std::string> determineGaps(){                                       
                 gap.push_back(shelfSide[count-1] + std::to_string((countFlag)));
         }
     }
+    
+    for(auto val:gap)                                                                    // printing the gap positions
+        ROS_INFO_STREAM(val);
     return gap;
 }
+
 
 double calc_remainder(double x, double y){
   std::string s = std::to_string(x/y);
@@ -491,66 +499,19 @@ double calc_remainder(double x, double y){
   return result;
 }
 
-void AislesWithObstacles(Camera &camera) {
+
+void detectAislesWithObstacles(Camera &camera) {
     auto eashwar = camera.get_aisle_breakbeam_msgs();
     for(int i=0;i<eashwar.size();i++){
         if(eashwar[i].size()) {
-            ObstacleInAisle[i] = true;
+            obstacleInAisle[i] = true;
             ROS_INFO_STREAM(i);
         }
     }
 }
 
-//void detectAislesWithObstacles(Camera &camera){
-  //camera.reset_shelf_breakbeams();
-  //ObstacleInAisle = std::vector<bool> (4,false);
-  
 
-  //ROS_INFO_STREAM("Detecting obstacles in aisles");
-
-  //std::vector<bool> shelf_cameras = camera.get_shelf_breakbeams();
-
-  //for(int i = 0; i<shelf_cameras.size(); i++){
-      //if(i < NUM_LOGICAL_CAMERAS_PER_AISLE && shelf_cameras[i] == true) {
-          //ObstacleInAisle[0] = true;
-            
-      //}else if(i>= NUM_LOGICAL_CAMERAS_PER_AISLE && i < 2*NUM_LOGICAL_CAMERAS_PER_AISLE && shelf_cameras[i] == true) {
-          //ObstacleInAisle[1] = true;
-      //}
-  //}
-
-   
-  //for(int i= 0; i<ObstacleInAisle.size(); i++){
-    //if(ObstacleInAisle[i] == 0)
-      //ROS_INFO_STREAM("Obstacle in Aisle"<< i);
-  //}
-  
-  //ROS_INFO_STREAM("Finished Detecting Obstacles in aisles");
-//}
-
-
-
-/**
-void detectaisleswithobstacles(Camera &camera){
-  auto aisle_breakbeam_msgs  = camera.get_aisle_breakbeam_msgs();
-  
-  ROS_INFO_STREAM("Print break beam Msgs");
-  for(int i = 0;i<4;i++){
-     auto vec = aisle_breakbeam_msgs[i];
-     ROS_INFO_STREAM("aisle "<< i << "  "<< vec.size()<< " msgs obtained");
-     if(vec.size()>= 5) {
-       for(auto msg:vec){
-         ROS_INFO_STREAM((msg->header).stamp);
-         //ROS_INFO_STREAM(msg->);
-         //ROS_INFO_STREAM(msg->object_detected);
-       }
-     }
-  }
-  }
-  ROS_INFO_STREAM("Finished Printing Break Beam Msgs");
-**/
-
-//TODO
+//TODO  make robust
 void estimateLocation(int aisle_num, double t){
    ROS_INFO_STREAM("obstacle is valid or invalid ");
    ROS_INFO_STREAM(obstacleAssociatedWithAisle[aisle_num].is_valid_obstacle);
@@ -596,7 +557,7 @@ void estimateObstacleAttributes(Camera &camera) {
 
   for(int i = 0; i<4; i++) {
     auto vec = aisle_breakbeam_msgs[i];
-    if(ObstacleInAisle[i] == true  && velocityOfObstacles[i] == 0 && vec.size() > 16) {
+    if(obstacleInAisle[i] == true  && velocityOfObstacles[i] == 0 && vec.size() > 16) {
        ROS_INFO_STREAM("estimating velocity for aisle" << i);
        ROS_INFO_STREAM("vector size is " << vec.size());
        auto it = std::find_if(vec.begin(), vec.end(),
@@ -649,7 +610,7 @@ void estimateObstacleAttributes(Camera &camera) {
        ROS_INFO_STREAM("sec3 is " << sec3);
        ROS_INFO_STREAM("wait time is " << wait_time);
        ROS_INFO_STREAM("move time is " << move_time);
-       estimateLocation(1,30);
+       //estimateLocation(1,30);
     }
   }
 }
@@ -672,7 +633,7 @@ int main(int argc, char ** argv) {
     gantry.goToPresetLocation(gantry.start_);
 
 
-    ros::ServiceClient agv2Delivery = node.serviceClient<nist_gear::AGVControl>("/ariac/agv2");               //initialize agvDelivery
+    ros::ServiceClient agv2Delivery = node.serviceClient<nist_gear::AGVControl>("/ariac/agv2");              //initialize agvDelivery
     ros::ServiceClient agv1Delivery = node.serviceClient<nist_gear::AGVControl>("/ariac/agv1");
 
     Camera camera;
@@ -694,27 +655,30 @@ int main(int argc, char ** argv) {
         orders = comp.getOrders();
 
 
-    product prod;
+    product prod;                                                                                            //Setting up product
 
 
-    std::vector<std::string> gap;
+    std::vector<std::string> gap;                                                                            //Determine gaps
     gap = determineGaps();
-    for(auto val:gap)                                                                                        // printing the gap positions
-        ROS_INFO_STREAM(val);
 
-//    ros::Duration(3.0).sleep();
-//    AislesWithObstacles(camera);
 
+    ros::Duration(3.0).sleep();                                                                              //wait for sometime and 
+    detectAislesWithObstacles(camera);                                                                       //determine obstacles in Aisles
     
-
-    while(true){
-         //detectaisleswithobstacles(camera);
-
-         ObstacleInAisle[1] = true;
-         ObstacleInAisle[2] = true;
-         ObstacleInAisle[3] = true;
-         ObstacleInAisle[0] = true;
-         estimateObstacleAttributes(camera);
+    
+    //TODO reduce computation 
+    bool done = false;                                                                                       //estimate obstacle attributes
+    while(not done){                                                                                             
+      estimateObstacleAttributes(camera);                                                                 
+      for(int i = 0; i<4; i++){
+        if(obstacleInAisle[i]) 
+           if(!obstacleAssociatedWithAisle[i].is_valid_obstacle)
+             done = false;
+           else
+             done = true;
+        else
+           done = true;
+      }
     }
 
 
@@ -736,20 +700,8 @@ int main(int argc, char ** argv) {
                 prod.arm_name = "left_arm";
                 obstacleForPart(prod);
 
-                                                                                                                //Conveyor Impementation
-//                if(k == 0) {
-//                    while (true) {
-//                        if (camera.get_break_beam()) {
-//                            conveyor(camera, gantry, prod);
-//                            break;
-//                        }
-//                    }
-//                    if(camera.get_break_beam()) {
-//                        camera.reset_break_beam();
-//                        continue;
-//                    }
-//                }
-
+                
+                // TODO - make high priority order checker more robust
                 ROS_INFO_STREAM(comp.getOrders().size());
                 ROS_INFO_STREAM(HighPriorityOrderInitiated);
                 if(comp.getOrders().size()>1 && !HighPriorityOrderInitiated){
@@ -761,7 +713,7 @@ int main(int argc, char ** argv) {
                     k--;
                 }
                 else
-                    processPart(prod, gantry, camera, false, true);             // Remove flip_flag after degugging
+                    processPart(prod, gantry, camera, false, true);                                  //Remove flip_flag after degugging
 
 
                 //TODO - Make checker for faulty more robust
@@ -769,10 +721,10 @@ int main(int argc, char ** argv) {
                 ros::Duration(3.0).sleep();
                 ros::spinOnce();
                 ros::spinOnce();
-                if(camera.get_is_faulty(prod.agv_id)) {
-                    ROS_INFO_STREAM("fAULTY");
-                    removeFaultyProduct(camera,gantry,prod);
-                    k--;                                                                    //process product again
+                if(camera.get_is_faulty(prod.agv_id)) {                                              //if product is faulty 
+                    removeFaultyProduct(camera,gantry,prod);                                             // 1.remove product
+                    k--;                                                                                 // 2.process product again
+                    ROS_INFO_STREAM("FAULTY");
                 }
                 ROS_INFO_STREAM("heere 2");
                 moveFromLocationToStart(presetLoc,"start",gantry);
@@ -785,7 +737,6 @@ int main(int argc, char ** argv) {
                 agvDeliveryService(agv1Delivery, order.shipments[j].shipment_type);
         }
         ROS_INFO_STREAM("here3");
-
     }
 
 
