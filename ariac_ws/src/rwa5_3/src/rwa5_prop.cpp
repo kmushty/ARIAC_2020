@@ -397,7 +397,7 @@ geometry_msgs::TransformStamped shelfPosition(std::string shelf){
     geometry_msgs::TransformStamped T_w_l;
 
     try {
-        T_w_l = tfBuffer.lookupTransform("world", shelf,            // Determining shelf position in world frame
+        T_w_l = tfBuffer.lookupTransform("world", shelf,                                        // Determining shelf position in world frame
                                          ros::Time(0), timeout);
     }
     catch (tf2::TransformException &ex) {
@@ -407,7 +407,7 @@ geometry_msgs::TransformStamped shelfPosition(std::string shelf){
     return T_w_l;
 }
 
-double shelfDistance(std::string shelf1, std::string shelf2){                      // Determining distance between adjacent shelves
+double shelfDistance(std::string shelf1, std::string shelf2){                                    // Determining distance between adjacent shelves
     geometry_msgs::TransformStamped s1;
     geometry_msgs::TransformStamped s2;
     s1 = shelfPosition(shelf1);
