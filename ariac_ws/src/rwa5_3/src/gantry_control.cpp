@@ -227,18 +227,18 @@ void GantryControl::init() {
 
     // shel8_obs_green - waypoint 1
     shelf8_obs_green1_.gantry = {0.0, -5.18, 0};
-    shelf8_obs_green1_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
-    shelf8_obs_green1_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+    shelf8_obs_green1_.left_arm = {-0.17, -0.13, 0.25, -0.77, 1.34, 0};
+    shelf8_obs_green1_.right_arm = {3.14, 0, 0.25, -0.78, 1.76, 1.88};
 
 // shel8_obs_green - waypoint 2
-    shelf8_obs_green2_.gantry = {-11.3, -5.18, 1.57};
-    shelf8_obs_green2_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
-    shelf8_obs_green2_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+    shelf8_obs_green2_.gantry = {-11.3, -5.18, 0};
+    shelf8_obs_green2_.left_arm = {-0.17, -0.13, 0.25, -0.77, 1.34, 0};
+    shelf8_obs_green2_.right_arm = {3.14, 0, 0.25, -0.78, 1.76, 1.88};
 
 // shel8_obs_green - waypoint 3
-    shelf8_obs_green3_.gantry = {-11.3, -3.5, 1.57};
-    shelf8_obs_green3_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
-    shelf8_obs_green3_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+    shelf8_obs_green3_.gantry = {-11.3, -3.5, 0};
+    shelf8_obs_green3_.left_arm = {-0.17, -0.13, 0.25, -0.77, 1.34, 0};
+    shelf8_obs_green3_.right_arm = {3.14, 0, 0.25, -0.78, 1.76, 1.88};
 
 // shel8_obs_green - waypoint 4
     shelf8_obs_green4_.gantry = {-11.3, -1.50, 0};
@@ -251,19 +251,19 @@ void GantryControl::init() {
     shelf8_obs_green5_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
 
     // shel8_obs_blue - waypoint 1
-    shelf8_obs_blue1_.gantry = {0.0, 5.18, 0};
+    shelf8_obs_blue1_.gantry = {0.0, 5.18, 3.14};
     shelf8_obs_blue1_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
     shelf8_obs_blue1_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
 
     // shel8_obs_blue - waypoint 2
-    shelf8_obs_blue2_.gantry = {-11.3, 5.18, -1.57};
-    shelf8_obs_blue2_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
-    shelf8_obs_blue2_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+    shelf8_obs_blue2_.gantry = {-11.3, 5.18, 3.14};
+    shelf8_obs_blue2_.left_arm = {-0.17, -0.13, 0.25, -0.77, 1.34, 0};
+    shelf8_obs_blue2_.right_arm = {3.14, 0, 0.25, -0.78, 1.76, 1.88};
 
     // shel8_obs_blue - waypoint 3
-    shelf8_obs_blue3_.gantry = {-11.32, 3.5, -1.57};
-    shelf8_obs_blue3_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
-    shelf8_obs_blue3_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+    shelf8_obs_blue3_.gantry = {-11.3, 3.5, 3.14};
+    shelf8_obs_blue3_.left_arm = {-0.17, -0.13, 0.25, -0.77, 1.34, 0};
+    shelf8_obs_blue3_.right_arm = {3.14, 0, 0.25, -0.78, 1.76, 1.88};
 
     // shel8_obs_blue - waypoint 4
     shelf8_obs_blue4_.gantry = {-11.3, 1.50, 3.14};
@@ -411,29 +411,29 @@ void GantryControl::init() {
     // ------------------------------------------------------- //
 
     // leftgap_2 green part pickup waypoints
-    left_gap_2_green_1_.gantry = {-11.30, -1.45, 0};
-    left_gap_2_green_1_.left_arm = {-2.0, -0.15, PI/2, -1.5, -0.4, 0};
-    left_gap_2_green_1_.right_arm = {PI, 0.00, 0.87, -PI/4, PI/2, 0};
+    left_gap_2_green_1_.gantry = {-11.30, -1.90, 0};
+    left_gap_2_green_1_.left_arm = {-0.17, -0.13, 0.25, -0.77, 1.34, 0};
+    left_gap_2_green_1_.right_arm = {3.14, 0, 0.25, -0.78, 1.76, 1.88};
 
-    left_gap_2_green_2_.gantry = {-13.70, -1.45, 0};
-    left_gap_2_green_2_.left_arm = {-2.0, -0.15, PI/2, -1.5, -0.4, 0};
-    left_gap_2_green_2_.right_arm = {PI, 0.00, 0.87, -PI/4, PI/2, 0};
+    left_gap_2_green_2_.gantry = {-13.70, -1.90, 0};
+    left_gap_2_green_2_.left_arm = {-2.39, -PI/4, PI/2, -PI/4, 0, 0};
+    left_gap_2_green_2_.right_arm = {3.14, 0, 0.25, -0.78, 1.76, 1.88};
 
-    left_gap_2_green_3_.gantry = {-13.70, -1.25, 0};
-    left_gap_2_green_3_.left_arm = {-2.0, -0.15, PI/2, -1.5, -0.4, 0};
-    left_gap_2_green_3_.right_arm = {PI, 0.00, 0.87, -PI/4, PI/2, 0};
+    left_gap_2_green_3_.gantry = {-14.13, -1.25, 0};
+    left_gap_2_green_3_.left_arm = {-1.78, -PI/4, PI/2, -PI/4, -0.20, 0};
+    left_gap_2_green_3_.right_arm = {3.14, 0, 0.25, -0.78, 1.76, 1.88};
 
     // rightgap_2 green part pickup waypoints
-    right_gap_2_blue_1_.gantry = {-11.30, 1.45, 3.14};
+    right_gap_2_blue_1_.gantry = {-11.30, 1.90, 3.14};
     right_gap_2_blue_1_.left_arm = {-2.25, -0.15, PI/2, -1.5, 0, 0};
     right_gap_2_blue_1_.right_arm = {PI, 0.00, 0.87, -PI/4, PI/2, 0};
 
-    right_gap_2_blue_2_.gantry = {-15.40, 1.45, 3.14};
-    right_gap_2_blue_2_.left_arm = {-2.25, -0.15, PI/2, -1.5, 0, 0};
-    right_gap_2_blue_2_.right_arm = {PI, 0.00, 0.87, -PI/4, PI/2, 0};
+    right_gap_2_blue_2_.gantry = {-14.65, 1.90, 3.14};
+    right_gap_2_blue_2_.left_arm = {-2.39, -PI/4, PI/2, -PI/4, 0, 0};
+    right_gap_2_blue_2_.right_arm = {3.14, 0, 0.25, -0.78, 1.76, 1.88};
 
-    right_gap_2_blue_3_.gantry = {-15.40, 1.35, 3.14};
-    right_gap_2_blue_3_.left_arm = {-2.25, -0.15, PI/2, -1.5, 0, 0};
+    right_gap_2_blue_3_.gantry = {-14.92, 1.25, 3.14};
+    right_gap_2_blue_3_.left_arm = {-1.78, -PI/4, PI/2, -PI/4, -0.20, 0};
     right_gap_2_blue_3_.right_arm = {PI, 0.00, 0.87, -PI/4, PI/2, 0};
 
     /*

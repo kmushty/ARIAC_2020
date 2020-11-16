@@ -270,39 +270,43 @@ void planPath(product prod, part my_part,std::map<std::string, std::vector<Prese
  camera.reset_shelf_breakbeams();
  std::vector<bool> get_beam = camera.get_shelf_breakbeams();
  ROS_INFO_STREAM("HELLO1");
- if (prod.type == "gasket_part_green") {
+ if (prod.type == "gasket_part_green") {            // Working
      ROS_INFO_STREAM("HELLO2");
      moveToLocation(presetLoc, "left_gap_2", gantry);
 //     moveToLocation(presetLoc, "agv2", gantry);
     ROS_INFO_STREAM("HELLO3");
      // check the break beam and wait after triggered
      while(true){          // waiting for beam to get triggered
+//       camera.reset_shelf_breakbeams();
        get_beam = camera.get_shelf_breakbeams();
-       ROS_INFO_STREAM("val of get_beam[2] is" << get_beam[2]);
+//       ROS_INFO_STREAM("val of get_beam[2] is" << get_beam[2]);
        if (get_beam[2]) {
+           ros::Duration(6.5).sleep();
            ROS_INFO_STREAM("Inside val of get_beam[2] is" << get_beam[2]);
-           ros::Duration(1.0).sleep();
+           moveToLocation(presetLoc, "logical_camera_12", gantry);
            gantry.pickPart(my_part);
            // move back to gap by reversing
            retraceSteps(presetLoc, "logical_camera_12", gantry);
-           moveFromLocationToStart(presetLoc,"start",gantry);
+           moveFromLocationToStart(presetLoc,"left_gap_2",gantry);
            break;
        }
-       camera.reset_shelf_breakbeams();
      } 
   } else if (prod.type == "pulley_part_blue") {
      moveToLocation(presetLoc, "right_gap_2", gantry);
      // check the break beam and wait after triggered
      while(true){
-         camera.reset_shelf_breakbeams();
+//         camera.reset_shelf_breakbeams();
          get_beam = camera.get_shelf_breakbeams();
-         ROS_INFO_STREAM("val of get_beam[6] is" << get_beam[6]);
+//         ROS_INFO_STREAM("val of get_beam[6] is" << get_beam[6]);
          if (get_beam[6]) {
              ROS_INFO_STREAM("Inside val of get_beam[6] is" << get_beam[6]);
-             ros::Duration(1.5).sleep();
+             ros::Duration(10).sleep();                    // TODO: Tweak this sleep duration
+             moveToLocation(presetLoc, "logical_camera_15", gantry);
+             gantry.pickPart(my_part);
              // move back to gap by reversing
              retraceSteps(presetLoc, "logical_camera_15", gantry);
-             moveFromLocationToStart(presetLoc,"start",gantry);
+             moveFromLocationToStart(presetLoc,"right_gap_2",gantry);
+             break;
          }
      // else add process part for conveyor belt
      }
