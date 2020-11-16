@@ -408,6 +408,34 @@ void GantryControl::init() {
     right_gap_3_3_.right_arm = {PI, 0.00, 1.00, -PI/4, PI/2, 0};
 
 
+    // ------------------------------------------------------- //
+
+    // leftgap_2 green part pickup waypoints
+    left_gap_2_green_1_.gantry = {-11.30, -1.45, 0};
+    left_gap_2_green_1_.left_arm = {-2.0, -0.15, PI/2, -1.5, -0.4, 0};
+    left_gap_2_green_1_.right_arm = {PI, 0.00, 0.87, -PI/4, PI/2, 0};
+
+    left_gap_2_green_2_.gantry = {-13.70, -1.45, 0};
+    left_gap_2_green_2_.left_arm = {-2.0, -0.15, PI/2, -1.5, -0.4, 0};
+    left_gap_2_green_2_.right_arm = {PI, 0.00, 0.87, -PI/4, PI/2, 0};
+
+    left_gap_2_green_3_.gantry = {-13.70, -1.25, 0};
+    left_gap_2_green_3_.left_arm = {-2.0, -0.15, PI/2, -1.5, -0.4, 0};
+    left_gap_2_green_3_.right_arm = {PI, 0.00, 0.87, -PI/4, PI/2, 0};
+
+    // rightgap_2 green part pickup waypoints
+    right_gap_2_blue_1_.gantry = {-11.30, 1.45, 3.14};
+    right_gap_2_blue_1_.left_arm = {-2.25, -0.15, PI/2, -1.5, 0, 0};
+    right_gap_2_blue_1_.right_arm = {PI, 0.00, 0.87, -PI/4, PI/2, 0};
+
+    right_gap_2_blue_2_.gantry = {-15.40, 1.45, 3.14};
+    right_gap_2_blue_2_.left_arm = {-2.25, -0.15, PI/2, -1.5, 0, 0};
+    right_gap_2_blue_2_.right_arm = {PI, 0.00, 0.87, -PI/4, PI/2, 0};
+
+    right_gap_2_blue_3_.gantry = {-15.40, 1.35, 3.14};
+    right_gap_2_blue_3_.left_arm = {-2.25, -0.15, PI/2, -1.5, 0, 0};
+    right_gap_2_blue_3_.right_arm = {PI, 0.00, 0.87, -PI/4, PI/2, 0};
+
     /*
      //--start location
     start_.gantry = {0,0,0};

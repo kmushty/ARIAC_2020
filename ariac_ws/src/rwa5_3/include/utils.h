@@ -60,7 +60,9 @@ agv2_drop, movingPart, movingPart1, agv1_gasket_part_green,shelf8_obs_green1, sh
 shelf8_obs_blue1, shelf8_obs_blue2, shelf8_obs_blue3, shelf8_obs_blue4, shelf8_obs_blue5, shelf8_obs_blue6, left_gap_default, middle_gap_default, right_gap_default,
 left_gap_0_2, left_gap_1_2, left_gap_1_3, left_gap_2_2, left_gap_2_3, left_gap_3_2, left_gap_3_3,
 middle_gap_0_2, middle_gap_1_2, middle_gap_1_3, middle_gap_2_2, middle_gap_2_3, middle_gap_3_2, middle_gap_3_3,
-right_gap_0_2, right_gap_1_2, right_gap_1_3, right_gap_2_2, right_gap_2_3, right_gap_3_2, right_gap_3_3;
+right_gap_0_2, right_gap_1_2, right_gap_1_3, right_gap_2_2, right_gap_2_3, right_gap_3_2, right_gap_3_3,
+left_gap_2_green_1, left_gap_2_green_2, left_gap_2_green_3, right_gap_2_blue_1, right_gap_2_blue_2, right_gap_2_blue_3;
+;
 
 typedef struct Part {
   std::string type; // model type

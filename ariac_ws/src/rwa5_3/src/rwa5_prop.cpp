@@ -83,9 +83,13 @@ void initWayPoints(std::map<std::string,std::vector<PresetLocation>> &presetLoc,
 //    presetLoc["logical_camera_15"] = {gantry.shelf8_1_, gantry.shelf8_2_, gantry.shelf8_3_};
     presetLoc["logical_camera_13"] = {gantry.shelf11_1_, gantry.shelf11_2_, gantry.shelf11_3_};
     presetLoc["logical_camera_16"] = {gantry.shelf11_1_, gantry.shelf11_2_, gantry.shelf11_3_};
-    presetLoc["logical_camera_15"] = {gantry.shelf8_obs_blue1_, gantry.shelf8_obs_blue2_, gantry.shelf8_obs_blue3_, gantry.shelf8_obs_blue4_, gantry.shelf8_obs_blue5_, gantry.shelf8_obs_blue6_};
-    presetLoc["logical_camera_12"] = {gantry.shelf8_obs_green1_, gantry.shelf8_obs_green2_, gantry.shelf8_obs_green3_, gantry.shelf8_obs_green4_, gantry.shelf8_obs_green5_};
-    
+//    presetLoc["logical_camera_15"] = {gantry.shelf8_obs_blue1_, gantry.shelf8_obs_blue2_, gantry.shelf8_obs_blue3_, gantry.shelf8_obs_blue4_, gantry.shelf8_obs_blue5_, gantry.shelf8_obs_blue6_};
+//    presetLoc["logical_camera_12"] = {gantry.shelf8_obs_green1_, gantry.shelf8_obs_green2_, gantry.shelf8_obs_green3_, gantry.shelf8_obs_green4_, gantry.shelf8_obs_green5_};
+    presetLoc["logical_camera_15"] = {gantry.right_gap_2_blue_1_, gantry.right_gap_2_blue_2_, gantry.right_gap_2_blue_3_};
+    presetLoc["logical_camera_12"] = {gantry.left_gap_2_green_1_, gantry.left_gap_2_green_2_, gantry.left_gap_2_green_3_};
+
+
+
     // useful presetloc
     presetLoc["start"] = {gantry.start_};                                                                     
     presetLoc["agv2"] = {gantry.agv2_};
@@ -108,7 +112,8 @@ void initWayPoints(std::map<std::string,std::vector<PresetLocation>> &presetLoc,
     // gaps
     presetLoc["left_gap_0"] = {gantry.left_gap_default_, gantry.left_gap_0_2_};
     presetLoc["left_gap_1"] = {gantry.left_gap_default_, gantry.left_gap_1_2_, gantry.left_gap_1_3_};
-    presetLoc["left_gap_2"] = {gantry.left_gap_default_, gantry.left_gap_2_2_, gantry.left_gap_2_3_};
+//    presetLoc["left_gap_2"] = {gantry.left_gap_default_, gantry.left_gap_2_2_, gantry.left_gap_2_3_};
+    presetLoc["left_gap_2"] = {gantry.shelf8_obs_green1_, gantry.shelf8_obs_green2_, gantry.shelf8_obs_green3_};
     presetLoc["left_gap_3"] = {gantry.left_gap_default_, gantry.left_gap_3_2_, gantry.left_gap_3_3_};
 
     presetLoc["middle_gap_0"] = {gantry.middle_gap_default_, gantry.middle_gap_0_2_};
@@ -118,7 +123,8 @@ void initWayPoints(std::map<std::string,std::vector<PresetLocation>> &presetLoc,
 
     presetLoc["right_gap_0"] = {gantry.right_gap_default_, gantry.right_gap_0_2_};
     presetLoc["right_gap_1"] = {gantry.right_gap_default_, gantry.right_gap_1_2_, gantry.right_gap_1_3_};
-    presetLoc["right_gap_2"] = {gantry.right_gap_default_, gantry.right_gap_2_2_, gantry.right_gap_2_3_};
+//    presetLoc["right_gap_2"] = {gantry.right_gap_default_, gantry.right_gap_2_2_, gantry.right_gap_2_3_};
+    presetLoc["right_gap_2"] = {gantry.shelf8_obs_blue1_, gantry.shelf8_obs_blue2_, gantry.shelf8_obs_blue3_};
     presetLoc["right_gap_3"] = {gantry.right_gap_default_, gantry.right_gap_3_2_, gantry.right_gap_3_3_};
 }
 
@@ -219,12 +225,12 @@ void flipPart(GantryControl &gantry, part &my_part_in_tray, product &prod){
     prod.arm_name = "right_arm";
 }
 
-int aisleAssociatedWithPart(product prod){
+int aisleAssociatedWithPart(part my_part){
     std::string aisle;
     std::string obstacleNumInAisle;
-    part my_part;
-    my_part.type = prod.type;
-    my_part.pose = prod.pose;
+//    part my_part;
+//    my_part.type = prod.type;
+//    my_part.pose = prod.pose;
 //    ObstacleInAisle = std::vector<bool> (4,false);
     ROS_INFO_STREAM(double(my_part.pose.position.y));
     if(double(my_part.pose.position.y) <= 0.6 && double(my_part.pose.position.y)>0){
@@ -263,28 +269,37 @@ int aisleAssociatedWithPart(product prod){
 void planPath(product prod, part my_part,std::map<std::string, std::vector<PresetLocation>> &presetLoc, Camera &camera, GantryControl &gantry) {
  camera.reset_shelf_breakbeams();
  std::vector<bool> get_beam = camera.get_shelf_breakbeams();
-
+ ROS_INFO_STREAM("HELLO1");
  if (prod.type == "gasket_part_green") {
+     ROS_INFO_STREAM("HELLO2");
      moveToLocation(presetLoc, "left_gap_2", gantry);
+//     moveToLocation(presetLoc, "agv2", gantry);
+    ROS_INFO_STREAM("HELLO3");
      // check the break beam and wait after triggered
      while(true){          // waiting for beam to get triggered
-       if (get_beam[2] == true) {
-           ROS_INFO_STREAM("val of get_beam[2] is" << get_beam[2]);
-           ros::Duration(2.0).sleep();
+       get_beam = camera.get_shelf_breakbeams();
+       ROS_INFO_STREAM("val of get_beam[2] is" << get_beam[2]);
+       if (get_beam[2]) {
+           ROS_INFO_STREAM("Inside val of get_beam[2] is" << get_beam[2]);
+           ros::Duration(1.0).sleep();
            gantry.pickPart(my_part);
            // move back to gap by reversing
            retraceSteps(presetLoc, "logical_camera_12", gantry);
            moveFromLocationToStart(presetLoc,"start",gantry);
            break;
        }
+       camera.reset_shelf_breakbeams();
      } 
   } else if (prod.type == "pulley_part_blue") {
      moveToLocation(presetLoc, "right_gap_2", gantry);
      // check the break beam and wait after triggered
      while(true){
-         if (get_beam[6] == true) {
-             ROS_INFO_STREAM("val of get_beam[2] is" << get_beam[2]);
-             ros::Duration(2.5).sleep();
+         camera.reset_shelf_breakbeams();
+         get_beam = camera.get_shelf_breakbeams();
+         ROS_INFO_STREAM("val of get_beam[6] is" << get_beam[6]);
+         if (get_beam[6]) {
+             ROS_INFO_STREAM("Inside val of get_beam[6] is" << get_beam[6]);
+             ros::Duration(1.5).sleep();
              // move back to gap by reversing
              retraceSteps(presetLoc, "logical_camera_15", gantry);
              moveFromLocationToStart(presetLoc,"start",gantry);
@@ -316,9 +331,11 @@ void processPart(product prod, GantryControl &gantry, Camera &camera, bool prior
                 my_part_in_tray.pose = prod.pose;
 
                 
-                if (obstacleInAisle[aisleAssociatedWithPart(prod)] == true) {
-                    planPath( prod, my_part, presetLoc, camera, gantry) 
-                }else {
+                if (obstacleInAisle[aisleAssociatedWithPart(my_part)]) {
+                    ROS_INFO_STREAM("Inside planPath");
+                    planPath( prod, my_part, presetLoc, camera, gantry);
+                }
+                else {
                     moveToLocation(presetLoc, parts.first, gantry);
                     gantry.pickPart(my_part);
                     moveFromLocationToStart(presetLoc, parts.first, gantry);
@@ -705,18 +722,18 @@ int main(int argc, char ** argv) {
     gap = determineGaps();
 
 
-    ros::Duration(3.0).sleep();                                                                              //wait for sometime and 
+    ros::Duration(1.0).sleep();                                                                              //wait for sometime and
     detectAislesWithObstacles(camera);                                                                       //determine obstacles in Aisles
     
     
     //TODO reduce computation 
-    for(int i = 0; i<4; i++){
-        if(obstacleInAisle[i]) {
-          estimateObstacleAttributes(camera,i);                                                                 
-          if(!obstacleAssociatedWithAisle[i].is_valid_obstacle)
-             i--;
-        }
-    }
+//    for(int i = 0; i<4; i++){
+//        if(obstacleInAisle[i]) {
+//          estimateObstacleAttributes(camera,i);
+//          if(!obstacleAssociatedWithAisle[i].is_valid_obstacle)
+//             i--;
+//        }
+//    }
 
 
 
@@ -736,6 +753,7 @@ int main(int argc, char ** argv) {
                 prod.pose = product.pose;
                 prod.agv_id = ship.agv_id;
                 prod.arm_name = "left_arm";
+
 
                 // TODO - make high priority order checker more robust
                 ROS_INFO_STREAM(comp.getOrders().size());
@@ -765,6 +783,7 @@ int main(int argc, char ** argv) {
                 ROS_INFO_STREAM("heere 2");
                 moveFromLocationToStart(presetLoc,"start",gantry);
                 ROS_INFO_STREAM("heere x");
+
             }
             ROS_INFO_STREAM("herex1");
             if(prod.agv_id == "agv2")

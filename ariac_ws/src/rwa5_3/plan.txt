@@ -1,28 +1,20 @@
 Sensor blackout
-
-
-Human Presence
    eashwar
-   1. Test Direction
-   4. Detecting the location of the human (test)
-   2. Rounding the move time and wait time -- debug
-   3. Calculation of midpoint of the gap
-   4. Detemining the closest gap
-
-   akwasi & shantam
-   4. Refactoring
+   5. Hashmap<hashmap> and modify processPart
 
     shantam
-   // Picking part from conveynor pickPartFromConveynor ---separate branch
-   1. Making sure the bram hits red pistons
-   2. Making sure logical camera detects the part before hitting the sensor.
-   3. Waiting till the bream bram gets triggered
-   4. Calling conveynor function
+   Conveyor implementation
 
 
    kaushik
    1. Preset location from gap to part
-   2. complete gaptoPart() function
+   2. complete planPath() function
+
+   ak
+   1. Logic for pathplanning
+
+
+   Modify getTargetPose() to get pose score
 
 
 

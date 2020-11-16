@@ -146,6 +146,13 @@ class GantryControl {
     right_gap_3_2 right_gap_3_2_;
     right_gap_3_3 right_gap_3_3_;
 
+    //gap to part
+    left_gap_2_green_1 left_gap_2_green_1_;
+    left_gap_2_green_2 left_gap_2_green_2_;
+    left_gap_2_green_3 left_gap_2_green_3_;
+    right_gap_2_blue_1 right_gap_2_blue_1_;
+    right_gap_2_blue_2 right_gap_2_blue_2_;
+    right_gap_2_blue_3 right_gap_2_blue_3_;
 
 
   private:
