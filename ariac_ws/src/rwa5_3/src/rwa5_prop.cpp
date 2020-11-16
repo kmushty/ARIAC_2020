@@ -422,6 +422,7 @@ void obstacleForPart(product prod){
     part my_part;
     my_part.type = prod.type;
     my_part.pose = prod.pose;
+
 //    ObstacleInAisle = std::vector<bool> (4,false);
     ROS_INFO_STREAM(double(my_part.pose.position.y));
     if(double(my_part.pose.position.y) <= 0.6 && double(my_part.pose.position.y)>0){
@@ -552,25 +553,23 @@ void estimateLocation(int aisle_num, double t){
 
 //TODO make velocity more robust, adjust the camera
 //     rectify error
-void estimateObstacleAttributes(Camera &camera) {
-  auto aisle_breakbeam_msgs  = camera.get_aisle_breakbeam_msgs();
+void estimateObstacleAttributes(Camera &camera,int aisle_num) {
+    auto aisle_breakbeam_msgs  = camera.get_aisle_breakbeam_msgs();
 
-  for(int i = 0; i<4; i++) {
-    auto vec = aisle_breakbeam_msgs[i];
-    if(obstacleInAisle[i] == true  && velocityOfObstacles[i] == 0 && vec.size() > 16) {
-       ROS_INFO_STREAM("estimating velocity for aisle" << i);
+    auto vec = aisle_breakbeam_msgs[aisle_num];
+    if(obstacleInAisle[aisle_num] == true  && velocityOfObstacles[aisle_num] == 0 && vec.size() > 16) {
+       ROS_INFO_STREAM("estimating velocity for aisle" << aisle_num);
        ROS_INFO_STREAM("vector size is " << vec.size());
        auto it = std::find_if(vec.begin(), vec.end(),
                          [&str = "shelf_breakbeam_7_frame"] 
                          (nist_gear::Proximity::ConstPtr &msg){return (msg->header).frame_id == str && msg->object_detected; });    
 
-       ROS_INFO_STREAM("aisle number is "<< i);
+       ROS_INFO_STREAM("aisle number is "<< aisle_num);
        if(it != vec.end()){
          ROS_INFO_STREAM("it something");
          ROS_INFO_STREAM(std::distance(vec.begin(),it));
        }else{
          ROS_INFO_STREAM("it nothing");
-         continue;
        }
 
        auto it2 = std::find_if(it, vec.end(),
@@ -582,7 +581,6 @@ void estimateObstacleAttributes(Camera &camera) {
          ROS_INFO_STREAM(std::distance(vec.begin(),it2));
        }else{
          ROS_INFO_STREAM("it2 nothing");
-         continue;
        }
         
        double sec1 = double((*it)->header.stamp.sec) + double((*it)->header.stamp.nsec)*1e-9;
@@ -602,8 +600,8 @@ void estimateObstacleAttributes(Camera &camera) {
        human.time_stamp1 = sec1;
        human.is_valid_obstacle = true;
          
-       obstacleAssociatedWithAisle[i] = human;
-       velocityOfObstacles[i] = velocity;
+       obstacleAssociatedWithAisle[aisle_num] = human;
+       velocityOfObstacles[aisle_num] = velocity;
        ROS_INFO_STREAM("Printing time interval");
        ROS_INFO_STREAM("sec1 is " << sec1);
        ROS_INFO_STREAM("sec2 is " << sec2);
@@ -612,7 +610,6 @@ void estimateObstacleAttributes(Camera &camera) {
        ROS_INFO_STREAM("move time is " << move_time);
        //estimateLocation(1,30);
     }
-  }
 }
 
 
@@ -667,19 +664,14 @@ int main(int argc, char ** argv) {
     
     
     //TODO reduce computation 
-    bool done = false;                                                                                       //estimate obstacle attributes
-    while(not done){                                                                                             
-      estimateObstacleAttributes(camera);                                                                 
-      for(int i = 0; i<4; i++){
-        if(obstacleInAisle[i]) 
-           if(!obstacleAssociatedWithAisle[i].is_valid_obstacle)
-             done = false;
-           else
-             done = true;
-        else
-           done = true;
-      }
+    for(int i = 0; i<4; i++){
+        if(obstacleInAisle[i]) {
+          estimateObstacleAttributes(camera,i);                                                                 
+          if(!obstacleAssociatedWithAisle[i].is_valid_obstacle)
+             i--;
+        }
     }
+
 
 
     for(int i = 0; i< orders.size(); i++){
@@ -721,10 +713,10 @@ int main(int argc, char ** argv) {
                 ros::Duration(3.0).sleep();
                 ros::spinOnce();
                 ros::spinOnce();
-                if(camera.get_is_faulty(prod.agv_id)) {                                              //if product is faulty 
-                    removeFaultyProduct(camera,gantry,prod);                                             // 1.remove product
-                    k--;                                                                                 // 2.process product again
+                if(camera.get_is_faulty(prod.agv_id)) {                                              
                     ROS_INFO_STREAM("FAULTY");
+                    removeFaultyProduct(camera,gantry,prod);                                             // remove product
+                    k--;                                                                                 // process product again
                 }
                 ROS_INFO_STREAM("heere 2");
                 moveFromLocationToStart(presetLoc,"start",gantry);
@@ -738,8 +730,6 @@ int main(int argc, char ** argv) {
         }
         ROS_INFO_STREAM("here3");
     }
-
-
     comp.endCompetition();
     spinner.stop();
     ros::shutdown();
