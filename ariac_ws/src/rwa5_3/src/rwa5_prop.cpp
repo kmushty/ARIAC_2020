@@ -219,6 +219,81 @@ void flipPart(GantryControl &gantry, part &my_part_in_tray, product &prod){
     prod.arm_name = "right_arm";
 }
 
+int aisleAssociatedWithPart(product prod){
+    std::string aisle;
+    std::string obstacleNumInAisle;
+    part my_part;
+    my_part.type = prod.type;
+    my_part.pose = prod.pose;
+//    ObstacleInAisle = std::vector<bool> (4,false);
+    ROS_INFO_STREAM(double(my_part.pose.position.y));
+    if(double(my_part.pose.position.y) <= 0.6 && double(my_part.pose.position.y)>0){
+        // Return the value of the aisle
+        return 1;
+        ROS_INFO_STREAM("aisle2");
+        ROS_INFO_STREAM("person1");
+    }
+    else if(double(my_part.pose.position.y) >= -0.7 && double(my_part.pose.position.y)<0){
+        return 2;
+        ROS_INFO_STREAM("aisle3");
+        ROS_INFO_STREAM("person2");
+    }
+    else if(double(my_part.pose.position.y) <= -2.3 && double(my_part.pose.position.y)> -2.9){
+        return 2;
+        ROS_INFO_STREAM("aisle3");
+        ROS_INFO_STREAM("person2");
+    }
+    else if(double(my_part.pose.position.y) <= -2.9 && double(my_part.pose.position.y)> -3.5){
+        return 3;
+        ROS_INFO_STREAM("aisle4");
+        ROS_INFO_STREAM("person2");
+    }
+    else if(double(my_part.pose.position.y) >= 2.6 && double(my_part.pose.position.y)< 3.2){
+        return 1;
+        ROS_INFO_STREAM("aisle2");
+        ROS_INFO_STREAM("person1");
+    }
+    else{
+        return 0;
+        ROS_INFO_STREAM("aisle1");
+        ROS_INFO_STREAM("person1");
+    }
+}
+
+void planPath(product prod, part my_part,std::map<std::string, std::vector<PresetLocation>> &presetLoc, Camera &camera, GantryControl &gantry) {
+ camera.reset_shelf_breakbeams();
+ std::vector<bool> get_beam = camera.get_shelf_breakbeams();
+
+ if (prod.type == "gasket_part_green") {
+     moveToLocation(presetLoc, "left_gap_2", gantry);
+     // check the break beam and wait after triggered
+     while(true){          // waiting for beam to get triggered
+       if (get_beam[2] == true) {
+           ROS_INFO_STREAM("val of get_beam[2] is" << get_beam[2]);
+           ros::Duration(2.0).sleep();
+           gantry.pickPart(my_part);
+           // move back to gap by reversing
+           retraceSteps(presetLoc, "logical_camera_12", gantry);
+           moveFromLocationToStart(presetLoc,"start",gantry);
+           break;
+       }
+     } 
+  } else if (prod.type == "pulley_part_blue") {
+     moveToLocation(presetLoc, "right_gap_2", gantry);
+     // check the break beam and wait after triggered
+     while(true){
+         if (get_beam[6] == true) {
+             ROS_INFO_STREAM("val of get_beam[2] is" << get_beam[2]);
+             ros::Duration(2.5).sleep();
+             // move back to gap by reversing
+             retraceSteps(presetLoc, "logical_camera_15", gantry);
+             moveFromLocationToStart(presetLoc,"start",gantry);
+         }
+     // else add process part for conveyor belt
+     }
+   }
+}
+
 void processPart(product prod, GantryControl &gantry, Camera &camera, bool priority_flag,  bool flip_flag) {
     part my_part, my_part_in_tray, placed_part, actual_part;
     bool foundPart = false;
@@ -240,9 +315,14 @@ void processPart(product prod, GantryControl &gantry, Camera &camera, bool prior
                 my_part_in_tray.type = prod.type;
                 my_part_in_tray.pose = prod.pose;
 
-                moveToLocation(presetLoc, parts.first, gantry);
-                gantry.pickPart(my_part);
-                moveFromLocationToStart(presetLoc, parts.first, gantry);
+                
+                if (obstacleInAisle[aisleAssociatedWithPart(prod)] == true) {
+                    planPath( prod, my_part, presetLoc, camera, gantry) 
+                }else {
+                    moveToLocation(presetLoc, parts.first, gantry);
+                    gantry.pickPart(my_part);
+                    moveFromLocationToStart(presetLoc, parts.first, gantry);
+                }
 
 
                 if (flip_flag && int(my_part_in_tray.pose.orientation.x) == 1) {                                   //Flip part if part needs to be flipped
@@ -416,40 +496,6 @@ double shelfDistance(std::string shelf1, std::string shelf2){                   
 }
 
 
-void obstacleForPart(product prod){
-    std::string aisle;
-    std::string obstacleNumInAisle;
-    part my_part;
-    my_part.type = prod.type;
-    my_part.pose = prod.pose;
-
-//    ObstacleInAisle = std::vector<bool> (4,false);
-    ROS_INFO_STREAM(double(my_part.pose.position.y));
-    if(double(my_part.pose.position.y) <= 0.6 && double(my_part.pose.position.y)>0){
-        ROS_INFO_STREAM("aisle2");
-        ROS_INFO_STREAM("person1");
-    }
-    else if(double(my_part.pose.position.y) >= -0.7 && double(my_part.pose.position.y)<0){
-        ROS_INFO_STREAM("aisle3");
-        ROS_INFO_STREAM("person2");
-    }
-    else if(double(my_part.pose.position.y) <= -2.3 && double(my_part.pose.position.y)> -2.9){
-        ROS_INFO_STREAM("aisle3");
-        ROS_INFO_STREAM("person2");
-    }
-    else if(double(my_part.pose.position.y) <= -2.9 && double(my_part.pose.position.y)> -3.5){
-        ROS_INFO_STREAM("aisle4");
-        ROS_INFO_STREAM("person2");
-    }
-    else if(double(my_part.pose.position.y) >= 2.6 && double(my_part.pose.position.y)< 3.2){
-        ROS_INFO_STREAM("aisle2");
-        ROS_INFO_STREAM("person1");
-    }
-    else{
-        ROS_INFO_STREAM("aisle1");
-        ROS_INFO_STREAM("person1");
-    }
-}
 
 
 std::vector<std::string> determineGaps(){                                                   // Function returning gap postions in the form of string
@@ -690,9 +736,7 @@ int main(int argc, char ** argv) {
                 prod.pose = product.pose;
                 prod.agv_id = ship.agv_id;
                 prod.arm_name = "left_arm";
-                obstacleForPart(prod);
 
-                
                 // TODO - make high priority order checker more robust
                 ROS_INFO_STREAM(comp.getOrders().size());
                 ROS_INFO_STREAM(HighPriorityOrderInitiated);
