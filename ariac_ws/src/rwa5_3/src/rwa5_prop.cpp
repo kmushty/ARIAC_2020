@@ -485,21 +485,21 @@ void conveyor(Camera &camera, GantryControl &gantry, product prod){
     imgPart.pose.orientation.w = 1;
 
     imgPart.pose.position.x = 0;
-    imgPart.pose.position.y = -0.272441;
-    imgPart.pose.position.z = 0.875004;
+    imgPart.pose.position.y = -0.5650; //-0.272441; //-0.5700
+    imgPart.pose.position.z = 0.868991; //0.875004;
     ROS_INFO_STREAM("Picking Part from conveynor");
     gantry.pickPart(imgPart);
     moveFromLocationToStart(presetLoc, "pickmovingPart", gantry);
 
-    if (int(my_part_in_tray.pose.orientation.x) == 1) {                                   //Flip part if part needs to be flipped
-        moveToLocation(presetLoc,prod.agv_id+"_flipped",gantry);                                       //go to location to flip pulley
-        flipPart(gantry, my_part_in_tray, prod);
-    }
-    else
-        moveToLocation(presetLoc, prod.agv_id, gantry);                                                //move to desired agv id
-
-    gantry.placePart(my_part_in_tray, prod.agv_id, prod.arm_name);
-    moveFromLocationToStart(presetLoc, "start", gantry);
+//    if (int(my_part_in_tray.pose.orientation.x) == 1) {                                   //Flip part if part needs to be flipped
+//        moveToLocation(presetLoc,prod.agv_id+"_flipped",gantry);                                       //go to location to flip pulley
+//        flipPart(gantry, my_part_in_tray, prod);
+//    }
+//    else
+//        moveToLocation(presetLoc, prod.agv_id, gantry);                                                //move to desired agv id
+//
+//    gantry.placePart(my_part_in_tray, prod.agv_id, prod.arm_name);
+//    moveFromLocationToStart(presetLoc, "start", gantry);
 }
 
 geometry_msgs::TransformStamped shelfPosition(std::string shelf){
@@ -777,6 +777,8 @@ int main(int argc, char ** argv) {
     
 
     ConveyorFlag = false;
+    int numPickParts = 4;
+//    int flag = 0;
     
     //TODO reduce computation 
 //    for(int i = 0; i<4; i++){
@@ -807,18 +809,26 @@ int main(int argc, char ** argv) {
                 prod.arm_name = "left_arm";
 
                 //TODO make more robust
-                //modify checker condition 
+                //modify checker condition
                 if(!ConveyorFlag) {
                     ros::Duration(18).sleep();
-                    int numPickParts = 4;
-                    for (const auto &part:camera.get_detected_parts()) {
-                        if (part.first == "logical_camera_9") {
-                            pickPartsFromConveyor(camera, gantry, prod, numPickParts);
-                        }
+                    if (camera.get_detected_parts().find("logical_camera_9") != camera.get_detected_parts().end()) {
+                        pickPartsFromConveyor(camera, gantry, prod, numPickParts);
+                        ConveyorFlag = true;
                     }
+                }
                     //flag += ;
-                    ConveyorFlag=true;
-                 }
+
+
+//                if(flag == 0) {
+//                    ros::Duration(18).sleep();
+//                    for (const auto &part:camera.get_detected_parts()) {
+//                        if (part.first == "logical_camera_9") {
+//                            pickPartsFromConveyor(camera, gantry, prod, numPickParts);
+//                        }
+//                    }
+//                    flag += 1;
+//                }
 
 
                 // TODO - make high priority order checker more robust
