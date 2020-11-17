@@ -46,6 +46,7 @@ std::vector<double> velocityOfObstacles(4,0.0);
 std::vector<obstacle>  obstacleAssociatedWithAisle;
 
 bool HighPriorityOrderInitiated;
+bool ConveyorFlag;
 
 std::map<std::string,std::vector<PresetLocation>> presetLoc;
 
@@ -775,8 +776,7 @@ int main(int argc, char ** argv) {
     detectAislesWithObstacles(camera);                                                                       //determine obstacles in Aisles
     
 
-    int numPickParts = 4;
-    int flag = 0;
+    ConveyorFlag = false;
     
     //TODO reduce computation 
 //    for(int i = 0; i<4; i++){
@@ -806,14 +806,18 @@ int main(int argc, char ** argv) {
                 prod.agv_id = ship.agv_id;
                 prod.arm_name = "left_arm";
 
-                 if(flag == 0) {
+                //TODO make more robust
+                //modify checker condition 
+                if(!ConveyorFlag) {
                     ros::Duration(18).sleep();
+                    int numPickParts = 4;
                     for (const auto &part:camera.get_detected_parts()) {
                         if (part.first == "logical_camera_9") {
                             pickPartsFromConveyor(camera, gantry, prod, numPickParts);
                         }
                     }
-                    flag += 1;
+                    //flag += ;
+                    ConveyorFlag=true;
                  }
 
 

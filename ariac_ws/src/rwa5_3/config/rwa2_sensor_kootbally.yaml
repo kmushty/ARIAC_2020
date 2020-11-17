@@ -58,7 +58,8 @@ sensors:
   logical_camera_9: # conveyor
     type: logical_camera
     pose:
-      xyz: [ -0.14, -1.82, 1.96 ]
+      xyz: [-0.140000, 1.517435, 1.960000]
+      #xyz: [ -0.14, -1.82, 1.96 ]
       rpy: [ 0, 'pi/2', 0 ]
 
   logical_camera_10: #bin1
