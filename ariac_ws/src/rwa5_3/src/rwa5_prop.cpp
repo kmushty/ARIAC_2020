@@ -86,7 +86,7 @@ void initWayPoints(std::map<std::string,std::vector<PresetLocation>> &presetLoc,
 //    presetLoc["logical_camera_15"] = {gantry.shelf8_obs_blue1_, gantry.shelf8_obs_blue2_, gantry.shelf8_obs_blue3_, gantry.shelf8_obs_blue4_, gantry.shelf8_obs_blue5_, gantry.shelf8_obs_blue6_};
 //    presetLoc["logical_camera_12"] = {gantry.shelf8_obs_green1_, gantry.shelf8_obs_green2_, gantry.shelf8_obs_green3_, gantry.shelf8_obs_green4_, gantry.shelf8_obs_green5_};
     presetLoc["logical_camera_15"] = {gantry.right_gap_2_blue_1_, gantry.right_gap_2_blue_2_};
-    presetLoc["logical_camera_12"] = {gantry.left_gap_2_green_1_, gantry.left_gap_2_green_2_, gantry.left_gap_2_green_3_};
+    presetLoc["logical_camera_12"] = {gantry.left_gap_2_green_1_, gantry.left_gap_2_green_2_};
 
 
 
@@ -267,52 +267,56 @@ int aisleAssociatedWithPart(part my_part){
 }
 
 void planPath(product prod, part my_part,std::map<std::string, std::vector<PresetLocation>> &presetLoc, Camera &camera, GantryControl &gantry) {
- camera.reset_shelf_breakbeams();
- std::vector<bool> get_beam = camera.get_shelf_breakbeams();
- ROS_INFO_STREAM("HELLO1");
- if (prod.type == "gasket_part_green") {            // Working
-     ROS_INFO_STREAM("HELLO2");
-     moveToLocation(presetLoc, "left_gap_2", gantry);
-//     moveToLocation(presetLoc, "agv2", gantry);
-    ROS_INFO_STREAM("HELLO3");
-     // check the break beam and wait after triggered
-     while(true){          // waiting for beam to get triggered
-//       camera.reset_shelf_breakbeams();
-       get_beam = camera.get_shelf_breakbeams();
-//       ROS_INFO_STREAM("val of get_beam[2] is" << get_beam[2]);
-       if (get_beam[2]) {
-           ros::Duration(6.5).sleep();
-           ROS_INFO_STREAM("Inside val of get_beam[2] is" << get_beam[2]);
-           moveToLocation(presetLoc, "logical_camera_12", gantry);
-           gantry.pickPart(my_part);
-           // move back to gap by reversing
-           retraceSteps(presetLoc, "logical_camera_12", gantry);
-           moveFromLocationToStart(presetLoc,"left_gap_2",gantry);
-           break;
-       }
-     } 
-  } else if (prod.type == "pulley_part_blue") {
-     moveToLocation(presetLoc, "right_gap_2", gantry);
-     // check the break beam and wait after triggered
-     while(true){
-//         camera.reset_shelf_breakbeams();
-         get_beam = camera.get_shelf_breakbeams();
+    std::vector<bool> get_beam;
+    ROS_INFO_STREAM("HELLO1");
+    if (prod.type == "gasket_part_green") {            // Working
+        ROS_INFO_STREAM("HELLO2");
+        moveToLocation(presetLoc, "left_gap_2", gantry);
+        camera.reset_shelf_breakbeams();
+        while (true) {          // waiting for beam to get triggered
+            get_beam = camera.get_shelf_breakbeams();
+//       ROS_INFO_STREAM("val of get_beam[3] is" << get_beam[3]);
+            if (get_beam[3] && !get_beam[2]) {
+                ROS_INFO_STREAM("Hello 3!");
+                ros::Duration(2).sleep();
+                get_beam = camera.get_shelf_breakbeams();
+                if (get_beam[2]) {
+                    ROS_INFO_STREAM("Inside val of get_beam[2] is" << get_beam[2]);
+                    moveToLocation(presetLoc, "logical_camera_12", gantry);
+                    gantry.pickPart(my_part);
+                    retraceSteps(presetLoc, "logical_camera_12", gantry);
+                    moveFromLocationToStart(presetLoc, "left_gap_2", gantry);
+                    break;
+                }
+            } else if (get_beam[3] && get_beam[2]) {
+                camera.reset_shelf_breakbeams();
+            }
+        }
+    } else if (prod.type == "pulley_part_blue") {
+        moveToLocation(presetLoc, "right_gap_2", gantry);
+        camera.reset_shelf_breakbeams();
+        while (true) {
+            get_beam = camera.get_shelf_breakbeams();
 //         ROS_INFO_STREAM("val of get_beam[6] is" << get_beam[6]);
-         if (get_beam[7]) {
-             ROS_INFO_STREAM("Inside val of get_beam[6] is" << get_beam[6]);
-             ros::Duration(9.0).sleep();                    // TODO: Tweak this sleep duration
-             moveToLocation(presetLoc, "logical_camera_15", gantry);
-             gantry.pickPart(my_part);
-             // move back to gap by reversing
-             retraceSteps(presetLoc, "logical_camera_15", gantry);
-             moveFromLocationToStart(presetLoc,"right_gap_2",gantry);
-             break;
-         }
-     // else add process part for conveyor belt
-     }
-   }
+            if (get_beam[8] && !get_beam[7]) {
+                ROS_INFO_STREAM("Hello 3!");
+                ros::Duration(2).sleep();  //TODO: tweak
+                get_beam = camera.get_shelf_breakbeams();
+                ROS_INFO_STREAM("val of get_beam[7] is" << get_beam[7]);
+                if (get_beam[7]) {
+                    moveToLocation(presetLoc, "logical_camera_15", gantry);
+                    gantry.pickPart(my_part);
+                    retraceSteps(presetLoc, "logical_camera_15", gantry);
+                    moveFromLocationToStart(presetLoc, "right_gap_2", gantry);
+                    break;
+                }
+            }
+            else if(get_beam[8] && get_beam[7]){
+                camera.reset_shelf_breakbeams();
+            }
+        }
+    }
 }
-
 void processPart(product prod, GantryControl &gantry, Camera &camera, bool priority_flag,  bool flip_flag) {
     part my_part, my_part_in_tray, placed_part, actual_part;
     bool foundPart = false;
