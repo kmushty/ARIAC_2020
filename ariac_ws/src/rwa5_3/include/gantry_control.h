@@ -104,6 +104,15 @@ class GantryControl {
     shelf8_obs_blue6 shelf8_obs_blue6_;
 
 
+    
+    // --------- //
+    bin13_1 bin13_1_;
+    bin13_2 bin13_2_;
+    bin13_3 bin13_3_;
+    bin13_4 bin13_4_;
+    // --------- //
+
+
     /** -------------**/
     shelf5_4 shelf5_4_;
     shelf5_5 shelf5_5_;

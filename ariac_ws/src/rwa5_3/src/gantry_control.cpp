@@ -54,6 +54,26 @@ void GantryControl::init() {
     bin13_.left_arm = {0, -0.63, 1.26, -0.78, PI/2, 0};
     bin13_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
 
+    // ---------------------------------------------------- //
+    // conveyor part deactivate gripper location - 1
+    bin13_1_.gantry = {2.30, 2.30, 0.28};//, 2.10};
+    bin13_1_.left_arm = {0, -0.63, 1.26, -0.78, PI/2, 0};
+    bin13_1_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+    // conveyor part deactivate gripper location - 2
+    bin13_2_.gantry = {2.00, 2.30, 0.28};//, 2.10};
+    bin13_2_.left_arm = {0, -0.63, 1.26, -0.78, PI/2, 0};
+    bin13_2_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+    // conveyor part deactivate gripper location -3
+    bin13_3_.gantry = {1.94, 2.52, 0.15};//, 2.10};
+    bin13_3_.left_arm = {0, -0.63, 1.26, -0.78, PI/2, 0};
+    bin13_3_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+    // conveyor part deactivate gripper location -4
+    bin13_4_.gantry = {2.28, 2.52, 0.15};//, 2.10};
+    bin13_4_.left_arm = {0, -0.63, 1.26, -0.78, PI/2, 0};
+    bin13_4_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+    // ---------------------------------------------------- //
+
     //--agv2
     agv2_.gantry = {0.6, 6.9, PI};
     agv2_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};

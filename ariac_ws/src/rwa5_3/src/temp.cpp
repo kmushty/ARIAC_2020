@@ -41,7 +41,7 @@
 
 const double LENGTH_OF_AISLE = 14.2;
 const int NUM_LOGICAL_CAMERAS_PER_AISLE = 4;
-std::vector<bool> obstacleInAisle(4,false);
+std::vector<bool> ObstacleInAisle(4,false);
 std::vector<double> velocityOfObstacles(4,0.0);
 std::vector<obstacle>  obstacleAssociatedWithAisle;
 
@@ -73,9 +73,8 @@ void agvDeliveryService(ros::ServiceClient &agvDelivery, std::string shipmentTyp
 
 
 void initWayPoints(std::map<std::string,std::vector<PresetLocation>> &presetLoc, GantryControl &gantry){
-    
-    // waypoints from start position position to logical_camera
-    presetLoc["logical_camera_2"] = {gantry.bin16_};                                                          
+
+    presetLoc["logical_camera_2"] = {gantry.bin16_};                                                          // waypoints from start position position to logical_camera
     presetLoc["logical_camera_6"] = {gantry.bin13_};
     presetLoc["logical_camera_11"] = {gantry.shelf5_1_, gantry.shelf5_2_, gantry.shelf5_3_};
 //    presetLoc["logical_camera_12"] = {gantry.shelf8_1_, gantry.shelf8_2_, gantry.shelf8_3_};
@@ -83,15 +82,10 @@ void initWayPoints(std::map<std::string,std::vector<PresetLocation>> &presetLoc,
 //    presetLoc["logical_camera_15"] = {gantry.shelf8_1_, gantry.shelf8_2_, gantry.shelf8_3_};
     presetLoc["logical_camera_13"] = {gantry.shelf11_1_, gantry.shelf11_2_, gantry.shelf11_3_};
     presetLoc["logical_camera_16"] = {gantry.shelf11_1_, gantry.shelf11_2_, gantry.shelf11_3_};
-//    presetLoc["logical_camera_15"] = {gantry.shelf8_obs_blue1_, gantry.shelf8_obs_blue2_, gantry.shelf8_obs_blue3_, gantry.shelf8_obs_blue4_, gantry.shelf8_obs_blue5_, gantry.shelf8_obs_blue6_};
-//    presetLoc["logical_camera_12"] = {gantry.shelf8_obs_green1_, gantry.shelf8_obs_green2_, gantry.shelf8_obs_green3_, gantry.shelf8_obs_green4_, gantry.shelf8_obs_green5_};
-    presetLoc["logical_camera_15"] = {gantry.right_gap_2_blue_1_, gantry.right_gap_2_blue_2_};
-    presetLoc["logical_camera_12"] = {gantry.left_gap_2_green_1_, gantry.left_gap_2_green_2_};
+    presetLoc["logical_camera_15"] = {gantry.shelf8_obs_blue1_, gantry.shelf8_obs_blue2_, gantry.shelf8_obs_blue3_, gantry.shelf8_obs_blue4_, gantry.shelf8_obs_blue5_, gantry.shelf8_obs_blue6_};
+    presetLoc["logical_camera_12"] = {gantry.shelf8_obs_green1_, gantry.shelf8_obs_green2_, gantry.shelf8_obs_green3_, gantry.shelf8_obs_green4_, gantry.shelf8_obs_green5_};
 
-
-
-    // useful presetloc
-    presetLoc["start"] = {gantry.start_};                                                                     
+    presetLoc["start"] = {gantry.start_};                                                                     // useful presetloc
     presetLoc["agv2"] = {gantry.agv2_};
     presetLoc["agv1"] = {gantry.agv1_};
     presetLoc["agv2_faultyG"] = {gantry.agv2_faultyG_};
@@ -108,26 +102,6 @@ void initWayPoints(std::map<std::string,std::vector<PresetLocation>> &presetLoc,
     presetLoc["pickmovingPart"] = {gantry.movingPart1_, gantry.movingPart_};
     presetLoc["agv1_gasket_part_green"] = {gantry.agv1_gasket_part_green_};
     presetLoc["agv2_disk_part_green"] = {gantry.agv2_};
-
-    // gaps
-    presetLoc["left_gap_0"] = {gantry.left_gap_default_, gantry.left_gap_0_2_};
-    presetLoc["left_gap_1"] = {gantry.left_gap_default_, gantry.left_gap_1_2_, gantry.left_gap_1_3_};
-//    presetLoc["left_gap_2"] = {gantry.left_gap_default_, gantry.left_gap_2_2_, gantry.left_gap_2_3_};
-    presetLoc["left_gap_2"] = {gantry.shelf8_obs_green1_, gantry.shelf8_obs_green2_, gantry.shelf8_obs_green3_};
-    presetLoc["left_gap_3"] = {gantry.left_gap_default_, gantry.left_gap_3_2_, gantry.left_gap_3_3_};
-
-    presetLoc["middle_gap_0"] = {gantry.middle_gap_default_, gantry.middle_gap_0_2_};
-    presetLoc["middle_gap_1"] = {gantry.middle_gap_default_, gantry.middle_gap_1_2_, gantry.middle_gap_1_3_};
-    presetLoc["middle_gap_2"] = {gantry.middle_gap_default_, gantry.middle_gap_2_2_, gantry.middle_gap_2_3_};
-    presetLoc["middle_gap_3"] = {gantry.middle_gap_default_, gantry.middle_gap_3_2_, gantry.middle_gap_3_3_};
-
-    presetLoc["right_gap_0"] = {gantry.right_gap_default_, gantry.right_gap_0_2_};
-    presetLoc["right_gap_1"] = {gantry.right_gap_default_, gantry.right_gap_1_2_, gantry.right_gap_1_3_};
-//    presetLoc["right_gap_2"] = {gantry.right_gap_default_, gantry.right_gap_2_2_, gantry.right_gap_2_3_};
-    presetLoc["right_gap_2"] = {gantry.shelf8_obs_blue1_, gantry.shelf8_obs_blue2_, gantry.shelf8_obs_blue3_};
-    presetLoc["right_gap_3"] = {gantry.right_gap_default_, gantry.right_gap_3_2_, gantry.right_gap_3_3_};
-
-    //conveyor
     presetLoc["conveyorPart_1"] = {gantry.bin13_1_};
     presetLoc["conveyorPart_2"] = {gantry.bin13_2_};
     presetLoc["conveyorPart_3"] = {gantry.bin13_3_};
@@ -142,11 +116,6 @@ void moveToLocation(std::map<std::string,std::vector<PresetLocation>> &presetLoc
         gantry.goToPresetLocation(waypoint);
 }
 
-void retraceSteps(std::map<std::string,std::vector<PresetLocation>> &presetLoc, std::string location,GantryControl &gantry) {
-    auto vec = presetLoc[location];
-    for(int i=vec.size()-1; i>=0;i--)
-        gantry.goToPresetLocation(vec[i]);
-}
 
 void moveFromLocationToStart(std::map<std::string,std::vector<PresetLocation>> &presetLoc, std::string location,GantryControl &gantry) {
     auto vec = presetLoc[location];
@@ -231,98 +200,38 @@ void flipPart(GantryControl &gantry, part &my_part_in_tray, product &prod){
     prod.arm_name = "right_arm";
 }
 
-int aisleAssociatedWithPart(part my_part){
-    std::string aisle;
-    std::string obstacleNumInAisle;
-//    part my_part;
-//    my_part.type = prod.type;
-//    my_part.pose = prod.pose;
-//    ObstacleInAisle = std::vector<bool> (4,false);
-    ROS_INFO_STREAM(double(my_part.pose.position.y));
-    if(double(my_part.pose.position.y) <= 0.6 && double(my_part.pose.position.y)>0){
-        // Return the value of the aisle
-        return 1;
-        ROS_INFO_STREAM("aisle2");
-        ROS_INFO_STREAM("person1");
-    }
-    else if(double(my_part.pose.position.y) >= -0.7 && double(my_part.pose.position.y)<0){
-        return 2;
-        ROS_INFO_STREAM("aisle3");
-        ROS_INFO_STREAM("person2");
-    }
-    else if(double(my_part.pose.position.y) <= -2.3 && double(my_part.pose.position.y)> -2.9){
-        return 2;
-        ROS_INFO_STREAM("aisle3");
-        ROS_INFO_STREAM("person2");
-    }
-    else if(double(my_part.pose.position.y) <= -2.9 && double(my_part.pose.position.y)> -3.5){
-        return 3;
-        ROS_INFO_STREAM("aisle4");
-        ROS_INFO_STREAM("person2");
-    }
-    else if(double(my_part.pose.position.y) >= 2.6 && double(my_part.pose.position.y)< 3.2){
-        return 1;
-        ROS_INFO_STREAM("aisle2");
-        ROS_INFO_STREAM("person1");
-    }
-    else{
-        return 0;
-        ROS_INFO_STREAM("aisle1");
-        ROS_INFO_STREAM("person1");
-    }
+void conveyor(Camera &camera, GantryControl &gantry, product prod){
+    ROS_INFO_STREAM("Break beam triggered");
+    moveToLocation(presetLoc, "movingPart", gantry);
+    nist_gear::VacuumGripperState armState;
+    part imgPart, my_part_in_tray;
+    my_part_in_tray.type = prod.type;
+    my_part_in_tray.pose = prod.pose;
+    imgPart.type = prod.type;
+    imgPart.pose.orientation.x = 0;
+    imgPart.pose.orientation.y = 0;
+    imgPart.pose.orientation.z = 0;
+    imgPart.pose.orientation.w = 1;
+
+    imgPart.pose.position.x = 0;
+    imgPart.pose.position.y = -0.5650; //-0.272441; //-0.5700
+    imgPart.pose.position.z = 0.875004;
+    ROS_INFO_STREAM("Picking Part from conveynor");
+    gantry.pickPart(imgPart);
+    moveFromLocationToStart(presetLoc, "pickmovingPart", gantry);
+
+//    if (int(my_part_in_tray.pose.orientation.x) == 1) {                                   //Flip part if part needs to be flipped
+//        moveToLocation(presetLoc,prod.agv_id+"_flipped",gantry);                                       //go to location to flip pulley
+//        flipPart(gantry, my_part_in_tray, prod);
+//    }
+//    else
+//        moveToLocation(presetLoc, prod.agv_id, gantry);                                                //move to desired agv id
+//
+//    gantry.placePart(my_part_in_tray, prod.agv_id, prod.arm_name);
+
+//    moveFromLocationToStart(presetLoc, "start", gantry);
 }
 
-void planPath(product prod, part my_part,std::map<std::string, std::vector<PresetLocation>> &presetLoc, Camera &camera, GantryControl &gantry) {
-    std::vector<bool> get_beam;
-    ROS_INFO_STREAM("HELLO1");
-    if (prod.type == "gasket_part_green") {            // Working
-        ROS_INFO_STREAM("HELLO2");
-        moveToLocation(presetLoc, "left_gap_2", gantry);
-        camera.reset_shelf_breakbeams();
-        while (true) {          // waiting for beam to get triggered
-            get_beam = camera.get_shelf_breakbeams();
-//       ROS_INFO_STREAM("val of get_beam[3] is" << get_beam[3]);
-            if (get_beam[3] && !get_beam[2]) {
-                ROS_INFO_STREAM("Hello 3!");
-                ros::Duration(2).sleep();
-                get_beam = camera.get_shelf_breakbeams();
-                if (get_beam[2]) {
-                    ROS_INFO_STREAM("Inside val of get_beam[2] is" << get_beam[2]);
-                    moveToLocation(presetLoc, "logical_camera_12", gantry);
-                    gantry.pickPart(my_part);
-                    retraceSteps(presetLoc, "logical_camera_12", gantry);
-                    moveFromLocationToStart(presetLoc, "left_gap_2", gantry);
-                    break;
-                }
-            } else if (get_beam[3] && get_beam[2]) {
-                camera.reset_shelf_breakbeams();
-            }
-        }
-    } else if (prod.type == "pulley_part_blue") {
-        moveToLocation(presetLoc, "right_gap_2", gantry);
-        camera.reset_shelf_breakbeams();
-        while (true) {
-            get_beam = camera.get_shelf_breakbeams();
-//         ROS_INFO_STREAM("val of get_beam[6] is" << get_beam[6]);
-            if (get_beam[8] && !get_beam[7]) {
-                ROS_INFO_STREAM("Hello 3!");
-                ros::Duration(2).sleep();  //TODO: tweak
-                get_beam = camera.get_shelf_breakbeams();
-                ROS_INFO_STREAM("val of get_beam[7] is" << get_beam[7]);
-                if (get_beam[7]) {
-                    moveToLocation(presetLoc, "logical_camera_15", gantry);
-                    gantry.pickPart(my_part);
-                    retraceSteps(presetLoc, "logical_camera_15", gantry);
-                    moveFromLocationToStart(presetLoc, "right_gap_2", gantry);
-                    break;
-                }
-            }
-            else if(get_beam[8] && get_beam[7]){
-                camera.reset_shelf_breakbeams();
-            }
-        }
-    }
-}
 void processPart(product prod, GantryControl &gantry, Camera &camera, bool priority_flag,  bool flip_flag) {
     part my_part, my_part_in_tray, placed_part, actual_part;
     bool foundPart = false;
@@ -344,16 +253,9 @@ void processPart(product prod, GantryControl &gantry, Camera &camera, bool prior
                 my_part_in_tray.type = prod.type;
                 my_part_in_tray.pose = prod.pose;
 
-                
-                if (obstacleInAisle[aisleAssociatedWithPart(my_part)]) {
-                    ROS_INFO_STREAM("Inside planPath");
-                    planPath( prod, my_part, presetLoc, camera, gantry);
-                }
-                else {
-                    moveToLocation(presetLoc, parts.first, gantry);
-                    gantry.pickPart(my_part);
-                    moveFromLocationToStart(presetLoc, parts.first, gantry);
-                }
+                moveToLocation(presetLoc, parts.first, gantry);
+                gantry.pickPart(my_part);
+                moveFromLocationToStart(presetLoc, parts.first, gantry);
 
 
                 if (flip_flag && int(my_part_in_tray.pose.orientation.x) == 1) {                                   //Flip part if part needs to be flipped
@@ -470,37 +372,6 @@ void processHPOrder(nist_gear::Order &order,Camera &camera, GantryControl &gantr
 
 }
 
-void conveyor(Camera &camera, GantryControl &gantry, product prod){
-    ROS_INFO_STREAM("Break beam triggered");
-    moveToLocation(presetLoc, "movingPart", gantry);
-    nist_gear::VacuumGripperState armState;
-    part imgPart, my_part_in_tray;
-    my_part_in_tray.type = prod.type;
-    my_part_in_tray.pose = prod.pose;
-    imgPart.type = prod.type;
-    imgPart.pose.orientation.x = 0;
-    imgPart.pose.orientation.y = 0;
-    imgPart.pose.orientation.z = 0;
-    imgPart.pose.orientation.w = 1;
-
-    imgPart.pose.position.x = 0;
-    imgPart.pose.position.y = -0.272441;
-    imgPart.pose.position.z = 0.875004;
-    ROS_INFO_STREAM("Picking Part from conveynor");
-    gantry.pickPart(imgPart);
-    moveFromLocationToStart(presetLoc, "pickmovingPart", gantry);
-
-    if (int(my_part_in_tray.pose.orientation.x) == 1) {                                   //Flip part if part needs to be flipped
-        moveToLocation(presetLoc,prod.agv_id+"_flipped",gantry);                                       //go to location to flip pulley
-        flipPart(gantry, my_part_in_tray, prod);
-    }
-    else
-        moveToLocation(presetLoc, prod.agv_id, gantry);                                                //move to desired agv id
-
-    gantry.placePart(my_part_in_tray, prod.agv_id, prod.arm_name);
-    moveFromLocationToStart(presetLoc, "start", gantry);
-}
-
 geometry_msgs::TransformStamped shelfPosition(std::string shelf){
     tf2_ros::Buffer tfBuffer;
     tf2_ros::TransformListener tfListener(tfBuffer);
@@ -508,7 +379,7 @@ geometry_msgs::TransformStamped shelfPosition(std::string shelf){
     geometry_msgs::TransformStamped T_w_l;
 
     try {
-        T_w_l = tfBuffer.lookupTransform("world", shelf,                                        // Determining shelf position in world frame
+        T_w_l = tfBuffer.lookupTransform("world", shelf,            // Determining shelf position in world frame
                                          ros::Time(0), timeout);
     }
     catch (tf2::TransformException &ex) {
@@ -518,7 +389,7 @@ geometry_msgs::TransformStamped shelfPosition(std::string shelf){
     return T_w_l;
 }
 
-double shelfDistance(std::string shelf1, std::string shelf2){                                    // Determining distance between adjacent shelves
+double shelfDistance(std::string shelf1, std::string shelf2){                   // Determining distance between adjacent shelves
     geometry_msgs::TransformStamped s1;
     geometry_msgs::TransformStamped s2;
     s1 = shelfPosition(shelf1);
@@ -527,47 +398,30 @@ double shelfDistance(std::string shelf1, std::string shelf2){                   
 }
 
 
-
-
-std::vector<std::string> determineGaps(){                                                   // Function returning gap postions in the form of string
+std::vector<std::string> determineGaps(){                                       // Function returning gap postions in the form of string
     std::vector<std::string> gap;
     std::vector<double> gapThreshold = {6.299163, 6.299173};
-    std::vector<std::string> shelfSide = {"left_gap_","middle_gap_", "right_gap_"};
+    std::vector<std::string> shelfSide = {"left_side_gap_", "right_side_gap_"};
     std::string temp;
     int count = 0;
-    int countFlag = 0;
     std::string name1;
     std::string name2;
     int shelfStartIndex = 3;
     int shelfEndIndex = 11;
 
-    for(int shelf = shelfStartIndex; shelf <= shelfEndIndex; shelf = shelf + shelfStartIndex){
+    for(int shelf = shelfStartIndex; shelf <= shelfEndIndex; shelf = shelf + 2*shelfStartIndex){
         count ++;
-        countFlag = 0;
         for(int row = shelf; row < (shelf + shelfStartIndex)-1; row++){
             name1 = "shelf"+std::to_string(row)+"_frame";
             name2 = "shelf"+std::to_string(row+1)+"_frame";
 
             if(shelfDistance(name1, name2) >= gapThreshold[0] && shelfDistance(name1, name2) <= gapThreshold[1]){
-                gap.push_back(shelfSide[count-1] + std::to_string((row+1) % shelfStartIndex));
-                countFlag += 1;
+                gap.push_back(shelfSide[count-1] + std::to_string(row % shelfStartIndex));
             }
-        }
-        if(countFlag == 0){
-            if(shelfPosition("shelf"+std::to_string(shelf)+"_frame").transform.translation.x >= -2.093989 &&
-               shelfPosition("shelf"+std::to_string(shelf)+"_frame").transform.translation.x <= -2.093979){
-                gap.push_back(shelfSide[count-1] + std::to_string((shelfStartIndex - countFlag)));
-            }
-            else
-                gap.push_back(shelfSide[count-1] + std::to_string((countFlag)));
         }
     }
-    
-    for(auto val:gap)                                                                    // printing the gap positions
-        ROS_INFO_STREAM(val);
     return gap;
 }
-
 
 double calc_remainder(double x, double y){
   std::string s = std::to_string(x/y);
@@ -578,18 +432,56 @@ double calc_remainder(double x, double y){
 }
 
 
-void detectAislesWithObstacles(Camera &camera) {
-    auto eashwar = camera.get_aisle_breakbeam_msgs();
-    for(int i=0;i<eashwar.size();i++){
-        if(eashwar[i].size()) {
-            obstacleInAisle[i] = true;
-            ROS_INFO_STREAM(i);
-        }
-    }
-}
+//void detectAislesWithObstacles(Camera &camera){
+  //camera.reset_shelf_breakbeams();
+  //ObstacleInAisle = std::vector<bool> (4,false);
+  
+
+  //ROS_INFO_STREAM("Detecting obstacles in aisles");
+
+  //std::vector<bool> shelf_cameras = camera.get_shelf_breakbeams();
+
+  //for(int i = 0; i<shelf_cameras.size(); i++){
+      //if(i < NUM_LOGICAL_CAMERAS_PER_AISLE && shelf_cameras[i] == true) {
+          //ObstacleInAisle[0] = true;
+            
+      //}else if(i>= NUM_LOGICAL_CAMERAS_PER_AISLE && i < 2*NUM_LOGICAL_CAMERAS_PER_AISLE && shelf_cameras[i] == true) {
+          //ObstacleInAisle[1] = true;
+      //}
+  //}
+
+   
+  //for(int i= 0; i<ObstacleInAisle.size(); i++){
+    //if(ObstacleInAisle[i] == 0)
+      //ROS_INFO_STREAM("Obstacle in Aisle"<< i);
+  //}
+  
+  //ROS_INFO_STREAM("Finished Detecting Obstacles in aisles");
+//}
 
 
-//TODO  make robust
+
+/**
+void detectaisleswithobstacles(Camera &camera){
+  auto aisle_breakbeam_msgs  = camera.get_aisle_breakbeam_msgs();
+  
+  ROS_INFO_STREAM("Print break beam Msgs");
+  for(int i = 0;i<4;i++){
+     auto vec = aisle_breakbeam_msgs[i];
+     ROS_INFO_STREAM("aisle "<< i << "  "<< vec.size()<< " msgs obtained");
+     if(vec.size()>= 5) {
+       for(auto msg:vec){
+         ROS_INFO_STREAM((msg->header).stamp);
+         //ROS_INFO_STREAM(msg->);
+         //ROS_INFO_STREAM(msg->object_detected);
+       }
+     }
+  }
+  }
+  ROS_INFO_STREAM("Finished Printing Break Beam Msgs");
+**/
+
+//TODO
 void estimateLocation(int aisle_num, double t){
    ROS_INFO_STREAM("obstacle is valid or invalid ");
    ROS_INFO_STREAM(obstacleAssociatedWithAisle[aisle_num].is_valid_obstacle);
@@ -630,23 +522,25 @@ void estimateLocation(int aisle_num, double t){
 
 //TODO make velocity more robust, adjust the camera
 //     rectify error
-void estimateObstacleAttributes(Camera &camera,int aisle_num) {
-    auto aisle_breakbeam_msgs  = camera.get_aisle_breakbeam_msgs();
+void estimateObstacleAttributes(Camera &camera) {
+  auto aisle_breakbeam_msgs  = camera.get_aisle_breakbeam_msgs();
 
-    auto vec = aisle_breakbeam_msgs[aisle_num];
-    if(obstacleInAisle[aisle_num] == true  && velocityOfObstacles[aisle_num] == 0 && vec.size() > 16) {
-       ROS_INFO_STREAM("estimating velocity for aisle" << aisle_num);
+  for(int i = 0; i<4; i++) {
+    auto vec = aisle_breakbeam_msgs[i];
+    if(ObstacleInAisle[i] == true  && velocityOfObstacles[i] == 0 && vec.size() > 16) {
+       ROS_INFO_STREAM("estimating velocity for aisle" << i);
        ROS_INFO_STREAM("vector size is " << vec.size());
        auto it = std::find_if(vec.begin(), vec.end(),
                          [&str = "shelf_breakbeam_7_frame"] 
                          (nist_gear::Proximity::ConstPtr &msg){return (msg->header).frame_id == str && msg->object_detected; });    
 
-       ROS_INFO_STREAM("aisle number is "<< aisle_num);
+       ROS_INFO_STREAM("aisle number is "<< i);
        if(it != vec.end()){
          ROS_INFO_STREAM("it something");
          ROS_INFO_STREAM(std::distance(vec.begin(),it));
        }else{
          ROS_INFO_STREAM("it nothing");
+         continue;
        }
 
        auto it2 = std::find_if(it, vec.end(),
@@ -658,16 +552,15 @@ void estimateObstacleAttributes(Camera &camera,int aisle_num) {
          ROS_INFO_STREAM(std::distance(vec.begin(),it2));
        }else{
          ROS_INFO_STREAM("it2 nothing");
+         continue;
        }
         
        double sec1 = double((*it)->header.stamp.sec) + double((*it)->header.stamp.nsec)*1e-9;
        double sec2 = double((*(it+1))->header.stamp.sec) + double((*(it+1))->header.stamp.nsec)*1e-9;
        double sec3 = double((*it2)->header.stamp.sec) + double((*it2)->header.stamp.nsec)*1e-9;
 
-       ROS_INFO_STREAM(sec2 - sec1);
-       double wait_time = round(sec2 - sec1);
-       double move_time = round(sec3 - sec1 - wait_time);
-       ROS_INFO_STREAM(sec3 - sec2);
+       double wait_time = sec2 - sec1;
+       double move_time = sec3 - sec1 - wait_time; 
 
        double velocity = LENGTH_OF_AISLE/move_time;
 
@@ -677,18 +570,18 @@ void estimateObstacleAttributes(Camera &camera,int aisle_num) {
        human.time_stamp1 = sec1;
        human.is_valid_obstacle = true;
          
-       obstacleAssociatedWithAisle[aisle_num] = human;
-       velocityOfObstacles[aisle_num] = velocity;
+       obstacleAssociatedWithAisle[i] = human;
+       velocityOfObstacles[i] = velocity;
        ROS_INFO_STREAM("Printing time interval");
        ROS_INFO_STREAM("sec1 is " << sec1);
        ROS_INFO_STREAM("sec2 is " << sec2);
        ROS_INFO_STREAM("sec3 is " << sec3);
        ROS_INFO_STREAM("wait time is " << wait_time);
        ROS_INFO_STREAM("move time is " << move_time);
-       //estimateLocation(1,30);
+       estimateLocation(1,30);
     }
+  }
 }
-
 
 void pickPartsFromConveyor(Camera &camera, GantryControl &gantry, product prod, int numParts){
     int count = 0, count1 = 0;
@@ -742,7 +635,7 @@ int main(int argc, char ** argv) {
     gantry.goToPresetLocation(gantry.start_);
 
 
-    ros::ServiceClient agv2Delivery = node.serviceClient<nist_gear::AGVControl>("/ariac/agv2");              //initialize agvDelivery
+    ros::ServiceClient agv2Delivery = node.serviceClient<nist_gear::AGVControl>("/ariac/agv2");               //initialize agvDelivery
     ros::ServiceClient agv1Delivery = node.serviceClient<nist_gear::AGVControl>("/ariac/agv1");
 
     Camera camera;
@@ -753,7 +646,8 @@ int main(int argc, char ** argv) {
 
 
     HighPriorityOrderInitiated  = false;                                                                     //setting up flag
-
+    int numPickParts = 4;
+    int flag = 0;
 
     obstacle temp;                                                                                           //Initializing obstacle
     obstacleAssociatedWithAisle = std::vector<obstacle> (4,temp);                                             
@@ -764,30 +658,23 @@ int main(int argc, char ** argv) {
         orders = comp.getOrders();
 
 
-    product prod;                                                                                            //Setting up product
+    product prod;
 
 
-    std::vector<std::string> gap;                                                                            //Determine gaps
+    std::vector<std::string> gap;
     gap = determineGaps();
+    for(auto val:gap)                                                                                        // printing the gap positions
+        ROS_INFO_STREAM(val);
 
+    // while(true){
+    //      //detectaisleswithobstacles(camera);
 
-    ros::Duration(1.0).sleep();                                                                              //wait for sometime and
-    detectAislesWithObstacles(camera);                                                                       //determine obstacles in Aisles
-    
-
-    int numPickParts = 4;
-    int flag = 0;
-    
-    //TODO reduce computation 
-//    for(int i = 0; i<4; i++){
-//        if(obstacleInAisle[i]) {
-//          estimateObstacleAttributes(camera,i);
-//          if(!obstacleAssociatedWithAisle[i].is_valid_obstacle)
-//             i--;
-//        }
-//    }
-
-
+    //      ObstacleInAisle[1] = true;
+    //      ObstacleInAisle[2] = true;
+    //      ObstacleInAisle[3] = true;
+    //      ObstacleInAisle[0] = true;
+    //      estimateObstacleAttributes(camera);
+    // }
 
     for(int i = 0; i< orders.size(); i++){
         auto order = orders[i];
@@ -800,13 +687,14 @@ int main(int argc, char ** argv) {
             for (int k=0; k<ship.products.size(); k++){
                 auto product = ship.products[k];
 
+
                 ROS_INFO_STREAM(product.type);
                 prod.type = product.type;
                 prod.pose = product.pose;
                 prod.agv_id = ship.agv_id;
                 prod.arm_name = "left_arm";
 
-                 if(flag == 0) {
+                if(flag == 0) {
                     ros::Duration(18).sleep();
                     for (const auto &part:camera.get_detected_parts()) {
                         if (part.first == "logical_camera_9") {
@@ -814,10 +702,8 @@ int main(int argc, char ** argv) {
                         }
                     }
                     flag += 1;
-                 }
+                }
 
-
-                // TODO - make high priority order checker more robust
                 ROS_INFO_STREAM(comp.getOrders().size());
                 ROS_INFO_STREAM(HighPriorityOrderInitiated);
                 if(comp.getOrders().size()>1 && !HighPriorityOrderInitiated){
@@ -829,7 +715,7 @@ int main(int argc, char ** argv) {
                     k--;
                 }
                 else
-                    processPart(prod, gantry, camera, false, true);                                  //Remove flip_flag after degugging
+                    processPart(prod, gantry, camera, false, true);             // Remove flip_flag after degugging
 
 
                 //TODO - Make checker for faulty more robust
@@ -837,15 +723,14 @@ int main(int argc, char ** argv) {
                 ros::Duration(3.0).sleep();
                 ros::spinOnce();
                 ros::spinOnce();
-                if(camera.get_is_faulty(prod.agv_id)) {                                              
-                    ROS_INFO_STREAM("FAULTY");
-                    removeFaultyProduct(camera,gantry,prod);                                             // remove product
-                    k--;                                                                                 // process product again
+                if(camera.get_is_faulty(prod.agv_id)) {
+                    ROS_INFO_STREAM("fAULTY");
+                    removeFaultyProduct(camera,gantry,prod);
+                    k--;                                                                    //process product again
                 }
                 ROS_INFO_STREAM("heere 2");
                 moveFromLocationToStart(presetLoc,"start",gantry);
                 ROS_INFO_STREAM("heere x");
-
             }
             ROS_INFO_STREAM("herex1");
             if(prod.agv_id == "agv2")
@@ -854,12 +739,16 @@ int main(int argc, char ** argv) {
                 agvDeliveryService(agv1Delivery, order.shipments[j].shipment_type);
         }
         ROS_INFO_STREAM("here3");
+
     }
+
+
     comp.endCompetition();
     spinner.stop();
     ros::shutdown();
     return 0;
 }
+
 
 
 
