@@ -45,7 +45,6 @@ const int NUM_LOGICAL_CAMERAS_PER_AISLE = 4;
 const double END_BREAKBEAM_LOCATION_X = -16.793;
 const double BEGIN_BREAKBEAM_LOCATION_X = -1.5778;
 std::vector<bool> obstacleInAisle(4,false);
-std::vector<double> velocityOfObstacles(4,0.0);
 std::vector<obstacle>  obstacleAssociatedWithAisle;
 
 bool HighPriorityOrderInitiated;
@@ -438,18 +437,101 @@ std::vector<std::string> estimateLocation(int aisle_num, double t) {
 }
 
 
+//TODO make velocity more robust, adjust the camera
+//     rectify error
+void estimateObstacleAttributes(Camera &camera,int aisle_num) {
+    ROS_INFO_STREAM("In estimateObstacleAttributes method");
+    auto aisle_breakbeam_msgs  = camera.get_aisle_breakbeam_msgs();
+
+    auto vec = aisle_breakbeam_msgs[aisle_num];
+    if(obstacleInAisle[aisle_num] == true  &&  vec.size() > 20) {
+       ROS_INFO_STREAM("estimating velocity for aisle" << aisle_num);
+       ROS_INFO_STREAM("vector size is " << vec.size());
+       auto it = std::find_if(vec.begin(), vec.end(),
+                         [&str = "shelf_breakbeam_9_frame"] 
+                         (nist_gear::Proximity::ConstPtr &msg){return (msg->header).frame_id == str && msg->object_detected; });    
+
+       ROS_INFO_STREAM("aisle number is "<< aisle_num);
+       if(it != vec.end()){
+         ROS_INFO_STREAM("it something");
+         ROS_INFO_STREAM(std::distance(vec.begin(),it));
+         ROS_INFO_STREAM("It");
+         ROS_INFO_STREAM(((*it)->header).frame_id);
+         ROS_INFO_STREAM((*it)->object_detected);
+       }else{
+         ROS_INFO_STREAM("it nothing");
+         return;
+       }
+
+       auto it2 = std::find_if(vec.begin(), vec.end(),
+                         [&str = "shelf_breakbeam_5_frame"] 
+                         (nist_gear::Proximity::ConstPtr &msg){return (msg->header).frame_id == str && msg->object_detected; });    
+
+       if(it2 != vec.end()){
+         ROS_INFO_STREAM("it2 something");
+         ROS_INFO_STREAM(std::distance(vec.begin(),it2));
+         ROS_INFO_STREAM("It1");
+         ROS_INFO_STREAM(((*(it+1))->header).frame_id);
+         ROS_INFO_STREAM((*(it+1))->object_detected);
+         ROS_INFO_STREAM("It2");
+         ROS_INFO_STREAM(((*it2)->header).frame_id);
+         ROS_INFO_STREAM((*it2)->object_detected);
+       }else{
+         ROS_INFO_STREAM("it2 nothing");
+         return;
+       }
+        
+       double sec1 = double((*it)->header.stamp.sec) + double((*it)->header.stamp.nsec)*1e-9;
+       double sec2 = double((*(it+1))->header.stamp.sec) + double((*(it+1))->header.stamp.nsec)*1e-9;
+       double sec3 = double((*it2)->header.stamp.sec) + double((*it2)->header.stamp.nsec)*1e-9;
+
+       ROS_INFO_STREAM(sec2 - sec1);
+       double wait_time = round(sec2 - sec1);
+       double move_time = round(sec3 - sec1 - wait_time);
+       ROS_INFO_STREAM(sec3 - sec2);
+
+       double velocity = LENGTH_OF_AISLE/move_time;
+
+       obstacle human;
+       human.wait_time = 7;//wait_time;
+       human.move_time = 9;//move_time;
+       human.time_stamp1 = sec1;
+       human.is_valid_obstacle = true;
+         
+       obstacleAssociatedWithAisle[aisle_num] = human;
+       ROS_INFO_STREAM("Printing time interval");
+       ROS_INFO_STREAM("sec1 is " << sec1);
+       ROS_INFO_STREAM("sec2 is " << sec2);
+       ROS_INFO_STREAM("sec3 is " << sec3);
+       ROS_INFO_STREAM("wait time is " << wait_time);
+       ROS_INFO_STREAM("move time is " << move_time);
+       
+       ROS_INFO_STREAM("exited estimateObstacleAttributes method");
+    }
+}
+
 
 void planAndExecutePath(product prod, part my_part,std::map<std::string, std::vector<PresetLocation>> &presetLoc, 
                         Camera &camera, GantryControl &gantry, Competition &comp, std::string location, int aisle_num) {
 
    ROS_INFO_STREAM("Plan and execute method");
-   auto gaps = planPath(aisle_num);
-   int threshold = 3;
    
+   auto gaps = planPath(aisle_num);
+
+   ROS_INFO_STREAM("is obstacle valid " << obstacleAssociatedWithAisle[aisle_num].is_valid_obstacle);
+   ROS_INFO_STREAM("aisle_num " << aisle_num);
+
+   ROS_INFO_STREAM("is obstacle valid "<<obstacleAssociatedWithAisle[aisle_num].is_valid_obstacle);
+
+
+   int threshold = 3;
    for(int i =0; i<gaps.size();i++) {
       ROS_INFO_STREAM("move to gap:"<< gaps[i]);
       moveToLocation(presetLoc, gaps[i], gantry);                                            //move to preset location
       ros::Duration(3).sleep();                                                              //wait for robot to reach gap
+      
+      while(!obstacleAssociatedWithAisle[aisle_num].is_valid_obstacle)
+       estimateObstacleAttributes(camera,aisle_num);
 
       if(i == gaps.size()-1) {
           while(true) {
@@ -468,6 +550,9 @@ void planAndExecutePath(product prod, part my_part,std::map<std::string, std::ve
    }
    ROS_INFO_STREAM("Exited out of Plan and Execute method");
 }
+
+
+
 
 
 
@@ -673,77 +758,6 @@ void detectAislesWithObstacles(Camera &camera) {
 
 
 
-//TODO make velocity more robust, adjust the camera
-//     rectify error
-void estimateObstacleAttributes(Camera &camera,int aisle_num) {
-    auto aisle_breakbeam_msgs  = camera.get_aisle_breakbeam_msgs();
-
-    auto vec = aisle_breakbeam_msgs[aisle_num];
-    if(obstacleInAisle[aisle_num] == true  && velocityOfObstacles[aisle_num] == 0 && vec.size() > 20) {
-       ROS_INFO_STREAM("estimating velocity for aisle" << aisle_num);
-       ROS_INFO_STREAM("vector size is " << vec.size());
-       auto it = std::find_if(vec.begin(), vec.end(),
-                         [&str = "shelf_breakbeam_9_frame"] 
-                         (nist_gear::Proximity::ConstPtr &msg){return (msg->header).frame_id == str && msg->object_detected; });    
-
-       ROS_INFO_STREAM("aisle number is "<< aisle_num);
-       if(it != vec.end()){
-         ROS_INFO_STREAM("it something");
-         ROS_INFO_STREAM(std::distance(vec.begin(),it));
-         ROS_INFO_STREAM("It");
-         ROS_INFO_STREAM(((*it)->header).frame_id);
-         ROS_INFO_STREAM((*it)->object_detected);
-       }else{
-         ROS_INFO_STREAM("it nothing");
-         return;
-       }
-
-       auto it2 = std::find_if(it, vec.end(),
-                         [&str = "shelf_breakbeam_5_frame"] 
-                         (nist_gear::Proximity::ConstPtr &msg){return (msg->header).frame_id == str && msg->object_detected; });    
-
-       if(it2 != vec.end()){
-         ROS_INFO_STREAM("it2 something");
-         ROS_INFO_STREAM(std::distance(vec.begin(),it2));
-         ROS_INFO_STREAM("It1");
-         ROS_INFO_STREAM(((*(it+1))->header).frame_id);
-         ROS_INFO_STREAM((*(it+1))->object_detected);
-         ROS_INFO_STREAM("It2");
-         ROS_INFO_STREAM(((*it2)->header).frame_id);
-         ROS_INFO_STREAM((*it2)->object_detected);
-       }else{
-         ROS_INFO_STREAM("it2 nothing");
-         return;
-       }
-        
-       double sec1 = double((*it)->header.stamp.sec) + double((*it)->header.stamp.nsec)*1e-9;
-       double sec2 = double((*(it+1))->header.stamp.sec) + double((*(it+1))->header.stamp.nsec)*1e-9;
-       double sec3 = double((*it2)->header.stamp.sec) + double((*it2)->header.stamp.nsec)*1e-9;
-
-       ROS_INFO_STREAM(sec2 - sec1);
-       double wait_time = round(sec2 - sec1);
-       double move_time = round(sec3 - sec1 - wait_time);
-       ROS_INFO_STREAM(sec3 - sec2);
-
-       double velocity = LENGTH_OF_AISLE/move_time;
-
-       obstacle human;
-       human.wait_time = 7;//wait_time;
-       human.move_time = 9;//move_time;
-       human.time_stamp1 = sec1;
-       human.is_valid_obstacle = true;
-         
-       obstacleAssociatedWithAisle[aisle_num] = human;
-       velocityOfObstacles[aisle_num] = velocity;
-       ROS_INFO_STREAM("Printing time interval");
-       ROS_INFO_STREAM("sec1 is " << sec1);
-       ROS_INFO_STREAM("sec2 is " << sec2);
-       ROS_INFO_STREAM("sec3 is " << sec3);
-       ROS_INFO_STREAM("wait time is " << wait_time);
-       ROS_INFO_STREAM("move time is " << move_time);
-    }
-}
-
 
 
 void pickPartsFromConveyor(Camera &camera, GantryControl &gantry, product prod, int numParts){
@@ -813,6 +827,7 @@ int main(int argc, char ** argv) {
 
     ROS_INFO_STREAM("TTTTTTT1");
 
+   
     HighPriorityOrderInitiated  = false;                                                                     //setting up flag
 
 
@@ -830,17 +845,12 @@ int main(int argc, char ** argv) {
     product prod;                                                                                            //Setting up product
 
 
-    std::vector<std::string> gap;                                                                            //Determine gaps
-    gap = determineGaps();
-
-
     ros::Duration(1.0).sleep();                                                                              //wait for sometime and
     detectAislesWithObstacles(camera);                                                                       //determine obstacles in Aisles
     
 
     ConveyorFlag = false;
     int numPickParts = 4;
-//    int flag = 0;
     
 
     //TODO reduce computation 
@@ -854,10 +864,11 @@ int main(int argc, char ** argv) {
       //}
     //}
     
-    obstacleAssociatedWithAisle[2].is_valid_obstacle= true;
-    obstacleAssociatedWithAisle[2].wait_time= 7;
-    obstacleAssociatedWithAisle[2].move_time= 9;
-    obstacleAssociatedWithAisle[2].time_stamp1= 9;
+    
+    //obstacleAssociatedWithAisle[2].is_valid_obstacle= true;
+    //obstacleAssociatedWithAisle[2].wait_time= 7;
+    //obstacleAssociatedWithAisle[2].move_time= 9;
+    //obstacleAssociatedWithAisle[2].time_stamp1= 9;
 
     obstacleAssociatedWithAisle[1].is_valid_obstacle= true;
     obstacleAssociatedWithAisle[1].wait_time= 7;
@@ -933,6 +944,7 @@ int main(int argc, char ** argv) {
         }
         ROS_INFO_STREAM("here3");
     }
+
     comp.endCompetition();
     spinner.stop();
     ros::shutdown();
