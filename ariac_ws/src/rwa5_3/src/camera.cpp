@@ -49,12 +49,13 @@ const nist_gear::LogicalCameraImage::ConstPtr &msg, int index) {
             //p_w.pose.orientation.z,
             //p_w.pose.orientation.w);
 
-            std::string key = "logical_camera_" + std::to_string(index);
 
-            mypart.logicalCameraName = key;
+            
           
        
             if(!std::isnan(mypart.pose.position.x) && !std::isnan(mypart.pose.position.y) && !std::isnan(mypart.pose.position.z)) {
+              std::string key = "logical_camera_" + std::to_string(index);
+              mypart.logicalCameraName = key;
               std::string temp = mypart.type + std::to_string(round(mypart.pose.position.x)) +
                                                std::to_string(round(mypart.pose.position.y)) +
                                                std::to_string(round(mypart.pose.position.z)) +

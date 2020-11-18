@@ -569,15 +569,19 @@ void processPart(product prod, GantryControl &gantry, Camera &camera, Competitio
 
     while(!foundPart) {                                                                                          // poll until we find part
         //detected_parts = camera.get_detected_parts();
+
         detected_parts = camera.get_detected_parts()[prod.type];
+        ROS_INFO_STREAM("dsasvdsarrefsasdfefasfeasdfasdfasdasdfasdfsadfadad");
         for(auto part :detected_parts)
             ROS_INFO_STREAM(part.first);
-
+        ROS_INFO_STREAM(prod.type);
+        ROS_INFO_STREAM("dsasvdsarrefsasdfefasfeaasdfasdfasdfasdfasdfadsfad");
         for(auto const& parts: detected_parts) {                                                               // search all logical cameras for desired part
             if (parts.second.logicalCameraName == "logical_camera_8" ||
                 parts.second.logicalCameraName == "logical_camera_10")                                          // Exclude agv cameras
                 continue;
-
+            
+            
             if (prod.type == parts.second.type.c_str()) {
                 my_part = parts.second;
 
@@ -594,6 +598,8 @@ void processPart(product prod, GantryControl &gantry, Camera &camera, Competitio
                 if (obstacleInAisle[aisle_num]) {
                     ROS_INFO_STREAM("Inside planPath");
                     ROS_INFO_STREAM("ss");
+                    ROS_INFO_STREAM(parts.second.logicalCameraName);
+                    ROS_INFO_STREAM(parts.first);
                     planAndExecutePath( prod, my_part, presetLoc, camera, gantry, comp, parts.second.logicalCameraName, aisle_num);
                 }
                 else {
