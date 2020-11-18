@@ -66,6 +66,7 @@ left_gap_2_green_1, left_gap_2_green_2, left_gap_2_green_3, right_gap_2_blue_1, 
 
 typedef struct Part {
   std::string type; // model type
+  std::string logicalCameraName;
   geometry_msgs::Pose pose; // model pose (in frame)
   geometry_msgs::Pose save_pose;
   std::string frame; // model frame (e.g., "logical_camera_1_frame")

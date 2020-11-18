@@ -205,6 +205,7 @@ void faultyGripper(GantryControl &gantry,product &prod,Camera &camera, part my_p
     nist_gear::VacuumGripperState armState;
 
     // TODO: Looping through the logical cameras
+    /*
     if (prod.agv_id == "agv2")
         placed_part = camera.get_detected_parts()["logical_camera_10"];                 // loop through to get placed part
     else
@@ -220,7 +221,9 @@ void faultyGripper(GantryControl &gantry,product &prod,Camera &camera, part my_p
     moveToLocation(presetLoc,prod.agv_id+"_"+prod.type, gantry);
     moveToLocation(presetLoc, prod.agv_id, gantry);
     gantry.placePart(my_part_in_tray, prod.agv_id, prod.arm_name);
+    */
 }
+
 
 
 void flipPart(GantryControl &gantry, part &my_part_in_tray, product &prod){
@@ -539,6 +542,7 @@ void planAndExecutePath(product prod, part my_part,std::map<std::string, std::ve
              
                //TODO instead of 6.0 will need to get x coordinate of gap
                if(vec[0] == "toward" && std::abs(std::stod(vec[1])+6.0) <= threshold) {            
+                  ROS_INFO_STREAM("Location is " <<  location);
                   moveToLocation(presetLoc, location, gantry);
                   gantry.pickPart(my_part);
                   retraceSteps(presetLoc, location, gantry);
@@ -564,11 +568,14 @@ void processPart(product prod, GantryControl &gantry, Camera &camera, Competitio
     std::map<std::string,part> detected_parts;
 
     while(!foundPart) {                                                                                          // poll until we find part
-        detected_parts = camera.get_detected_parts();
+        //detected_parts = camera.get_detected_parts();
+        detected_parts = camera.get_detected_parts()[prod.type];
+        for(auto part :detected_parts)
+            ROS_INFO_STREAM(part.first);
 
-        for(auto const& parts: detected_parts) {                                                                 // search all logical cameras for desired part
-            if (parts.first == "logical_camera_8" ||
-                parts.first == "logical_camera_10")                                                              // Exclude agv cameras
+        for(auto const& parts: detected_parts) {                                                               // search all logical cameras for desired part
+            if (parts.second.logicalCameraName == "logical_camera_8" ||
+                parts.second.logicalCameraName == "logical_camera_10")                                          // Exclude agv cameras
                 continue;
 
             if (prod.type == parts.second.type.c_str()) {
@@ -579,9 +586,14 @@ void processPart(product prod, GantryControl &gantry, Camera &camera, Competitio
 
                 
                 int aisle_num = aisleAssociatedWithPart(my_part);
+
+                detected_parts.erase(parts.first);
+                camera.removeElement(prod.type, parts.first);
+                
+
                 if (obstacleInAisle[aisle_num]) {
                     ROS_INFO_STREAM("Inside planPath");
-                    planAndExecutePath( prod, my_part, presetLoc, camera, gantry, comp, parts.first, aisle_num);
+                    planAndExecutePath( prod, my_part, presetLoc, camera, gantry, comp, parts.second.logicalCameraName, aisle_num);
                 }
                 else {
                     moveToLocation(presetLoc, parts.first, gantry);
@@ -599,9 +611,10 @@ void processPart(product prod, GantryControl &gantry, Camera &camera, Competitio
                     moveToLocation(presetLoc, prod.agv_id, gantry);                                                //move to desired agv id
 
                 armState = gantry.getGripperState(prod.arm_name);
-                if (!armState.attached)                                                                            //object accidentally fell on the tray
-                    faultyGripper(gantry, prod, camera, my_part_in_tray);
-                else
+
+                //if (!armState.attached)                                                                            //object accidentally fell on the tray
+                    //faultyGripper(gantry, prod, camera, my_part_in_tray);
+                //else
                     gantry.placePart(my_part_in_tray, prod.agv_id, prod.arm_name);                                 //place part on the tray
 
 

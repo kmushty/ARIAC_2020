@@ -14,6 +14,7 @@
 #include <tf2_geometry_msgs/tf2_geometry_msgs.h> //--needed for tf2::Matrix3x3
 #include <map>
 #include "boost/bind.hpp"
+#include <cmath>
 #include "utils.h"
 
 
@@ -40,7 +41,8 @@ public:
     void init(ros::NodeHandle & node);
 
     //std::map<std::string,std::vector<part>> get_detected_parts();
-    std::map<std::string,part> get_detected_parts();
+    //std::map<std::string,part> get_detected_parts();
+    std::map<std::string, std::map<std::string, part>> get_detected_parts();
 
     Camera();
 
@@ -60,14 +62,16 @@ public:
     
     std::map<int,std::vector<nist_gear::Proximity::ConstPtr>> get_aisle_breakbeam_msgs(); 
     
+    void removeElement(std::string prod_type, std::string prod);
 
 
 private:
     ros::Subscriber logical_camera_subscriber[NUM_LOGICAL_CAMERAS];
     //std::map<std::string,std::vector<geometry_msgs::PoseStamped>> detected_parts;
     //std::map<std::string,std::vector<part>> detected_parts;
-
-    std::map<std::string,part> detected_parts;
+    //std::map<std::string,part> detected_parts;
+    
+    std::map<std::string, std::map<std::string, part>> detected_parts;
 
     // vector of parts for agv logical cameras
 
@@ -80,6 +84,7 @@ private:
     bool break_beam_triggered;
     std::vector<bool> triggered_shelf_breakbeams;
     std::map<int,std::vector<nist_gear::Proximity::ConstPtr>> aisle_breakbeam_msgs;  
+
 
     geometry_msgs::Pose faulty_pose1, faulty_pose2;
 };

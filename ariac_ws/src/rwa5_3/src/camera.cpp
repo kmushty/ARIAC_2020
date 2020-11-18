@@ -50,8 +50,22 @@ const nist_gear::LogicalCameraImage::ConstPtr &msg, int index) {
             //p_w.pose.orientation.w);
 
             std::string key = "logical_camera_" + std::to_string(index);
+
+            mypart.logicalCameraName = key;
+          
+       
+            if(!std::isnan(mypart.pose.position.x) && !std::isnan(mypart.pose.position.y) && !std::isnan(mypart.pose.position.z)) {
+              std::string temp = mypart.type + std::to_string(round(mypart.pose.position.x)) +
+                                               std::to_string(round(mypart.pose.position.y)) +
+                                               std::to_string(round(mypart.pose.position.z)) +
+                                               std::to_string(round(mypart.pose.orientation.x)) +
+                                               std::to_string(round(mypart.pose.orientation.y)) +
+                                               std::to_string(round(mypart.pose.orientation.z)) +
+                                               std::to_string(round(mypart.pose.orientation.w));
+                detected_parts[mypart.type][temp] = mypart;
+            }
             //detected_parts[key].push_back(mypart);
-            detected_parts[key] = mypart;
+            //detected_parts[key] = mypart;
         }
     }
 }
@@ -61,7 +75,7 @@ const nist_gear::LogicalCameraImage::ConstPtr &msg, int index) {
 void Camera::break_beam_callback(const nist_gear::Proximity::ConstPtr &msg) {
     //ROS_INFO_STREAM("in break beam callback");
     if (msg->object_detected) {  // If there is an object in proximity.
-        break_beam_triggered = true;
+        //break_beam_triggered = true;
         ROS_WARN_ONCE("Break beam triggered.");
     }
     //ROS_INFO_STREAM("exited break beam callback");
@@ -134,15 +148,20 @@ void Camera::init(ros::NodeHandle & node){
     "/ariac/quality_control_sensor_1", 1, &Camera::quality_control_sensor_callback1,this
     );
 
+    ROS_INFO_STREAM("debug4");
     quality_sensor_subscriber_2 = node.subscribe(
     "/ariac/quality_control_sensor_2", 1, &Camera::quality_control_sensor_callback2,this
     );
 
+    ROS_INFO_STREAM("debug5");
     breakbeam_1_sensor_subscriber = node.subscribe("/ariac/breakbeam_1",1, &Camera::break_beam_callback, this);
+    ROS_INFO_STREAM("debug7");
     
     break_beam_triggered = false;
     is_faulty1 = false;
     is_faulty2 = false;
+
+    ROS_INFO_STREAM("debug6");
     triggered_shelf_breakbeams = std::vector<bool> (NUM_SHELF_BREAKBEAM,false);
    
     ROS_INFO_STREAM("debug3");
@@ -157,7 +176,7 @@ void Camera::init(ros::NodeHandle & node){
 //return detected_parts;
 //}
 
-std::map<std::string,part>  Camera::get_detected_parts(){
+std::map<std::string,std::map<std::string,part>>  Camera::get_detected_parts(){
     return detected_parts;
 }
 
@@ -259,5 +278,8 @@ std::map<int,std::vector<nist_gear::Proximity::ConstPtr>> Camera::get_aisle_brea
   return aisle_breakbeam_msgs;
 }
     
+void Camera::removeElement(std::string prod_type, std::string prod){
+  detected_parts[prod_type].erase(prod);
+}
     
 
