@@ -593,6 +593,7 @@ void processPart(product prod, GantryControl &gantry, Camera &camera, Competitio
 
                 if (obstacleInAisle[aisle_num]) {
                     ROS_INFO_STREAM("Inside planPath");
+                    ROS_INFO_STREAM("ss");
                     planAndExecutePath( prod, my_part, presetLoc, camera, gantry, comp, parts.second.logicalCameraName, aisle_num);
                 }
                 else {
