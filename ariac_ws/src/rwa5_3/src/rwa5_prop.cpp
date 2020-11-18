@@ -305,6 +305,7 @@ double shelfDistance(std::string shelf1, std::string shelf2){                   
 
 
 std::vector<std::string> determineGaps(){                                                   // Function returning gap postions in the form of string
+    ROS_INFO_STREAM("In determineGaps method");
     std::vector<std::string> gap;
     std::vector<double> gapThreshold = {6.299163, 6.299173};
     std::vector<std::string> shelfSide = {"left_gap_","middle_gap_", "right_gap_"};
@@ -338,8 +339,11 @@ std::vector<std::string> determineGaps(){                                       
         }
     }
     
+    
     for(auto val:gap)                                                                    // printing the gap positions
         ROS_INFO_STREAM(val);
+
+    ROS_INFO_STREAM("Exited determin gap method");
     return gap;
 }
 
@@ -348,14 +352,24 @@ std::vector<std::string> determineGaps(){                                       
 std::vector<std::string> planPath(int aisle_num){
    auto gap = determineGaps();
 
+   ROS_INFO_STREAM("In planPath method");
+   
+   ROS_INFO_STREAM("printing gaps");
+   ROS_INFO_STREAM("aisle_num " << aisle_num);
+   for(auto a:gap)
+     std::cout << a << std::endl;
+
    std::vector<std::string> plan;  
-   if(aisle_num = 1)
+   if(aisle_num == 1)
       plan.push_back(gap[0]);
    else
-      plan.push_back(gap[1]);
+      plan.push_back(gap[2]);
+
+   ROS_INFO_STREAM("Exited planPath method");
 
    return plan;
 }
+
 
 double calc_remainder(double x, double y){
   std::string s = std::to_string(x/y);
@@ -428,26 +442,32 @@ std::vector<std::string> estimateLocation(int aisle_num, double t) {
 void planAndExecutePath(product prod, part my_part,std::map<std::string, std::vector<PresetLocation>> &presetLoc, 
                         Camera &camera, GantryControl &gantry, Competition &comp, std::string location, int aisle_num) {
 
+   ROS_INFO_STREAM("Plan and execute method");
    auto gaps = planPath(aisle_num);
    int threshold = 3;
-   for(auto str:gaps){
-      moveToLocation(presetLoc, str, gantry);                              // move to preset location
-      ros::Duration(3).sleep();                                            //wait for robot to reach gap
+   
+   for(int i =0; i<gaps.size();i++) {
+      ROS_INFO_STREAM("move to gap:"<< gaps[i]);
+      moveToLocation(presetLoc, gaps[i], gantry);                                            //move to preset location
+      ros::Duration(3).sleep();                                                              //wait for robot to reach gap
 
-      while(true){
-         auto vec= estimateLocation(aisle_num, comp.getClock());           // estimate Location
-         
-         if(vec[0] == "toward" && std::abs(std::stod(vec[1])+5.0) <= threshold){         
-            moveToLocation(presetLoc, location, gantry);
-            gantry.pickPart(my_part);
-            retraceSteps(presetLoc, location, gantry);
-            moveFromLocationToStart(presetLoc, gaps[0], gantry);
-            break;
-        }
-      }
+      if(i == gaps.size()-1) {
+          while(true) {
+               auto vec = estimateLocation(aisle_num, comp.getClock());                      //estimate Location
+             
+               //TODO instead of 6.0 will need to get x coordinate of gap
+               if(vec[0] == "toward" && std::abs(std::stod(vec[1])+6.0) <= threshold) {            
+                  moveToLocation(presetLoc, location, gantry);
+                  gantry.pickPart(my_part);
+                  retraceSteps(presetLoc, location, gantry);
+                  moveFromLocationToStart(presetLoc, gaps[i], gantry);
+                  break;
+               }
+           }
+       }
    }
+   ROS_INFO_STREAM("Exited out of Plan and Execute method");
 }
-
 
 
 
@@ -638,7 +658,6 @@ void conveyor(Camera &camera, GantryControl &gantry, product prod){
 
 
 
-
 void detectAislesWithObstacles(Camera &camera) {
     auto eashwar = camera.get_aisle_breakbeam_msgs();
     for(int i=0;i<eashwar.size();i++){
@@ -660,11 +679,11 @@ void estimateObstacleAttributes(Camera &camera,int aisle_num) {
     auto aisle_breakbeam_msgs  = camera.get_aisle_breakbeam_msgs();
 
     auto vec = aisle_breakbeam_msgs[aisle_num];
-    if(obstacleInAisle[aisle_num] == true  && velocityOfObstacles[aisle_num] == 0 && vec.size() > 16) {
+    if(obstacleInAisle[aisle_num] == true  && velocityOfObstacles[aisle_num] == 0 && vec.size() > 20) {
        ROS_INFO_STREAM("estimating velocity for aisle" << aisle_num);
        ROS_INFO_STREAM("vector size is " << vec.size());
        auto it = std::find_if(vec.begin(), vec.end(),
-                         [&str = "shelf_breakbeam_7_frame"] 
+                         [&str = "shelf_breakbeam_9_frame"] 
                          (nist_gear::Proximity::ConstPtr &msg){return (msg->header).frame_id == str && msg->object_detected; });    
 
        ROS_INFO_STREAM("aisle number is "<< aisle_num);
@@ -674,25 +693,27 @@ void estimateObstacleAttributes(Camera &camera,int aisle_num) {
          ROS_INFO_STREAM("It");
          ROS_INFO_STREAM(((*it)->header).frame_id);
          ROS_INFO_STREAM((*it)->object_detected);
-         ROS_INFO_STREAM("It1");
-         ROS_INFO_STREAM(((*(it+1))->header).frame_id);
-         ROS_INFO_STREAM((*(it+1))->object_detected);
        }else{
          ROS_INFO_STREAM("it nothing");
+         return;
        }
 
        auto it2 = std::find_if(it, vec.end(),
-                         [&str = "shelf_breakbeam_4_frame"] 
+                         [&str = "shelf_breakbeam_5_frame"] 
                          (nist_gear::Proximity::ConstPtr &msg){return (msg->header).frame_id == str && msg->object_detected; });    
 
        if(it2 != vec.end()){
          ROS_INFO_STREAM("it2 something");
          ROS_INFO_STREAM(std::distance(vec.begin(),it2));
+         ROS_INFO_STREAM("It1");
+         ROS_INFO_STREAM(((*(it+1))->header).frame_id);
+         ROS_INFO_STREAM((*(it+1))->object_detected);
          ROS_INFO_STREAM("It2");
          ROS_INFO_STREAM(((*it2)->header).frame_id);
          ROS_INFO_STREAM((*it2)->object_detected);
        }else{
          ROS_INFO_STREAM("it2 nothing");
+         return;
        }
         
        double sec1 = double((*it)->header.stamp.sec) + double((*it)->header.stamp.nsec)*1e-9;
@@ -720,7 +741,6 @@ void estimateObstacleAttributes(Camera &camera,int aisle_num) {
        ROS_INFO_STREAM("sec3 is " << sec3);
        ROS_INFO_STREAM("wait time is " << wait_time);
        ROS_INFO_STREAM("move time is " << move_time);
-       //estimateLocation(1,30);
     }
 }
 
@@ -778,9 +798,12 @@ int main(int argc, char ** argv) {
     gantry.init();
     gantry.goToPresetLocation(gantry.start_);
 
+    ROS_INFO_STREAM("TTTTTTT3");
 
     ros::ServiceClient agv2Delivery = node.serviceClient<nist_gear::AGVControl>("/ariac/agv2");              //initialize agvDelivery
     ros::ServiceClient agv1Delivery = node.serviceClient<nist_gear::AGVControl>("/ariac/agv1");
+
+    ROS_INFO_STREAM("TTTTT5");
 
     Camera camera;
     camera.init(node);                                                                                       //initialize camera
@@ -788,6 +811,7 @@ int main(int argc, char ** argv) {
 
     initWayPoints(presetLoc, gantry);                                                                        //initialize waypoints
 
+    ROS_INFO_STREAM("TTTTTTT1");
 
     HighPriorityOrderInitiated  = false;                                                                     //setting up flag
 
@@ -795,6 +819,8 @@ int main(int argc, char ** argv) {
     obstacle temp;                                                                                           //Initializing obstacle
     obstacleAssociatedWithAisle = std::vector<obstacle> (4,temp);                                             
 
+
+    ROS_INFO_STREAM("TTTTTTT2");
 
     auto orders = comp.getOrders();                                                                          //Wait for order
     while(orders.size()<=0)
@@ -818,14 +844,28 @@ int main(int argc, char ** argv) {
     
 
     //TODO reduce computation 
-    while(true){
-      if(obstacleInAisle[2]){
-        estimateObstacleAttributes(camera,2);
-        if(obstacleAssociatedWithAisle[2].is_valid_obstacle)
-            break;
-      }
-    }
+    std::cout << "estimating obstacles parameters" << std::endl;
+    //while(true){
+      
+      //if(obstacleInAisle[2]){
+        //estimateObstacleAttributes(camera,2);
+        //if(obstacleAssociatedWithAisle[2].is_valid_obstacle)
+            //break;
+      //}
+    //}
+    
+    obstacleAssociatedWithAisle[2].is_valid_obstacle= true;
+    obstacleAssociatedWithAisle[2].wait_time= 7;
+    obstacleAssociatedWithAisle[2].move_time= 9;
+    obstacleAssociatedWithAisle[2].time_stamp1= 9;
 
+    obstacleAssociatedWithAisle[1].is_valid_obstacle= true;
+    obstacleAssociatedWithAisle[1].wait_time= 7;
+    obstacleAssociatedWithAisle[1].move_time= 9;
+    obstacleAssociatedWithAisle[1].time_stamp1= 25;
+
+
+    std::cout << "finished estimating obstacle parameters" << std::endl;
 
     for(int i = 0; i< orders.size(); i++){
         auto order = orders[i];
@@ -846,25 +886,13 @@ int main(int argc, char ** argv) {
 
                 //TODO make more robust
                 //modify checker condition
-                if(!ConveyorFlag) {
-                    ros::Duration(18).sleep();
-                    if (camera.get_detected_parts().find("logical_camera_9") != camera.get_detected_parts().end()) {
-                        pickPartsFromConveyor(camera, gantry, prod, numPickParts);
-                        ConveyorFlag = true;
-                    }
-                }
-                    //flag += ;
-
-
-//                if(flag == 0) {
-//                    ros::Duration(18).sleep();
-//                    for (const auto &part:camera.get_detected_parts()) {
-//                        if (part.first == "logical_camera_9") {
-//                            pickPartsFromConveyor(camera, gantry, prod, numPickParts);
-//                        }
-//                    }
-//                    flag += 1;
-//                }
+                //if(!ConveyorFlag) {
+                    //ros::Duration(18).sleep();
+                    //if (camera.get_detected_parts().find("logical_camera_9") != camera.get_detected_parts().end()) {
+                        //pickPartsFromConveyor(camera, gantry, prod, numPickParts);
+                        //ConveyorFlag = true;
+                    //}
+                //}
 
 
                 // TODO - make high priority order checker more robust

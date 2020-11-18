@@ -59,16 +59,20 @@ const nist_gear::LogicalCameraImage::ConstPtr &msg, int index) {
 
 
 void Camera::break_beam_callback(const nist_gear::Proximity::ConstPtr &msg) {
+    //ROS_INFO_STREAM("in break beam callback");
     if (msg->object_detected) {  // If there is an object in proximity.
         break_beam_triggered = true;
         ROS_WARN_ONCE("Break beam triggered.");
     }
+    //ROS_INFO_STREAM("exited break beam callback");
 }
 
 
 void Camera::shelf_breakbeam_callback(
 const nist_gear::Proximity::ConstPtr &msg, int index){
 //    triggered_shelf_breakbeams = std::vector<bool> (NUM_SHELF_BREAKBEAM,false);
+   
+  //ROS_INFO_STREAM("in shelf callback");
     if (msg->object_detected) {  // If there is an object in proximity.
         ROS_INFO_STREAM("Break beam " + std::to_string(index) +"  triggered.");
         triggered_shelf_breakbeams[index] = true;
@@ -77,8 +81,10 @@ const nist_gear::Proximity::ConstPtr &msg, int index){
 
    if(index < 5){
        aisle_breakbeam_msgs[1].push_back(msg);
-   }else if(index >=5 && index < 9)
+   }else if(index >=5 && index <=9)
        aisle_breakbeam_msgs[2].push_back(msg);
+
+   //ROS_INFO_STREAM("exited  shelf callback");
 }
 
 
@@ -98,6 +104,7 @@ Camera::Camera(){
 
 
 void Camera::init(ros::NodeHandle & node){
+    ROS_INFO_STREAM("in init camera");
     std::ostringstream otopic;
     std::string topic;
 
@@ -110,6 +117,7 @@ void Camera::init(ros::NodeHandle & node){
         topic, 1, boost::bind(&Camera::logical_camera_callback, this, _1, index));
     }
 
+    ROS_INFO_STREAM("debug1");
     for(int index = 0; index < NUM_SHELF_BREAKBEAM; index++) {
         otopic.str(""); otopic.clear();
         otopic << "/ariac/shelf_breakbeam_" << (index) << "_change";
@@ -121,6 +129,7 @@ void Camera::init(ros::NodeHandle & node){
 
 
 
+    ROS_INFO_STREAM("debug2");
     quality_sensor_subscriber_1 = node.subscribe(
     "/ariac/quality_control_sensor_1", 1, &Camera::quality_control_sensor_callback1,this
     );
@@ -136,9 +145,11 @@ void Camera::init(ros::NodeHandle & node){
     is_faulty2 = false;
     triggered_shelf_breakbeams = std::vector<bool> (NUM_SHELF_BREAKBEAM,false);
    
+    ROS_INFO_STREAM("debug3");
     for(int i = 0; i<4; i++){
        aisle_breakbeam_msgs[i] = {};
     }
+    ROS_INFO_STREAM("exited out of init camera");
 }
 
 
