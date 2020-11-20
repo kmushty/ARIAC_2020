@@ -131,82 +131,63 @@ sensors:
   shelf_breakbeam_0:
     type: break_beam
     pose:
-      #xyz: [ -2.177333, 2.359924, 0.438050 ]
       xyz: [ -1.679531, 2.359924, 0.438050 ]
       rpy: [ 0, 0, -1.57 ]
 
+  #shelf_breakbeam_1:
+    #type: break_beam
+    #pose:
+      #xyz: [ -6.020965, 2.364526, 0.438050 ]
+      #rpy: [ 0, 0, -1.57 ]
+
+  #shelf_breakbeam_2:
+    #type: break_beam
+    #pose:
+      #xyz: [ -10.140000, 2.355990, 0.438050 ]
+      #rpy: [ 0, 0, -1.57 ]
+
   shelf_breakbeam_1:
-    type: break_beam
-    pose:
-      xyz: [ -6.020965, 2.364526, 0.438050 ]
-      rpy: [ 0, 0, -1.57 ]
-
-  shelf_breakbeam_2:
-    type: break_beam
-    pose:
-      xyz: [ -10.140000, 2.355990, 0.438050 ]
-      rpy: [ 0, 0, -1.57 ]
-
-  shelf_breakbeam_3:
     type: break_beam
     pose:
       xyz: [ -12.607288, 2.301808, 0.438050 ]
       rpy: [ 0, 0, -1.57 ]
 
-  shelf_breakbeam_4:
+  shelf_breakbeam_2:
     type: break_beam
     pose:
       xyz: [ -16.405857, 2.343718, 0.438050 ]
       rpy: [ 0, 0, -1.57 ]
 
-  shelf_breakbeam_5:
+  shelf_breakbeam_3:
     type: break_beam
     pose:
-#      xyz: [ -2.255234, -0.742663, 0.438050 ]
-#      xyz: [ -2.181771, -0.742604, 0.438050 ]
-#      xyz: [ -1.753632, -0.742263, 0.438050 ]
-#      xyz: [ -1.590664, -0.742133, 0.438050 ]
-#      xyz: [ -2.720428, -0.743033, 0.438050 ]
-#      xyz: [ -2.292360, -0.742692, 0.438050 ]
-#      xyz: [ -2.408548, -0.742785, 0.438050 ]
-      #xyz: [ -1.577878, -0.742123, 0.438050 ]
       xyz: [ -1.278728, -0.742067, 0.438050 ]
-      #xyz: [ -1.679531, -0.742663, 0.438050 ]
-      #xyz: [ -1.574, -0.742663, 0.438050 ]
       rpy: [ 0, 0, -1.57 ]
 
 
 
-  shelf_breakbeam_6:
-    type: break_beam
-    pose:
-      xyz: [ -6.011172, -0.715403, 0.438050 ]
-      rpy: [ 0, 0, -1.57 ]
+  #shelf_breakbeam_6:
+    #type: break_beam
+    #pose:
+      #xyz: [ -6.011172, -0.715403, 0.438050 ]
+      #rpy: [ 0, 0, -1.57 ]
 
-  shelf_breakbeam_7:
-    type: break_beam
-    pose:
-      xyz: [ -10.143683, -0.701655, 0.438050 ]
-      rpy: [ 0, 0, -1.57 ]
+  #shelf_breakbeam_7:
+    #type: break_beam
+    #pose:
+      #xyz: [ -10.143683, -0.701655, 0.438050 ]
+      #rpy: [ 0, 0, -1.57 ]
 
-  shelf_breakbeam_8:
+  shelf_breakbeam_4:
     type: break_beam
     pose:
       xyz: [ -12.592617, -0.728178, 0.438050 ]
       rpy: [ 0, 0, -1.57 ]
 
-  shelf_breakbeam_9:
+  shelf_breakbeam_5:
     type: break_beam
     pose:
-#      xyz: [ -16.447124, -0.740479, 0.438050 ]
-#      xyz: [ -16.746405, -0.740717, 0.740717 ]
-#      xyz: [ -16.589651, -0.740592, 0.740717 ]
-#      xyz: [ -15.969187, -0.740098, 0.740717 ]
-#      xyz: [ -16.331347, -0.740386, 0.740717 ]
-#      xyz: [ -16.221481, -0.740299, 0.740717 ]
-      #xyz: [ -16.793615, -0.740755, 0.740717 ]
       xyz: [ -17.05475, -0.740803, 0.301235 ]
-      #xyz: [ -16.648241, -0.740479, 0.438050 ]
       rpy: [ 0, 0, -1.57 ]
 
 

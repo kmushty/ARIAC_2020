@@ -19,7 +19,7 @@
 
 
 const int NUM_LOGICAL_CAMERAS = 17;
-const int NUM_SHELF_BREAKBEAM = 10;
+const int NUM_SHELF_BREAKBEAM = 6;
 
 class Camera{
 

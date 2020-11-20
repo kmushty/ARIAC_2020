@@ -42,8 +42,13 @@
 
 const double LENGTH_OF_AISLE = 14.2;
 const int NUM_LOGICAL_CAMERAS_PER_AISLE = 4;
-const double END_BREAKBEAM_LOCATION_X = -16.793;
-const double BEGIN_BREAKBEAM_LOCATION_X = -1.5778;
+
+//coordinates obtainted from gazebo
+const double END_LOCATION_X = -16.793;
+const double BEGIN_LOCATION_X = -1.5778;
+const double MID_LOCATION_X = -12.592617;
+
+
 std::vector<bool> obstacleInAisle(4,false);
 std::vector<obstacle>  obstacleAssociatedWithAisle;
 
@@ -73,6 +78,7 @@ void agvDeliveryService(ros::ServiceClient &agvDelivery, std::string shipmentTyp
 
     ROS_INFO("AGV delivery successful");
 }
+
 
 
 void initWayPoints(std::map<std::string,std::vector<PresetLocation>> &presetLoc, GantryControl &gantry){
@@ -139,11 +145,13 @@ void initWayPoints(std::map<std::string,std::vector<PresetLocation>> &presetLoc,
 
 
 
+
 void moveToLocation(std::map<std::string,std::vector<PresetLocation>> &presetLoc, std::string location,GantryControl &gantry){
     auto vec = presetLoc[location];
     for(auto waypoint :vec)
         gantry.goToPresetLocation(waypoint);
 }
+
 
 void retraceSteps(std::map<std::string,std::vector<PresetLocation>> &presetLoc, std::string location,GantryControl &gantry) {
     auto vec = presetLoc[location];
@@ -419,7 +427,7 @@ std::vector<std::string> estimateLocation(int aisle_num, double t) {
           result = std::vector<std::string> {"waiting",std::to_string(wait_time-td)};
        }else {
         td = td-wait_time;
-        x = BEGIN_BREAKBEAM_LOCATION_X - (LENGTH_OF_AISLE/move_time)*td;
+        x = BEGIN_LOCATION_X - (LENGTH_OF_AISLE/move_time)*td;
         ROS_INFO_STREAM("Moving away from conveyor belt");
         ROS_INFO_STREAM("currently at position " << x);
         result = std::vector<std::string> {"away",std::to_string(x)};
@@ -430,7 +438,7 @@ std::vector<std::string> estimateLocation(int aisle_num, double t) {
           result = std::vector<std::string> {"waiting",std::to_string(wait_time-td)};
        }else {
           td = td-wait_time;
-          x = END_BREAKBEAM_LOCATION_X + (LENGTH_OF_AISLE/move_time)*td;
+          x = END_LOCATION_X + (LENGTH_OF_AISLE/move_time)*td;
           ROS_INFO_STREAM("Moving towards conveyor belt");
           ROS_INFO_STREAM("currently at position " << x);
           result = std::vector<std::string> {"toward",std::to_string(x)};
@@ -447,11 +455,11 @@ void estimateObstacleAttributes(Camera &camera,int aisle_num) {
     auto aisle_breakbeam_msgs  = camera.get_aisle_breakbeam_msgs();
 
     auto vec = aisle_breakbeam_msgs[aisle_num];
-    if(obstacleInAisle[aisle_num] == true  &&  vec.size() > 20) {
+    if(obstacleInAisle[aisle_num] == true  &&  vec.size() > 8) {
        ROS_INFO_STREAM("estimating velocity for aisle" << aisle_num);
        ROS_INFO_STREAM("vector size is " << vec.size());
        auto it = std::find_if(vec.begin(), vec.end(),
-                         [&str = "shelf_breakbeam_9_frame"] 
+                         [&str = "shelf_breakbeam_5_frame"] 
                          (nist_gear::Proximity::ConstPtr &msg){return (msg->header).frame_id == str && msg->object_detected; });    
 
        ROS_INFO_STREAM("aisle number is "<< aisle_num);
@@ -467,7 +475,7 @@ void estimateObstacleAttributes(Camera &camera,int aisle_num) {
        }
 
        auto it2 = std::find_if(vec.begin(), vec.end(),
-                         [&str = "shelf_breakbeam_5_frame"] 
+                         [&str = "shelf_breakbeam_4_frame"] 
                          (nist_gear::Proximity::ConstPtr &msg){return (msg->header).frame_id == str && msg->object_detected; });    
 
        if(it2 != vec.end()){
@@ -490,7 +498,7 @@ void estimateObstacleAttributes(Camera &camera,int aisle_num) {
 
        ROS_INFO_STREAM(sec2 - sec1);
        double wait_time = round(sec2 - sec1);
-       double move_time = round(sec3 - sec1 - wait_time);
+       double move_time = round(3*sec3 - sec1 - wait_time);
        ROS_INFO_STREAM(sec3 - sec2);
 
        double velocity = LENGTH_OF_AISLE/move_time;
@@ -776,10 +784,6 @@ void detectAislesWithObstacles(Camera &camera) {
 
 
 
-
-
-
-
 void pickPartsFromConveyor(Camera &camera, GantryControl &gantry, product prod, int numParts){
     int count = 0, count1 = 0;
     while(count < numParts){
@@ -890,10 +894,10 @@ int main(int argc, char ** argv) {
     //obstacleAssociatedWithAisle[2].move_time= 9;
     //obstacleAssociatedWithAisle[2].time_stamp1= 9;
 
-    obstacleAssociatedWithAisle[1].is_valid_obstacle= true;
-    obstacleAssociatedWithAisle[1].wait_time= 7;
-    obstacleAssociatedWithAisle[1].move_time= 9;
-    obstacleAssociatedWithAisle[1].time_stamp1= 25;
+    //obstacleAssociatedWithAisle[1].is_valid_obstacle= true;
+    //obstacleAssociatedWithAisle[1].wait_time= 7;
+    //obstacleAssociatedWithAisle[1].move_time= 9;
+    //obstacleAssociatedWithAisle[1].time_stamp1= 25;
 
 
     std::cout << "finished estimating obstacle parameters" << std::endl;

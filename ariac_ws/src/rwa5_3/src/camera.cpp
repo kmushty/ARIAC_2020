@@ -84,7 +84,7 @@ void Camera::break_beam_callback(const nist_gear::Proximity::ConstPtr &msg) {
 
 
 void Camera::shelf_breakbeam_callback(
-const nist_gear::Proximity::ConstPtr &msg, int index){
+const nist_gear::Proximity::ConstPtr &msg, int index) {
 //    triggered_shelf_breakbeams = std::vector<bool> (NUM_SHELF_BREAKBEAM,false);
    
   //ROS_INFO_STREAM("in shelf callback");
@@ -94,9 +94,9 @@ const nist_gear::Proximity::ConstPtr &msg, int index){
     }
 
 
-   if(index < 5){
+   if(index < 3){
        aisle_breakbeam_msgs[1].push_back(msg);
-   }else if(index >=5 && index <=9)
+   }else if(index < 6)
        aisle_breakbeam_msgs[2].push_back(msg);
 
    //ROS_INFO_STREAM("exited  shelf callback");
