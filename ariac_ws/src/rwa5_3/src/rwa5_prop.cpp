@@ -929,6 +929,16 @@ int main(int argc, char ** argv) {
                     //}
                 //}
 
+                //process parts if parts has been detected  logical camera and conveyor hasn't been processed
+                if(!ConveyorFlag && ) {
+                    for (const auto &part:camera.get_detected_parts()) {
+                        if (part.first == "logical_camera_9") {
+                            pickPartsFromConveyor(camera, gantry, prod, numPickParts);
+                        }
+                    }
+                    ConveyorFlag = true;
+                }
+
 
                 // TODO - make high priority order checker more robust
                 ROS_INFO_STREAM(comp.getOrders().size());

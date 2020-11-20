@@ -44,6 +44,10 @@ public:
     //std::map<std::string,part> get_detected_parts();
     std::map<std::string, std::map<std::string, part>> get_detected_parts();
 
+    std::map<std::string, part> get_conveyor_detected_parts();
+
+    std::map<std::string, std::map<std::string, part>> get_agv_detected_parts();
+
     Camera();
 
     //void remove_part(std::string logical_camera, int index);
@@ -72,6 +76,8 @@ private:
     //std::map<std::string,part> detected_parts;
     
     std::map<std::string, std::map<std::string, part>> detected_parts;
+    std::map<std::string, std::map<std::string, part>> agv_detected_parts;
+    std::map<std::string, part> conveyor_detected_parts;
 
     // vector of parts for agv logical cameras
 
