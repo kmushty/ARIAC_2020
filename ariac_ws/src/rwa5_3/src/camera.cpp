@@ -307,7 +307,7 @@ void Camera::reset_agv_logical_camera(std::string logical_camera_name) {
 }
 
 void Camera::reset_conveyor_logical_camera() {
-  conveyor_detected_parts.clear()
+  conveyor_detected_parts.clear();
 }
 
 

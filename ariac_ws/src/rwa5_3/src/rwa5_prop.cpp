@@ -213,7 +213,7 @@ void faultyGripper(GantryControl &gantry,product &prod,Camera &camera, part my_p
     part placed_part, actual_part;
     nist_gear::VacuumGripperState armState;
 
-    std::map<string,part> parts
+    std::map<std::string,part> parts;
     if (prod.agv_id == "agv2")
         parts = camera.get_detected_parts()["logical_camera_10"];                 
     else
@@ -223,7 +223,7 @@ void faultyGripper(GantryControl &gantry,product &prod,Camera &camera, part my_p
     //get part that was just placed on agv;
     placed_part = parts.begin()->second;                 
     for(const auto& part: parts){
-      if(placed_part.second.count<part.second.count)
+      if(placed_part.count < part.second.count)
         placed_part = part.second;
     }
     
@@ -265,7 +265,7 @@ int aisleAssociatedWithPart(part my_part){
      
     for(int i =0 ; i<=7 ; i++){
        std::string str = "logical_camera_" +std::to_string(i);
-       if(part.logical_camera_name == str)
+       if(my_part.logicalCameraName == str)
          return -1;
     }
 
