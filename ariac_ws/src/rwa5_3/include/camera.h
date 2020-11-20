@@ -63,7 +63,10 @@ public:
     void reset_is_faulty();
     void reset_break_beam();
     void reset_shelf_breakbeams();
+    void reset_agv_logical_camera(std::string);
+    void reset_conveyor_logical_camera();
     
+
     std::map<int,std::vector<nist_gear::Proximity::ConstPtr>> get_aisle_breakbeam_msgs(); 
     
     void removeElement(std::string prod_type, std::string prod);
