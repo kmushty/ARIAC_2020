@@ -1,0 +1,26 @@
+1. Hp Order 
+  -- Under sensor blackout
+
+
+2. Conveyor belt
+   -- gaps to person
+   -- conveyor speed
+
+
+3. get target world pose.
+
+
+4. priority cost or time
+
+
+5. faulty product
+   -- sensor blackout
+
+
+
+
+
+
+
+
+

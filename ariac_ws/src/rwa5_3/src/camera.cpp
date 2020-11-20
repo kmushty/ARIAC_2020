@@ -51,29 +51,32 @@ const nist_gear::LogicalCameraImage::ConstPtr &msg, int index) {
 
 
 
-            std::string key = "logical_camera_" + std::to_string(index);=
+            std::string key = "logical_camera_" + std::to_string(index);
+            mypart.logicalCameraName = key;
+            std::string temp = mypart.type + std::to_string(round(mypart.pose.position.x)) +
+                                           std::to_string(round(mypart.pose.position.y)) +
+                                           std::to_string(round(mypart.pose.position.z)) +
+                                           std::to_string(round(mypart.pose.orientation.x)) +
+                                           std::to_string(round(mypart.pose.orientation.y)) +
+                                           std::to_string(round(mypart.pose.orientation.z)) +
+                                           std::to_string(round(mypart.pose.orientation.w));
 
 
-            if(key == "logical_camera_8"){
+            if(key == "logical_camera_9")             // conveyor belt logical camera
+               conveyor_detected_parts[key] = mypart;
                 
+            else if(key == "logical_camera_8" || key=="logical_camera_10") {  // agv_logical camera
+              if(!std::isnan(mypart.pose.position.x) && !std::isnan(mypart.pose.position.y) && !std::isnan(mypart.pose.position.z)) {
+                     mypart.count = agv_detected_parts[key].size() + 1;
+                     agv_detected_parts[key][temp] =   mypart;
+              }
             }
-            else if(key == "logical_camera_10")
 
-            if(!std::isnan(mypart.pose.position.x) && !std::isnan(mypart.pose.position.y) && !std::isnan(mypart.pose.position.z)) {
-                std::string key = "logical_camera_" + std::to_string(index);
-                mypart.logicalCameraName = key;
-                std::string temp = mypart.type + std::to_string(round(mypart.pose.position.x)) +
-                                               std::to_string(round(mypart.pose.position.y)) +
-                                               std::to_string(round(mypart.pose.position.z)) +
-                                               std::to_string(round(mypart.pose.orientation.x)) +
-                                               std::to_string(round(mypart.pose.orientation.y)) +
-                                               std::to_string(round(mypart.pose.orientation.z)) +
-                                               std::to_string(round(mypart.pose.orientation.w));
-                detected_parts[mypart.type][temp] = mypart;
+            else {                                                   //logical cameras for shelfs and bins
+                if(!std::isnan(mypart.pose.position.x) && !std::isnan(mypart.pose.position.y) && !std::isnan(mypart.pose.position.z)) 
+                    detected_parts[mypart.type][temp] = mypart;
             }
-            //detected_parts[key].push_back(mypart);
-            //detected_parts[key] = mypart;
-        }
+         }
     }
 }
 
@@ -289,4 +292,23 @@ void Camera::removeElement(std::string prod_type, std::string prod){
   detected_parts[prod_type].erase(prod);
 }
     
+
+std::map<std::string, part> Camera::get_conveyor_detected_parts() {
+    return conveyor_detected_parts;
+}
+
+std::map<std::string, std::map<std::string, part>> Camera::get_agv_detected_parts() {
+  return agv_detected_parts;
+}
+
+
+void Camera::reset_agv_logical_camera(std::string logical_camera_name) {
+   agv_detected_parts[logical_camera_name].clear();
+}
+
+void Camera::reset_conveyor_logical_camera() {
+  conveyor_detected_parts.clear()
+}
+
+
 
