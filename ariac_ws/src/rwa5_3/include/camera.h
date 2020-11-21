@@ -71,6 +71,11 @@ public:
     
     void removeElement(std::string prod_type, std::string prod);
 
+    
+    std::map<std::string,geometry_msgs::Pose> get_faulty_poses();
+
+    bool isSensorBlackout();
+
 
 private:
     ros::Subscriber logical_camera_subscriber[NUM_LOGICAL_CAMERAS];
@@ -91,11 +96,15 @@ private:
 
     bool is_faulty1, is_faulty2;
     bool break_beam_triggered;
+    bool sensor_blackout;
     std::vector<bool> triggered_shelf_breakbeams;
     std::map<int,std::vector<nist_gear::Proximity::ConstPtr>> aisle_breakbeam_msgs;  
+    
+
 
 
     geometry_msgs::Pose faulty_pose1, faulty_pose2;
+    std::map<std::string,std::map<std::string,geometry_msgs::Pose>> faulty_poses;
 };
 
 

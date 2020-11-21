@@ -107,8 +107,8 @@ sensors:
   laser_profiler_0:
     type: laser_profiler
     pose:
-      xyz: [ 0., 1.486, 1.526 ]
-      rpy: [ 'pi/2', 'pi/2', 0 ]
+      xyz: [ -1.032362, 1.486000, 0.772111]
+      rpy: [ 1.570796, 0.041612, 0 ]
 
   range_finder_0:
     type: proximity_sensor
@@ -189,7 +189,6 @@ sensors:
     pose:
       xyz: [ -17.05475, -0.740803, 0.301235 ]
       rpy: [ 0, 0, -1.57 ]
-
 
 
 
