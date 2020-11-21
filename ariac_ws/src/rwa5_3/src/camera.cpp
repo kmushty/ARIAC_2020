@@ -53,13 +53,13 @@ const nist_gear::LogicalCameraImage::ConstPtr &msg, int index) {
 
             std::string key = "logical_camera_" + std::to_string(index);
             mypart.logicalCameraName = key;
-            std::string temp = mypart.type + std::to_string(round(mypart.pose.position.x)) +
-                                           std::to_string(round(mypart.pose.position.y)) +
-                                           std::to_string(round(mypart.pose.position.z)) +
-                                           std::to_string(round(mypart.pose.orientation.x)) +
-                                           std::to_string(round(mypart.pose.orientation.y)) +
-                                           std::to_string(round(mypart.pose.orientation.z)) +
-                                           std::to_string(round(mypart.pose.orientation.w));
+            std::string temp = mypart.type + std::to_string((int)round(mypart.pose.position.x)) +
+                                           std::to_string((int)round(mypart.pose.position.y)) +
+                                           std::to_string((int)round(mypart.pose.position.z)) +
+                                           std::to_string((int)round(mypart.pose.orientation.x)) +
+                                           std::to_string((int)round(mypart.pose.orientation.y)) +
+                                           std::to_string((int)round(mypart.pose.orientation.z)) +
+                                           std::to_string((int)round(mypart.pose.orientation.w));
 
 
             if(key == "logical_camera_9")             // conveyor belt logical camera
@@ -118,9 +118,15 @@ void Camera::laser_profiler_callback(const sensor_msgs::LaserScan::ConstPtr & ms
     msg->ranges.begin(), msg->ranges.end(), [](const float f) {return std::isfinite(f);});
     if (number_of_valid_ranges > 0) {
         ROS_INFO_THROTTLE(1, "Laser profiler sees something.");
+        sensor_blackout = false;
+    }else{
+      sensor_blackout = true;
     }
 }
 
+bool Camera::isSensorBlackout() {
+  return sensor_blackout;
+}
 
 Camera::Camera(){
 
@@ -179,7 +185,9 @@ void Camera::init(ros::NodeHandle & node){
        aisle_breakbeam_msgs[i] = {};
     }
     ROS_INFO_STREAM("exited out of init camera");
+    sensor_blackout = false; 
 }
+
 
 
 //std::map<std::string,std::vector<part>>  Camera::get_detected_parts(){
@@ -218,8 +226,17 @@ void Camera::quality_control_sensor_callback1(const nist_gear::LogicalCameraImag
         //ROS_INFO_STREAM("Pose of part in world frame" << p_w.pose);
 
         faulty_pose1 = p_w.pose;
+        std::string key = std::to_string((int)round(p_w.pose.position.x)) +
+                          std::to_string((int)round(p_w.pose.position.y)) +
+                          std::to_string((int)round(p_w.pose.position.z)) +
+                          std::to_string((int)round(p_w.pose.orientation.x)) +
+                          std::to_string((int)round(p_w.pose.orientation.y)) +
+                          std::to_string((int)round(p_w.pose.orientation.z)) +
+                          std::to_string((int)round(p_w.pose.orientation.w));
+        faulty_poses["agv1"][key] = p_w.pose;
     }
 }
+
 
 void Camera::quality_control_sensor_callback2(const nist_gear::LogicalCameraImage &msg){
     if(msg.models.size() > 0) {
@@ -242,6 +259,14 @@ void Camera::quality_control_sensor_callback2(const nist_gear::LogicalCameraImag
         //ROS_INFO_STREAM("Pose of part in world frame" << p_w.pose);
 
         faulty_pose2 = p_w.pose;
+        std::string key = std::to_string((int)round(p_w.pose.position.x)) +
+                          std::to_string((int)round(p_w.pose.position.y)) +
+                          std::to_string((int)round(p_w.pose.position.z)) +
+                          std::to_string((int)round(p_w.pose.orientation.x)) +
+                          std::to_string((int)round(p_w.pose.orientation.y)) +
+                          std::to_string((int)round(p_w.pose.orientation.z)) +
+                          std::to_string((int)round(p_w.pose.orientation.w));
+        faulty_poses["agv2"][key] = p_w.pose;
     }
 }
 
@@ -311,4 +336,12 @@ void Camera::reset_conveyor_logical_camera() {
 }
 
 
+std::map<std::string,geometry_msgs::Pose> Camera::get_faulty_poses() {
+  return faulty_poses;
+}
+
+
+void Camera::removefaultyPose(std::string avg_name, std::string faulty_pose) {
+    faulty_poses[agv_name].erase(faulty_pose);
+}
 

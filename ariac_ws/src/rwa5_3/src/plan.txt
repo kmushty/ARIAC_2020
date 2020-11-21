@@ -1,23 +1,35 @@
 1. Hp Order 
-  -- Under sensor blackout
+  -- Under sensor blackout --Not  done
+
+  --soln -build tray
+         - only submit tray after sensor blackout is over -almost
+            --when sensor black out is over --almost
+              -- remove all faulty parts  -- almost
+
 
 
 2. Conveyor belt
-   -- gaps to person
-   -- conveyor speed
+ #  -- gaps to person -- take nearest gap without obstacle
 
 
 3. get target world pose.
+ ---
 
-
-4. priority cost or time
 
 
 5. faulty product
-   -- sensor blackout
+   -- sensor blackout -- similar to above
+                      -- continue to build then wait until part has  sensor blackout is over
+
+
+6. preset locations - dynamic
 
 
 
+TODO List
+1. dynamic preset location  -- takes priority -3
+2. verify the pose -- 3
+3. fulfilling an order under sensor blackout 
 
 
 

@@ -42,6 +42,7 @@
 
 const double LENGTH_OF_AISLE = 14.2;
 const int NUM_LOGICAL_CAMERAS_PER_AISLE = 4;
+const int TIMELIMIT_THRESHOLD = 40;
 
 //coordinates obtainted from gazebo
 const double END_LOCATION_X = -16.793;
@@ -52,6 +53,7 @@ const double MID_LOCATION_X = -12.592617;
 std::vector<bool> obstacleInAisle(4,false);
 std::vector<obstacle>  obstacleAssociatedWithAisle;
 
+bool stop_processing;
 bool HighPriorityOrderInitiated;
 bool ConveyorFlag;
 bool PreviousOrderAgvChange;
@@ -59,7 +61,21 @@ bool PreviousOrderAgvChange;
 std::map<std::string,std::vector<PresetLocation>> presetLoc;
 
 
-void agvDeliveryService(ros::ServiceClient &agvDelivery, std::string shipmentType){
+
+bool compIsAlmostOver(int threshold){
+   return std::abs(comp.getClock()-500) <= threshold;
+}
+
+void agvDeliveryService(std::string agv_id, ros::ServiceClient &agvDelivery1, ros::ServiceClient &agvDelivery2, std::string shipmentType){
+    
+    ros::ServiceClient *agvDel;
+    if(agv_id == "agv2");
+        agvDel = &agvDelivery2;
+    else
+        agvDel = &agvDelivery1;
+
+    auto agvDelivery = *agvDel;
+
     // AGV Delivering the parts
     if (!agvDelivery.exists()) {
         ROS_INFO("[AGV][startAGV] Waiting for thE AGV to start...");
@@ -656,10 +672,63 @@ void processPart(product prod, GantryControl &gantry, Camera &camera, Competitio
     }
 }
 
+
+
+//TODO -
+void removeReplaceFaultyProductsAndDeliver(Camera &camera,GantryControl &gantry,std::string agv_id,
+    ros::serviceClient &agv1Delivery,ros::serviceClient &agv2Delivery,std::string shipment_type) {
+
+
+    auto logicalCameraName = (agv_id == "agv1") ? "logical_camera_8" : "logical_camera_10";
+    auto faulty_poses = camera.get_faulty_poses()[agv_id];
+    auto parts = camera.agv_detected_parts()[logicalCameraName];
     
+    std::vector<product> productsTobeReplaced;   //
+    moveToLocation(presetLoc, agv_id, gantry);
+
+    // remove all faulty products
+    product prod;                                 
+    for(const auto & faulty_pose: faulty_poses) {
+      for(const auto & part: parts) {
+         if(abs(part.pose.position.x - faulty_pose.position.x)< 0.2 &&
+            abs(part.pose.position.y - faulty_pose.position.y)< 0.2 &&
+            abs(part.pose.position.z - faulty_pose.position.z)< 0.2 &&
+            abs(part.pose.orientation.x - faulty_pose.orientation.x)< 0.2 &&
+            abs(part.pose.orientation.y - faulty_pose.orientation.y)< 0.2 &&
+            abs(part.pose.orientation.z - faulty_pose.orientation.z)< 0.2 &&
+            abs(part.pose.orientation.w - faulty_pose.orientation.w)< 0.2 ) {
+
+            gantry.pickPart(part);
+                                  //TODO drop part
+
+            prod.type = part.type;
+            prod.pose = part.pose;
+            prod.agv_id = agv_id;
+            prod.arm_name = "left_arm";
+            productsTobeReplaced.push_back(prod);
+         }
+      }
+    }
+    
+    //replace all faulty products
+    bool delivered = false;
+    for(auto product:productsTobeReplaced){                   
+      if(compIsAlmostOver(TIMELIMIT_THRESHOLD)){
+         agvDeliveryService(agv_id,agv1Delivery,agv2Delivery,shipment_type);
+         delivered = true;
+         break;
+      }else 
+         processPart(product, gantry, camera, comp, true,  true);
+    }
+
+    if(!delivered)
+         agvDeliveryService(agv_id,agv1Delivery,agv2Delivery,shipment_type);
+}
+
 
 //TODO- Sensor blackout
 void removeFaultyProduct(Camera &camera, GantryControl &gantry, product &prod) {
+
     ROS_INFO_STREAM("IN faulty part");
     part temp;
 
@@ -709,6 +778,7 @@ void processHPOrder(nist_gear::Order &order,Camera &camera, GantryControl &gantr
     product prod;
     bool wanted = true;
 
+
     for(int j=0; j<order.shipments.size(); j++){
         auto ship = order.shipments[j];
 
@@ -730,22 +800,34 @@ void processHPOrder(nist_gear::Order &order,Camera &camera, GantryControl &gantr
                 ros::Duration(3.0).sleep();
                 ros::spinOnce();
                 ros::spinOnce();
-                if(camera.get_is_faulty(prod.agv_id)) {
-                    removeFaultyProduct(camera,gantry,prod);
-                    k--;                                                                                         //process product again
-                }
+                //if(camera.get_is_faulty(prod.agv_id)) {
+                    //removeFaultyProduct(camera,gantry,prod);
+                    //k--;                                                                                         //process product again
+                //}
             }else
                 removeProduct(camera,gantry,prod);
 
             moveFromLocationToStart(presetLoc,"start",gantry);
             ROS_INFO("HELLO1");
+
+            if(compIsAlmostOver(TIMELIMIT_THRESHOLD)) {
+                 agvDeliveryService(prod.agv_id,agv1Delivery,agv2Delivery,order.shipments[j].shipment_type);
+                 stop_processing = true;
+                 break;
+            }
         }
-        ROS_INFO("HELLO2");
-        if(prod.agv_id == "agv2")
-            agvDeliveryService(agv2Delivery, order.shipments[j].shipment_type);
-        else
-            agvDeliveryService(agv1Delivery, order.shipments[j].shipment_type);
-    }
+
+      }
+
+       if(compIsAlmostOver(TIMELIMIT_THRESHOLD)) {
+                 agvDeliveryService(prod.agv_id,agv1Delivery,agv2Delivery,order.shipments[j].shipment_type);
+                 stop_processing = true;
+                 break;
+        } else{
+            //TODO sensor blackout
+            if(faulty_poses[prod.agv_id].size() > 0)
+                removeReplaceFaultyProductsAndDeliver(camera,gantry,prod.agv_id,agv1Delivery,agv2Delivery,order.shipments[j].shipment_type);
+       }
 }
 
 
@@ -866,6 +948,7 @@ int main(int argc, char ** argv) {
 
    
     HighPriorityOrderInitiated  = false;                                                                     //setting up flag
+    stop_processing = true;
 
 
     obstacle temp;                                                                                           //Initializing obstacle
@@ -917,10 +1000,13 @@ int main(int argc, char ** argv) {
 
     for(int i = 0; i< orders.size(); i++){
         auto order = orders[i];
-
+        
+        if(stop_processing) break;
 
         for(int j=0; j<order.shipments.size(); j++){
             auto ship = order.shipments[j];
+
+            if(stop_processing) break;
 
 
             for (int k=0; k<ship.products.size(); k++){
@@ -950,6 +1036,9 @@ int main(int argc, char ** argv) {
                     ROS_INFO_STREAM(comp.getOrders().size());
                     ROS_INFO_STREAM(HighPriorityOrderInitiated);
 
+                    if(stop_processing == true) break;
+
+
                     if(PreviousOrderAgvChange == true)                           //does the new order modify to the current agv  
                        k = 0;                                                    //Build order from scratch
                     else
@@ -964,21 +1053,37 @@ int main(int argc, char ** argv) {
                 ros::Duration(3.0).sleep();
                 ros::spinOnce();
                 ros::spinOnce();
-                if(camera.get_is_faulty(prod.agv_id)) {                                              
-                    ROS_INFO_STREAM("FAULTY");
-                    removeFaultyProduct(camera,gantry,prod);                       // remove product
-                    k--;                                                           // process product again
-                }
+
+
+                //if(camera.get_is_faulty(prod.agv_id)) {                                              
+                    //ROS_INFO_STREAM("FAULTY");
+                    //removeFaultyProduct(camera,gantry,prod);                       // remove product
+                    //k--;                                                           // process product again
+                    //camera.reset_is_faulty();
+                //}
                 ROS_INFO_STREAM("heere 2");
                 moveFromLocationToStart(presetLoc,"start",gantry);
                 ROS_INFO_STREAM("heere x");
 
+                if(compIsAlmostOver(TIMELIMIT_THRESHOLD)){
+                    agvDeliveryService(prod.agv_id,agv1Delivery,agv2Delivery,order.shipments[j].shipment_type);
+                    stop_processing = true;
+                    break;
+                } 
             }
             ROS_INFO_STREAM("herex1");
-            if(prod.agv_id == "agv2")
-                agvDeliveryService(agv2Delivery, order.shipments[j].shipment_type);
-            else
-                agvDeliveryService(agv1Delivery, order.shipments[j].shipment_type);
+            auto faulty_poses = camera.get_faulty_poses();
+            
+
+            if(compIsAlmostOver(TIMELIMIT_THRESHOLD)) {
+                 agvDeliveryService(prod.agv_id,agv1Delivery,agv2Delivery,order.shipments[j].shipment_type);
+                 stop_processing = true;
+                 break;
+            } else{
+                //TODO sensor blackout
+                if(faulty_poses[prod.agv_id].size() > 0)
+                    removeReplaceFaultyProductsAndDeliver(camera,gantry,prod.agv_id,agv1Delivery,agv2Delivery,order.shipments[j].shipment_type);
+            }
         }
         ROS_INFO_STREAM("here3");
     }
