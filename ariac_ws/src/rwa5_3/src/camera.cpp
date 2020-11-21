@@ -336,12 +336,12 @@ void Camera::reset_conveyor_logical_camera() {
 }
 
 
-std::map<std::string,geometry_msgs::Pose> Camera::get_faulty_poses() {
+std::map<std::string,std::map<std::string,geometry_msgs::Pose>> Camera::get_faulty_poses() {
   return faulty_poses;
 }
 
 
-void Camera::removefaultyPose(std::string avg_name, std::string faulty_pose) {
+void Camera::removefaultyPose(std::string agv_name, std::string faulty_pose) {
     faulty_poses[agv_name].erase(faulty_pose);
 }
 

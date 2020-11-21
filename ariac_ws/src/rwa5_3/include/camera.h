@@ -53,7 +53,7 @@ public:
     //void remove_part(std::string logical_camera, int index);
 
     geometry_msgs::Pose get_faulty_pose(std::string agv);
-
+    void removefaultyPose(std::string agv_name, std::string faulty_pose);
 
     bool get_is_faulty(std::string agv);
     bool get_break_beam();
@@ -71,8 +71,8 @@ public:
     
     void removeElement(std::string prod_type, std::string prod);
 
-    
-    std::map<std::string,geometry_msgs::Pose> get_faulty_poses();
+
+    std::map<std::string,std::map<std::string,geometry_msgs::Pose>> get_faulty_poses();
 
     bool isSensorBlackout();
 
