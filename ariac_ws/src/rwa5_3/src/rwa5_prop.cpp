@@ -609,11 +609,18 @@ void processPart(product prod, GantryControl &gantry, Camera &camera, Competitio
     while(!foundPart) {                                                                                          // poll until we find part
 
         detected_parts = camera.get_detected_parts()[prod.type];
+
+        ROS_INFO_STREAM("Printing detected part(s");
+        for(const auto & parts: detected_parts){
+            ROS_INFO_STREAM("parts .firts "<< parts.first);
+            ROS_INFO_STREAM("parts .second  "<< parts.second.logicalCameraName);
+        }
         for(const auto& parts: detected_parts) {                                                               // search all logical cameras for desired part
             if (parts.second.logicalCameraName == "logical_camera_8" ||
                 parts.second.logicalCameraName == "logical_camera_10")                                          // Exclude agv cameras
                 continue;
-            
+
+
             
             if (prod.type == parts.second.type.c_str()) {
                 my_part = parts.second;
@@ -621,9 +628,9 @@ void processPart(product prod, GantryControl &gantry, Camera &camera, Competitio
                 my_part_in_tray.type = prod.type;
                 my_part_in_tray.pose = prod.pose;
 
-                
+                ROS_INFO_STREAM("parts .second  "<< parts.second.logicalCameraName);
 
-                detected_parts.erase(parts.first);
+                //detected_parts.erase(parts.first);
                 camera.removeElement(prod.type, parts.first);
                 
                 int aisle_num = aisleAssociatedWithPart(my_part);
@@ -949,7 +956,7 @@ int main(int argc, char ** argv) {
 
    
     HighPriorityOrderInitiated  = false;                                                                     //setting up flag
-    stop_processing = true;
+    stop_processing = false;
 
 
     obstacle temp;                                                                                           //Initializing obstacle
@@ -986,15 +993,15 @@ int main(int argc, char ** argv) {
     //}
     
     
-    //obstacleAssociatedWithAisle[2].is_valid_obstacle= true;
-    //obstacleAssociatedWithAisle[2].wait_time= 7;
-    //obstacleAssociatedWithAisle[2].move_time= 9;
-    //obstacleAssociatedWithAisle[2].time_stamp1= 9;
+    obstacleAssociatedWithAisle[2].is_valid_obstacle= true;
+    obstacleAssociatedWithAisle[2].wait_time= 7;
+    obstacleAssociatedWithAisle[2].move_time= 9;
+    obstacleAssociatedWithAisle[2].time_stamp1= 9;
 
-    //obstacleAssociatedWithAisle[1].is_valid_obstacle= true;
-    //obstacleAssociatedWithAisle[1].wait_time= 7;
-    //obstacleAssociatedWithAisle[1].move_time= 9;
-    //obstacleAssociatedWithAisle[1].time_stamp1= 25;
+    obstacleAssociatedWithAisle[1].is_valid_obstacle= true;
+    obstacleAssociatedWithAisle[1].wait_time= 7;
+    obstacleAssociatedWithAisle[1].move_time= 9;
+    obstacleAssociatedWithAisle[1].time_stamp1= 25;
 
 
     std::cout << "finished estimating obstacle parameters" << std::endl;
@@ -1021,12 +1028,12 @@ int main(int argc, char ** argv) {
 
 
                 //process parts on conveyor belt if parts are detected
-                if(!ConveyorFlag && camera.get_conveyor_detected_parts().size()>0) {
-                    ROS_INFO_STREAM("processing conveyor belt");
-                    pickPartsFromConveyor(camera, gantry, prod, numPickParts);
-                    ConveyorFlag = true;
-                    camera.reset_conveyor_logical_camera();
-                }
+//                if(!ConveyorFlag && camera.get_conveyor_detected_parts().size()>0) {
+//                    ROS_INFO_STREAM("processing conveyor belt");
+//                    pickPartsFromConveyor(camera, gantry, prod, numPickParts);
+//                    ConveyorFlag = true;
+//                    camera.reset_conveyor_logical_camera();
+//                }
 
 
                 // TODO - make high priority order checker more robust
