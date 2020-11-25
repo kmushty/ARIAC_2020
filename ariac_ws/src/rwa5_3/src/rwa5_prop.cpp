@@ -169,6 +169,15 @@ void moveToLocation(std::map<std::string,std::vector<PresetLocation>> &presetLoc
         gantry.goToPresetLocation(waypoint);
 }
 
+void moveToLocation2(std::map<std::string,std::vector<PresetLocation>> &presetLoc, part part,GantryControl &gantry){
+    auto vec = presetLoc[part.logicalCameraName];
+    for(auto waypoint :vec){
+        gantry.goToPresetLocation(waypoint);
+        break;
+    }
+    std::vector<double> gantryConfiguration =  full_robot_group_.getCurrentJointValues();
+
+}
 
 void retraceSteps(std::map<std::string,std::vector<PresetLocation>> &presetLoc, std::string location,GantryControl &gantry) {
     auto vec = presetLoc[location];

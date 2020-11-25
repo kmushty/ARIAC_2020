@@ -1101,6 +1101,7 @@ void GantryControl::right_arm_controller_state_callback(const control_msgs::Join
 }
 
 
+
 bool GantryControl::send_command(trajectory_msgs::JointTrajectory command_msg) {
     // ROS_INFO_STREAM("[gantry_control][send_command] called.");
 
