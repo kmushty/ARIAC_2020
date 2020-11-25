@@ -36,12 +36,12 @@ orders:
     shipment_count: 2
     destinations: [agv1,agv2]
     products:
-#      product_0:
-#        type: pulley_part_blue
-#        pose:
-#          xyz: [0.0, 0.15, 0]
-#          rpy: ['pi', 0, 0]
       product_0:
+        type: pulley_part_blue
+        pose:
+          xyz: [0.0, 0.15, 0]
+          rpy: ['pi', 0, 0]
+      product_1:
         type: gasket_part_green
         pose:
           xyz: [-0.1, -0.2, 0]
@@ -80,9 +80,9 @@ sensor_blackout:
   product_count: 1
   duration: 50
 
-faulty_products:
-  - pulley_part_blue_3
-  - piston_rod_part_red_2
-  - piston_rod_part_red_6
-  - gasket_part_green_4
+#faulty_products:
+#  - pulley_part_blue_3
+#  - piston_rod_part_red_2
+#  - piston_rod_part_red_6
+#  - gasket_part_green_4
 #time_limit: -1
