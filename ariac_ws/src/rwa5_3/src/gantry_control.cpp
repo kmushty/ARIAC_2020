@@ -1135,3 +1135,31 @@ bool GantryControl::send_command(trajectory_msgs::JointTrajectory command_msg) {
     }
 }
 
+
+void GantryControl::moveToPart(part my_part) {
+  auto gantryConfiguration = full_robot_group_.getCurrentJointValues();
+  ROS_INFO_STREAM("gNTRY" << gantryConfiguration[2]);
+
+  gantryConfiguration[0] = my_part.pose.position.x;
+
+ //change gantry
+  full_robot_group_.move();
+  
+
+
+
+  //if(gantryConfiguration[2] < 0.2 && gantryConfiguration[2] > -0.2) {
+        //gantryConfiguration[0] = part.pose.position.x - 0.7;
+    //}
+    //else if(gantryConfiguration[2] > 3 && gantryConfiguration[2] < 3.2) {
+        //gantryConfiguration[1] = -1 * (part.pose.position.y - 0.7);
+        //gantryConfiguration[0] = part.pose.position.x + 0.7;
+    //}
+    //full_robot_group_.setJointValueTarget(gantryConfiguration);
+    //full_robot_group_.move();
+    
+}
+
+
+
+
