@@ -887,13 +887,17 @@ bool GantryControl::pickPart(part part){
 
 //    ros::AsyncSpinner spinner(1);
 //    spinner.start();
-    std::vector<double> orientation = full_robot_group_.getCurrentRPY();
+
     std::vector<double> gantryConfiguration = full_robot_group_.getCurrentJointValues();
-    gantryConfiguration[0] = part.pose.position.x;
-    if(orientation[2] < 0.2)
-        gantryConfiguration[1] = -1*(part.pose.position.y + 0.7);
-    if(orientation[2] > 3.0)
-        gantryConfiguration[1] = -1*(part.pose.position.y - 0.7);
+    ROS_INFO_STREAM("gNTRY" << gantryConfiguration[2]);
+    if(gantryConfiguration[2] < 0.2 && gantryConfiguration[2] > -0.2) {
+        gantryConfiguration[1] = -1 * (part.pose.position.y + 1);
+        gantryConfiguration[0] = part.pose.position.x - 0.7;
+    }
+    else if(gantryConfiguration[2] > 3 && gantryConfiguration[2] < 3.2) {
+        gantryConfiguration[1] = -1 * (part.pose.position.y - 0.7);
+        gantryConfiguration[0] = part.pose.position.x + 0.7;
+    }
     full_robot_group_.setJointValueTarget(gantryConfiguration);
     full_robot_group_.move();
 
