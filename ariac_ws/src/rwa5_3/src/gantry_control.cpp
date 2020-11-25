@@ -887,6 +887,11 @@ bool GantryControl::pickPart(part part){
 
 //    ros::AsyncSpinner spinner(1);
 //    spinner.start();
+    std::vector<double> gantryConfiguration = full_robot_group_.getCurrentJointValues();
+    gantryConfiguration[0] = part.pose.position.x;
+    gantryConfiguration[1] = -1*(part.pose.position.y + 0.7);
+    full_robot_group_.setJointValueTarget(gantryConfiguration);
+    full_robot_group_.move();
 
 //    left_arm_group_.setPoseReferenceFrame("world");
     geometry_msgs::Pose currentPose = left_arm_group_.getCurrentPose().pose;
