@@ -13,9 +13,9 @@ options:
   belt_population_cycles: 10
 
 shelf_layout:
-  row_1: [ 'base','collar',0,'base' ] #shelves: 3, 4, 5
-  row_2: [ 'pipe',0,'base','base' ]   #shelves: 6, 7, 8
-  row_3: [ 'base','pipe',0,'collar' ] #shelves: 9, 10, 11
+  row_1: ["base", "collar", 0, "base"] #shelves: 3, 4, 5
+  row_2: ["pipe", 0, "base", "base"] #shelves: 6, 7, 8
+  row_3: ["base", "pipe", 0, "collar"] #shelves: 9, 10, 11
 
 #aisle_layout:
 #  person_1:
@@ -34,33 +34,42 @@ orders:
     announcement_condition: time
     announcement_condition_value: 0.0
     shipment_count: 1
-    destinations: [agv1,agv2]
+    destinations: [agv1, agv2]
     products:
-#      product_0:
-#        type: pulley_part_blue
-#        pose:
-#          xyz: [0.0, 0.15, 0]
-#          rpy: ['pi', 0, 0]
+      #      product_0:
+      #        type: pulley_part_blue
+      #        pose:
+      #          xyz: [0.0, 0.15, 0]
+      #          rpy: ['pi', 0, 0]
       product_0:
-        type: gasket_part_green
+        type: disk_part_green
         pose:
           xyz: [-0.1, -0.2, 0]
-          rpy: [0, 0, '-pi/4']
+          rpy: [0, 0, "-pi/4"]
       #product_2:
-        #type: piston_rod_part_red
-        #pose:
-          #xyz: [0.15, -0.2, 0]
-          #rpy: [0, 0, 'pi/4']
-
+      #type: piston_rod_part_red
+      #pose:
+      #xyz: [0.15, -0.2, 0]
+      #rpy: [0, 0, 'pi/4']
 
 belt_models:
   piston_rod_part_red:
     8.0:
       pose:
         xyz: [0.0, 4.3, 0.92]
-        rpy: [0, 0, 'pi/4']
+        rpy: [0, 0, "pi/4"]
 
-models_over_shelves:
+models_over_bins:
+  bin7:
+    models:
+      disk_part_green:
+        xyz_start: [0.1, 0.1, 0.0]
+        xyz_end: [0.5, 0.5, 0.0]
+        rpy: [0, 0, 0]
+        num_models_x: 2
+        num_models_y: 2
+
+# models_over_shelves:
 #  shelf8:
 #    models:
 #      gasket_part_green:
@@ -76,20 +85,20 @@ models_over_shelves:
 #        num_models_x: 4
 #        num_models_y: 1
 #
-  shelf11:
-    models:
-      gasket_part_green:
-        xyz_start: [ 0.5, 0.4, 0.0 ]
-        xyz_end: [ 1.4, 0.4, 0.0 ]
-        rpy: [ 0, 0, -pi/4 ]
-        num_models_x: 6
-        num_models_y: 1
-      pulley_part_blue:
-        xyz_start: [ -0.5, -0.4, 0.0 ]
-        xyz_end: [ -1.4, -0.4, 0.0 ]
-        rpy: [ 0, 0, pi/4 ]
-        num_models_x: 4
-        num_models_y: 1
+# shelf11:
+#   models:
+#     gasket_part_green:
+#       xyz_start: [0.5, 0.4, 0.0]
+#       xyz_end: [1.4, 0.4, 0.0]
+#       rpy: [0, 0, -pi/4]
+#       num_models_x: 6
+#       num_models_y: 1
+#     pulley_part_blue:
+#       xyz_start: [-0.5, -0.4, 0.0]
+#       xyz_end: [-1.4, -0.4, 0.0]
+#       rpy: [0, 0, pi/4]
+#       num_models_x: 4
+#       num_models_y: 1
 #
 #  shelf5:
 #    models:
@@ -109,7 +118,6 @@ models_over_shelves:
 sensor_blackout:
   product_count: 1
   duration: 50
-
 #faulty_products:
 #  - pulley_part_blue_3
 #  - piston_rod_part_red_2
