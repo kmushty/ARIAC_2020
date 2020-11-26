@@ -1269,8 +1269,12 @@ void GantryControl::moveToPart(part my_part)
     auto gantryConfiguration = full_robot_group_.getCurrentJointValues();
     ROS_INFO_STREAM("gNTRY" << gantryConfiguration[2]);
 
-    //shelf logical cameras
-    if (my_part.logicalCameraName != "logical_camera_1" && my_part.logicalCameraName != "logical_camera_2" &&
+  if(my_part.logicalCameraName == "logical_camera_9"){
+      gantryConfiguration[0] = my_part.pose.position.x-0.2;
+      gantryConfiguration[1] = -1*my_part.pose.position.y;
+
+
+   } else if (my_part.logicalCameraName != "logical_camera_1" && my_part.logicalCameraName != "logical_camera_2" &&
         my_part.logicalCameraName != "logical_camera_5" && my_part.logicalCameraName != "logical_camera_6")
     {
         if (gantryConfiguration[2] < -1.50 && gantryConfiguration[2] > -1.60)

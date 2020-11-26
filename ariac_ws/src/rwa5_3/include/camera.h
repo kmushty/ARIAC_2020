@@ -20,6 +20,7 @@
 
 const int NUM_LOGICAL_CAMERAS = 17;
 const int NUM_SHELF_BREAKBEAM = 6;
+extern Competition *comp_ref;
 
 class Camera{
 

@@ -78,6 +78,7 @@ typedef struct Part {
   PartStates state; // model state (enum PartStates)
   int count;
   bool faulty;
+  double conveyor_time = -1;
 } part;
 
 typedef struct Position {

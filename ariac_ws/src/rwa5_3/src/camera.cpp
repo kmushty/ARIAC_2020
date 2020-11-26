@@ -1,5 +1,6 @@
 #include "camera.h"
 
+Competition *comp_ref; 
 
 void Camera::logical_camera_callback(
 const nist_gear::LogicalCameraImage::ConstPtr &msg, int index) {
@@ -62,8 +63,11 @@ const nist_gear::LogicalCameraImage::ConstPtr &msg, int index) {
                                            std::to_string((int)round(mypart.pose.orientation.w));
 
 
-            if(key == "logical_camera_9")             // conveyor belt logical camera
-               conveyor_detected_parts[key] = mypart;
+            if(key == "logical_camera_9") {                           // conveyor belt logical camera
+              mypart.conveyor_time = (*comp_ref).getClock();
+              conveyor_detected_parts[key] = mypart;
+            }                                                               
+
                 
             else if(key == "logical_camera_8" || key=="logical_camera_10") {  // agv_logical camera
               if(!std::isnan(mypart.pose.position.x) && !std::isnan(mypart.pose.position.y) && !std::isnan(mypart.pose.position.z)) {

@@ -927,6 +927,19 @@ void detectAislesWithObstacles(Camera &camera) {
 
 
 
+void pickPartsFromConveyor2(Camera &camera, Competition &comp, GantryControl &gantry, product prod, int numParts){
+     part conveyor_part = camera.get_conveyor_detected_parts()["logical_camera_9"];
+     
+     double conveyor_speed = 0.2;
+     double location_y0 = conveyor_part.pose.position.y;
+
+     double location_y = (comp.getClock() - conveyor_part.conveyor_time)*conveyor_speed + location_y0;
+     if(location_y > -10000) {
+       conveyor_part.pose.position.y = location_y;
+       gantry.moveToPart(conveyor_part);
+     }
+}
+
 
 void pickPartsFromConveyor(Camera &camera, GantryControl &gantry, product prod, int numParts){
     int count = 0, count1 = 0;
@@ -1067,14 +1080,16 @@ int main(int argc, char ** argv) {
                 prod.agv_id = ship.agv_id;
                 prod.arm_name = "left_arm";
 
-
                 //process parts on conveyor belt if parts are detected
-//                if(!ConveyorFlag && camera.get_conveyor_detected_parts().size()>0) {
-//                    ROS_INFO_STREAM("processing conveyor belt");
-//                    pickPartsFromConveyor(camera, gantry, prod, numPickParts);
-//                    ConveyorFlag = true;
-//                    camera.reset_conveyor_logical_camera();
-//                }
+                while(true) {
+                  ros::Duration(10).sleep();
+                  if(!ConveyorFlag && camera.get_conveyor_detected_parts().size()>0) {
+                      ROS_INFO_STREAM("processing conveyor belt");
+                      pickPartsFromConveyor2(camera, comp, gantry, prod, numPickParts);
+                      ConveyorFlag = true;
+                      camera.reset_conveyor_logical_camera();
+                   }
+                }
 
 
                 // TODO - make high priority order checker more robust
