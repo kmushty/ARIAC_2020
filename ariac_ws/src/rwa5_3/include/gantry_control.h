@@ -165,13 +165,19 @@ class GantryControl {
 
 
     //final
-    logicalCamera12 logicalCamera12_, logicalCamera12_1_, logicalCamera12_2_;
-    logicalCamera15 logicalCamera15_2_;
-    logicalCamera13 logicalCamera13_, logicalCamera13_1_, logicalCamera13_2_;
-    logicalCamera16 logicalCamera16_2_;
-    logicalCamera11 logicalCamera11_, logicalCamera11_1_, logicalCamera11_2_;
-    logicalCamera14 logicalCamera14_2_;
+    logical_11_14_aisle_0_short logical_11_14_aisle_0_short_, logical_11_14_aisle_0_short_1_, logical_11_14_aisle_0_short_2_;
+    logical_11_14_aisle_0_long logical_11_14_aisle_0_long_2_;
+    logical_12_15_aisle_1_short logical_12_15_aisle_1_short_, logical_12_15_aisle_1_short_1_, logical_12_15_aisle_1_short_2_;
+    logical_12_15_aisle_1_long logical_12_15_aisle_1_long_2_;
+    logical_13_16_aisle_2_short logical_13_16_aisle_2_short_, logical_13_16_aisle_2_short_1_, logical_13_16_aisle_2_short_2_;
+    logical_13_16_aisle_2_long logical_13_16_aisle_2_long_2_;
 
+    logical_11_14_aisle_1_short logical_11_14_aisle_1_short_, logical_11_14_aisle_1_short_1_, logical_11_14_aisle_1_short_2_;
+    logical_11_14_aisle_1_long logical_11_14_aisle_1_long_2_;
+    logical_12_15_aisle_2_short logical_12_15_aisle_2_short_, logical_12_15_aisle_2_short_1_, logical_12_15_aisle_2_short_2_;
+    logical_12_15_aisle_2_long logical_12_15_aisle_2_long_2_;
+    logical_13_16_aisle_3_short logical_13_16_aisle_3_short_, logical_13_16_aisle_3_short_1_, logical_13_16_aisle_3_short_2_;
+    logical_13_16_aisle_3_long logical_13_16_aisle_3_long_2_;
 
 
 

@@ -113,13 +113,21 @@ void initWayPoints(std::map<std::string,std::vector<PresetLocation>> &presetLoc,
 //    presetLoc["logical_camera_12"] = {gantry.shelf8_obs_green1_, gantry.shelf8_obs_green2_, gantry.shelf8_obs_green3_, gantry.left_gap_2_green_1_, gantry.left_gap_2_green_2_};
 //    presetLoc["logical_camera_15"] = {gantry.right_gap_2_blue_1_, gantry.right_gap_2_blue_2_};
 //    presetLoc["logical_camera_12"] = {gantry.left_gap_2_green_1_, gantry.left_gap_2_green_2_};
-    presetLoc["logical_camera_12"] = {gantry.logicalCamera12_, gantry.logicalCamera12_1_, gantry.logicalCamera12_2_};
-    presetLoc["logical_camera_15"] = {gantry.logicalCamera12_, gantry.logicalCamera12_1_, gantry.logicalCamera15_2_};
-    presetLoc["logical_camera_13"] = {gantry.logicalCamera13_, gantry.logicalCamera13_1_, gantry.logicalCamera13_2_};
-    presetLoc["logical_camera_16"] = {gantry.logicalCamera13_, gantry.logicalCamera13_1_, gantry.logicalCamera16_2_};
-    presetLoc["logical_camera_11"] = {gantry.logicalCamera11_, gantry.logicalCamera11_1_, gantry.logicalCamera11_2_};
-    presetLoc["logical_camera_14"] = {gantry.logicalCamera11_, gantry.logicalCamera11_1_, gantry.logicalCamera14_2_};
+//    presetLoc["logical_camera_12"] = {gantry.logicalCamera12_, gantry.logicalCamera12_1_, gantry.logicalCamera12_2_};
+//    presetLoc["logical_camera_15"] = {gantry.logicalCamera12_, gantry.logicalCamera12_1_, gantry.logicalCamera15_2_};
+//    presetLoc["logical_camera_13"] = {gantry.logicalCamera13_, gantry.logicalCamera13_1_, gantry.logicalCamera13_2_};
+//    presetLoc["logical_camera_16"] = {gantry.logicalCamera13_, gantry.logicalCamera13_1_, gantry.logicalCamera16_2_};
+//    presetLoc["logical_camera_11"] = {gantry.logicalCamera11_, gantry.logicalCamera11_1_, gantry.logicalCamera11_2_};
+//    presetLoc["logical_camera_14"] = {gantry.logicalCamera11_, gantry.logicalCamera11_1_, gantry.logicalCamera14_2_};
 
+    presetLoc["logical_camera_11"] = {gantry.logical_11_14_aisle_1_short_, gantry.logical_11_14_aisle_1_short_1_, gantry.logical_11_14_aisle_1_long_2_};
+    presetLoc["logical_camera_14"] = {gantry.logical_11_14_aisle_1_short_, gantry.logical_11_14_aisle_1_short_1_, gantry.logical_11_14_aisle_1_short_2_};
+
+    presetLoc["logical_camera_12"] = {gantry.logical_12_15_aisle_2_short_, gantry.logical_12_15_aisle_2_short_1_, gantry.logical_12_15_aisle_2_long_2_};
+    presetLoc["logical_camera_15"] = {gantry.logical_12_15_aisle_2_short_, gantry.logical_12_15_aisle_2_short_1_, gantry.logical_12_15_aisle_2_short_2_};
+
+    presetLoc["logical_camera_13"] = {gantry.logical_13_16_aisle_3_short_, gantry.logical_13_16_aisle_3_short_1_, gantry.logical_13_16_aisle_3_long_2_};
+    presetLoc["logical_camera_16"] = {gantry.logical_13_16_aisle_3_short_, gantry.logical_13_16_aisle_3_short_1_, gantry.logical_13_16_aisle_3_short_2_};
 
 
 

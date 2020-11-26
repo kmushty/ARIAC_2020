@@ -62,7 +62,8 @@ left_gap_0_2, left_gap_1_2, left_gap_1_3, left_gap_2_2, left_gap_2_3, left_gap_3
 middle_gap_0_2, middle_gap_1_2, middle_gap_1_3, middle_gap_2_2, middle_gap_2_3, middle_gap_3_2, middle_gap_3_3,
 right_gap_0_2, right_gap_1_2, right_gap_1_3, right_gap_2_2, right_gap_2_3, right_gap_3_2, right_gap_3_3,
 left_gap_2_green_1, left_gap_2_green_2, left_gap_2_green_3, right_gap_2_blue_1, right_gap_2_blue_2, right_gap_2_blue_3,bin13_1, bin13_2, bin13_3, bin13_4,
-logicalCamera12, logicalCamera15, logicalCamera13, logicalCamera16, logicalCamera11, logicalCamera14;
+logical_12_15_aisle_1_short, logical_12_15_aisle_1_long, logical_13_16_aisle_2_short, logical_13_16_aisle_2_long, logical_11_14_aisle_0_short, logical_11_14_aisle_0_long, logical_11_14_aisle_1_short, logical_11_14_aisle_1_long,
+logical_12_15_aisle_2_short, logical_12_15_aisle_2_long, logical_13_16_aisle_3_short, logical_13_16_aisle_3_long;
 
 
 typedef struct Part {

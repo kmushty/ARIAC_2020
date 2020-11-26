@@ -536,60 +536,112 @@ void GantryControl::init() {
 //    logicalCamera12_.left_arm = {-1.82, -0.40, 1.82, -1.41, -0.25, 0};
 //    logicalCamera12_.right_arm = {1.25, -3.27, -1.13, 0.88, -0.13, 0};
 
-    logicalCamera12_.gantry = {0, -1.48, 0};
-    logicalCamera12_.left_arm = {-1.48, -2.89, -1.74, -1.72, 0, 0};
-    logicalCamera12_.right_arm = {1.49, -0.34, 1.74, -1.53, 3.14, 0};
+    logical_12_15_aisle_1_short_.gantry = {0, -1.48, 0};
+    logical_12_15_aisle_1_short_.left_arm = {-1.48, -2.89, -1.74, -1.72, 0, 0};
+    logical_12_15_aisle_1_short_.right_arm = {1.49, -0.34, 1.74, -1.53, 3.14, 0};
 
-    logicalCamera12_1_.gantry = {-14, -1.48, 0};
-    logicalCamera12_1_.left_arm = {-1.48, -2.89, -1.74, -1.72, 0, 0};
-    logicalCamera12_1_.right_arm = {1.49, -0.34, 1.74, -1.53, 3.14, 0};
+    logical_12_15_aisle_1_short_1_.gantry = {-14, -1.48, 0};
+    logical_12_15_aisle_1_short_1_.left_arm = {-1.48, -2.89, -1.74, -1.72, 0, 0};
+    logical_12_15_aisle_1_short_1_.right_arm = {1.49, -0.34, 1.74, -1.53, 3.14, 0};
 
-    logicalCamera12_2_.gantry = {-14.7, -1.80, -1.57};
-    logicalCamera12_2_.left_arm = {0, -2.05, 1.57, -2.65, -1.57, 0};
-    logicalCamera12_2_.right_arm = {1.51, -1.57, 2.8, -1.44, 3.14, 0};
-
-
-    logicalCamera15_2_.gantry = {-15.11, -1.10, -1.57};
-    logicalCamera15_2_.left_arm = {0, -2.05, 1.57, -2.65, -1.57, 0};
-    logicalCamera15_2_.right_arm = {1.51, -1.57, 2.8, -1.44, 3.14, 0};
+    logical_12_15_aisle_1_short_2_.gantry = {-14.7, -1.80, -1.57};
+    logical_12_15_aisle_1_short_2_.left_arm = {0, -2.05, 1.57, -2.65, -1.57, 0};
+    logical_12_15_aisle_1_short_2_.right_arm = {1.51, -1.57, 2.8, -1.44, 3.14, 0};
 
 
-
-    logicalCamera13_.gantry = {0, 1.52, 0};
-    logicalCamera13_.left_arm = {-1.48, -2.89, -1.74, -1.72, 0, 0};
-    logicalCamera13_.right_arm = {1.49, -0.34, 1.74, -1.53, 3.14, 0};
-
-    logicalCamera13_1_.gantry = {-14, 1.52, 0};
-    logicalCamera13_1_.left_arm = {-1.48, -2.89, -1.74, -1.72, 0, 0};
-    logicalCamera13_1_.right_arm = {1.49, -0.34, 1.74, -1.53, 3.14, 0};
-
-    logicalCamera13_2_.gantry = {-14.7, 1.20, -1.57};
-    logicalCamera13_2_.left_arm = {0, -2.05, 1.57, -2.65, -1.57, 0};
-    logicalCamera13_2_.right_arm = {1.51, -1.57, 2.8, -1.44, 3.14, 0};
-
-    logicalCamera16_2_.gantry = {-15.11, 1.90, -1.57};
-    logicalCamera16_2_.left_arm = {0, -2.05, 1.57, -2.65, -1.57, 0};
-    logicalCamera16_2_.right_arm = {1.51, -1.57, 2.8, -1.44, 3.14, 0};
+    logical_12_15_aisle_1_long_2_.gantry = {-15.11, -1.10, -1.57};
+    logical_12_15_aisle_1_long_2_.left_arm = {0, -2.05, 1.57, -2.65, -1.57, 0};
+    logical_12_15_aisle_1_long_2_.right_arm = {1.51, -1.57, 2.8, -1.44, 3.14, 0};
 
 
 
-    logicalCamera11_.gantry = {0, -4.48, 0};
-    logicalCamera11_.left_arm = {-1.48, -2.89, -1.74, -1.72, 0, 0};
-    logicalCamera11_.right_arm = {1.49, -0.34, 1.74, -1.53, 3.14, 0};
+    logical_13_16_aisle_2_short_.gantry = {0, 1.52, 0};
+    logical_13_16_aisle_2_short_.left_arm = {-1.48, -2.89, -1.74, -1.72, 0, 0};
+    logical_13_16_aisle_2_short_.right_arm = {1.49, -0.34, 1.74, -1.53, 3.14, 0};
 
-    logicalCamera11_1_.gantry = {-14, -4.48, 0};
-    logicalCamera11_1_.left_arm = {-1.48, -2.89, -1.74, -1.72, 0, 0};
-    logicalCamera11_1_.right_arm = {1.49, -0.34, 1.74, -1.53, 3.14, 0};
+    logical_13_16_aisle_2_short_1_.gantry = {-14, 1.52, 0};
+    logical_13_16_aisle_2_short_1_.left_arm = {-1.48, -2.89, -1.74, -1.72, 0, 0};
+    logical_13_16_aisle_2_short_1_.right_arm = {1.49, -0.34, 1.74, -1.53, 3.14, 0};
 
-    logicalCamera11_2_.gantry = {-14.7, -4.80, -1.57};
-    logicalCamera11_2_.left_arm = {0, -2.05, 1.57, -2.65, -1.57, 0};
-    logicalCamera11_2_.right_arm = {1.51, -1.57, 2.8, -1.44, 3.14, 0};
+    logical_13_16_aisle_2_short_2_.gantry = {-14.7, 1.20, -1.57};
+    logical_13_16_aisle_2_short_2_.left_arm = {0, -2.05, 1.57, -2.65, -1.57, 0};
+    logical_13_16_aisle_2_short_2_.right_arm = {1.51, -1.57, 2.8, -1.44, 3.14, 0};
+
+    logical_13_16_aisle_2_long_2_.gantry = {-15.11, 1.90, -1.57};
+    logical_13_16_aisle_2_long_2_.left_arm = {0, -2.05, 1.57, -2.65, -1.57, 0};
+    logical_13_16_aisle_2_long_2_.right_arm = {1.51, -1.57, 2.8, -1.44, 3.14, 0};
+
+
+    logical_11_14_aisle_0_short_.gantry = {0, -4.48, 0};
+    logical_11_14_aisle_0_short_.left_arm = {-1.48, -2.89, -1.74, -1.72, 0, 0};
+    logical_11_14_aisle_0_short_.right_arm = {1.49, -0.34, 1.74, -1.53, 3.14, 0};
+
+    logical_11_14_aisle_0_short_1_.gantry = {-14, -4.48, 0};
+    logical_11_14_aisle_0_short_1_.left_arm = {-1.48, -2.89, -1.74, -1.72, 0, 0};
+    logical_11_14_aisle_0_short_1_.right_arm = {1.49, -0.34, 1.74, -1.53, 3.14, 0};
+
+    logical_11_14_aisle_0_short_2_.gantry = {-14.7, -4.80, -1.57};
+    logical_11_14_aisle_0_short_2_.left_arm = {0, -2.05, 1.57, -2.65, -1.57, 0};
+    logical_11_14_aisle_0_short_2_.right_arm = {1.51, -1.57, 2.8, -1.44, 3.14, 0};
 
     // --blue - logical camera 15
-    logicalCamera14_2_.gantry = {-15.11, -4.10, -1.57};
-    logicalCamera14_2_.left_arm = {0, -2.05, 1.57, -2.65, -1.57, 0};
-    logicalCamera14_2_.right_arm = {1.51, -1.57, 2.8, -1.44, 3.14, 0};
+    logical_11_14_aisle_0_long_2_.gantry = {-15.11, -4.10, -1.57};
+    logical_11_14_aisle_0_long_2_.left_arm = {0, -2.05, 1.57, -2.65, -1.57, 0};
+    logical_11_14_aisle_0_long_2_.right_arm = {1.51, -1.57, 2.8, -1.44, 3.14, 0};
 
+
+    logical_11_14_aisle_1_short_.gantry = {0, -1.46, 3.14};
+    logical_11_14_aisle_1_short_.left_arm = {-1.48, -2.89, -1.74, -1.72, 0, 0};
+    logical_11_14_aisle_1_short_.right_arm = {1.49, -0.34, 1.74, -1.53, 3.14, 0};
+
+    logical_11_14_aisle_1_short_1_.gantry = {-14, -1.46, 3.14};
+    logical_11_14_aisle_1_short_1_.left_arm = {-1.48, -2.89, -1.74, -1.72, 0, 0};
+    logical_11_14_aisle_1_short_1_.right_arm = {1.49, -0.34, 1.74, -1.53, 3.14, 0};
+
+    logical_11_14_aisle_1_short_2_.gantry = {-14.3, -1.2, 1.57};
+    logical_11_14_aisle_1_short_2_.left_arm = {0, -2.05, 1.57, -2.65, -1.57, 0};
+    logical_11_14_aisle_1_short_2_.right_arm = {1.51, -1.57, 2.8, -1.44, 3.14, 0};
+
+    // --blue - logical camera 15
+    logical_11_14_aisle_1_long_2_.gantry = {-14.3, -1.9, 1.57};
+    logical_11_14_aisle_1_long_2_.left_arm = {0, -2.05, 1.57, -2.65, -1.57, 0};
+    logical_11_14_aisle_1_long_2_.right_arm = {1.51, -1.57, 2.8, -1.44, 3.14, 0};
+
+
+    logical_12_15_aisle_2_short_.gantry = {0, 1.54, 3.14};
+    logical_12_15_aisle_2_short_.left_arm = {-1.48, -2.89, -1.74, -1.72, 0, 0};
+    logical_12_15_aisle_2_short_.right_arm = {1.49, -0.34, 1.74, -1.53, 3.14, 0};
+
+    logical_12_15_aisle_2_short_1_.gantry = {-14, 1.54, 3.14};
+    logical_12_15_aisle_2_short_1_.left_arm = {-1.48, -2.89, -1.74, -1.72, 0, 0};
+    logical_12_15_aisle_2_short_1_.right_arm = {1.49, -0.34, 1.74, -1.53, 3.14, 0};
+
+    logical_12_15_aisle_2_short_2_.gantry = {-14.3, 1.8, 1.57};
+    logical_12_15_aisle_2_short_2_.left_arm = {0, -2.05, 1.57, -2.65, -1.57, 0};
+    logical_12_15_aisle_2_short_2_.right_arm = {1.51, -1.57, 2.8, -1.44, 3.14, 0};
+
+    // --blue - logical camera 15
+    logical_12_15_aisle_2_long_2_.gantry = {-14.3, 1.1, 1.57};
+    logical_12_15_aisle_2_long_2_.left_arm = {0, -2.05, 1.57, -2.65, -1.57, 0};
+    logical_12_15_aisle_2_long_2_.right_arm = {1.51, -1.57, 2.8, -1.44, 3.14, 0};
+
+
+    logical_13_16_aisle_3_short_.gantry = {0, 4.54, 3.14};
+    logical_13_16_aisle_3_short_.left_arm = {-1.48, -2.89, -1.74, -1.72, 0, 0};
+    logical_13_16_aisle_3_short_.right_arm = {1.49, -0.34, 1.74, -1.53, 3.14, 0};
+
+    logical_13_16_aisle_3_short_1_.gantry = {-14, 4.54, 3.14};
+    logical_13_16_aisle_3_short_1_.left_arm = {-1.48, -2.89, -1.74, -1.72, 0, 0};
+    logical_13_16_aisle_3_short_1_.right_arm = {1.49, -0.34, 1.74, -1.53, 3.14, 0};
+
+    logical_13_16_aisle_3_short_2_.gantry = {-14.3, 4.8, 1.57};
+    logical_13_16_aisle_3_short_2_.left_arm = {0, -2.05, 1.57, -2.65, -1.57, 0};
+    logical_13_16_aisle_3_short_2_.right_arm = {1.51, -1.57, 2.8, -1.44, 3.14, 0};
+
+    // --blue - logical camera 15
+    logical_13_16_aisle_3_long_2_.gantry = {-14.3, 4.1, 1.57};
+    logical_13_16_aisle_3_long_2_.left_arm = {0, -2.05, 1.57, -2.65, -1.57, 0};
+    logical_13_16_aisle_3_long_2_.right_arm = {1.51, -1.57, 2.8, -1.44, 3.14, 0};
 
 
 
@@ -1193,7 +1245,13 @@ void GantryControl::moveToPart(part my_part) {
   auto gantryConfiguration = full_robot_group_.getCurrentJointValues();
   ROS_INFO_STREAM("gNTRY" << gantryConfiguration[2]);
 
-  gantryConfiguration[0] = my_part.pose.position.x - 0.2;
+    if(gantryConfiguration[2] < -1.50 && gantryConfiguration[2] > -1.60) {
+        gantryConfiguration[0] = my_part.pose.position.x - 0.2;
+    }
+    else if(gantryConfiguration[2] > 1.50 && gantryConfiguration[2] < 1.60) {
+        gantryConfiguration[0] = my_part.pose.position.x + 0.2;
+    }
+//  gantryConfiguration[0] = my_part.pose.position.x - 0.2;
   full_robot_group_.setJointValueTarget(gantryConfiguration);
   full_robot_group_.move();
 
