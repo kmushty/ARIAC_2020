@@ -614,6 +614,35 @@ void GantryControl::init()
     logical_13_16_aisle_3_long_2_.left_arm = {0, -2.05, 1.57, -2.65, -1.57, 0};
     logical_13_16_aisle_3_long_2_.right_arm = {1.51, -1.57, 2.8, -1.44, 3.14, 0};
 
+
+
+
+    logical_0_4_short_.gantry = {4.52, -1.7, 3.14};
+    logical_0_4_short_.left_arm = {-1.48, -2.89, -1.74, -1.72, 0, 0};
+    logical_0_4_short_.right_arm = {1.49, -0.34, 1.74, -1.53, 3.14, 0};
+
+    logical_0_4_short_1_.gantry = {4.52, -1.7, 1.57};
+    logical_0_4_short_1_.left_arm = {0, -2.05, 1.57, -2.65, -1.57, 0};
+    logical_0_4_short_1_.right_arm = {1.51, -1.57, 2.8, -1.44, 3.14, 0};
+
+    logical_0_4_long_1_.gantry = {4.52, -2.45, 1.57};
+    logical_0_4_long_1_.left_arm = {0, -2.05, 1.57, -2.65, -1.57, 0};
+    logical_0_4_long_1_.right_arm = {1.51, -1.57, 2.8, -1.44, 3.14, 0};
+
+    logical_3_7_short_.gantry = {3.8, 1.70, 0};
+    logical_3_7_short_.left_arm = {-1.48, -2.89, -1.74, -1.72, 0, 0};
+    logical_3_7_short_.right_arm = {1.49, -0.34, 1.74, -1.53, 3.14, 0};
+
+    logical_3_7_short_1_.gantry = {3.8, 1.70, -1.57};
+    logical_3_7_short_1_.left_arm = {0, -2.05, 1.57, -2.65, -1.57, 0};
+    logical_3_7_short_1_.right_arm = {1.51, -1.57, 2.8, -1.44, 3.14, 0};
+
+    logical_3_7_long_1_.gantry = {3.8, 2.45, -1.57};
+    logical_3_7_long_1_.left_arm = {0, -2.05, 1.57, -2.65, -1.57, 0};
+    logical_3_7_long_1_.right_arm = {1.51, -1.57, 2.8, -1.44, 3.14, 0};
+
+
+
     //    logicalCamera12_2_.gantry = {-13.78, -1.85, -1.57};;
     //    logicalCamera12_2_.left_arm = {0, -2.01, 1.63, -2.76, -1.57, 0};
     //    logicalCamera12_2_.right_arm = {1.25, -3.27, -1.13, 0.88, -0.13, 0};
@@ -633,7 +662,6 @@ void GantryControl::init()
     agv2_.gantry = {0.6, 6.9, PI};
     agv2_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
     agv2_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
-
 //    agv2_.gantry = {0, 6.30, 0};
 //    agv2_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
 //    agv2_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};

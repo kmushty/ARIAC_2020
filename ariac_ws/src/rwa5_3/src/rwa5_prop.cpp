@@ -135,6 +135,12 @@ void initWayPoints(std::map<std::string,std::vector<PresetLocation>> &presetLoc,
     presetLoc["logical_camera_5"] = {gantry.start_};
     presetLoc["logical_camera_6"] = {gantry.start_};
 
+    presetLoc["logical_camera_0"] = {gantry.logical_0_4_short_, gantry.logical_0_4_long_1_};
+    presetLoc["logical_camera_4"] = {gantry.logical_0_4_short_, gantry.logical_0_4_short_1_};
+    presetLoc["logical_camera_3"] = {gantry.logical_3_7_short_, gantry.logical_3_7_short_1_};
+    presetLoc["logical_camera_7"] = {gantry.logical_3_7_short_, gantry.logical_3_7_long_1_};
+
+
 
     // useful presetloc
     presetLoc["start"] = {gantry.start_};                                                                     

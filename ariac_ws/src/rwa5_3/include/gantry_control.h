@@ -179,6 +179,12 @@ class GantryControl {
     logical_13_16_aisle_3_short logical_13_16_aisle_3_short_, logical_13_16_aisle_3_short_1_, logical_13_16_aisle_3_short_2_;
     logical_13_16_aisle_3_long logical_13_16_aisle_3_long_2_;
 
+    logical_0_4_short logical_0_4_short_, logical_0_4_short_1_;
+    logical_0_4_long logical_0_4_long_1_;
+
+    logical_3_7_short logical_3_7_short_, logical_3_7_short_1_;
+    logical_3_7_long logical_3_7_long_1_;
+
 
 
   private:
