@@ -129,6 +129,11 @@ void initWayPoints(std::map<std::string,std::vector<PresetLocation>> &presetLoc,
     presetLoc["logical_camera_13"] = {gantry.logical_13_16_aisle_3_short_, gantry.logical_13_16_aisle_3_short_1_, gantry.logical_13_16_aisle_3_long_2_};
     presetLoc["logical_camera_16"] = {gantry.logical_13_16_aisle_3_short_, gantry.logical_13_16_aisle_3_short_1_, gantry.logical_13_16_aisle_3_short_2_};
 
+    
+    presetLoc["logical_camera_1"] = {gantry.start_};
+    presetLoc["logical_camera_2"] = {gantry.start_};
+    presetLoc["logical_camera_5"] = {gantry.start_};
+    presetLoc["logical_camera_6"] = {gantry.start_};
 
 
     // useful presetloc
@@ -167,7 +172,9 @@ void initWayPoints(std::map<std::string,std::vector<PresetLocation>> &presetLoc,
 //    presetLoc["right_gap_2"] = {gantry.right_gap_default_, gantry.right_gap_2_2_, gantry.right_gap_2_3_};
     presetLoc["right_gap_2"] = {gantry.shelf8_obs_blue1_, gantry.shelf8_obs_blue2_, gantry.shelf8_obs_blue3_};
     presetLoc["right_gap_3"] = {gantry.right_gap_default_, gantry.right_gap_3_2_, gantry.right_gap_3_3_};
-
+    
+    
+     
     //conveyor
     presetLoc["conveyorPart_1"] = {gantry.bin13_1_};
     presetLoc["conveyorPart_2"] = {gantry.bin13_2_};
@@ -188,11 +195,12 @@ void moveToLocation2(std::map<std::string,std::vector<PresetLocation>> &presetLo
     auto vec = presetLoc[my_part.logicalCameraName];
     int count =0;
     for(auto waypoint :vec){
-        gantry.goToPresetLocation(waypoint);
-//        ros::Duration(10).sleep();
-        ROS_INFO_STREAM("iiiiiiiin way point");
-    }
-    gantry.moveToPart(my_part);
+          gantry.goToPresetLocation(waypoint);
+  //        ros::Duration(10).sleep();
+          ROS_INFO_STREAM("iiiiiiiin way point");
+     }
+
+     gantry.moveToPart(my_part);
     //modify to pick part
 }
 

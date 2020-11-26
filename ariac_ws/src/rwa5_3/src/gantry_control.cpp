@@ -1244,16 +1244,23 @@ bool GantryControl::send_command(trajectory_msgs::JointTrajectory command_msg) {
 void GantryControl::moveToPart(part my_part) {
   auto gantryConfiguration = full_robot_group_.getCurrentJointValues();
   ROS_INFO_STREAM("gNTRY" << gantryConfiguration[2]);
-
-    if(gantryConfiguration[2] < -1.50 && gantryConfiguration[2] > -1.60) {
-        gantryConfiguration[0] = my_part.pose.position.x - 0.2;
-    }
-    else if(gantryConfiguration[2] > 1.50 && gantryConfiguration[2] < 1.60) {
-        gantryConfiguration[0] = my_part.pose.position.x + 0.2;
-    }
-//  gantryConfiguration[0] = my_part.pose.position.x - 0.2;
+   
+   //shelf logical cameras
+   if(my_part.logicalCameraName != "logical_camera_1" &&   my_part.logicalCameraName != "logical_camera_2" &&
+      my_part.logicalCameraName != "logical_camera_5" &&   my_part.logicalCameraName != "logical_camera_6") {
+      if(gantryConfiguration[2] < -1.50 && gantryConfiguration[2] > -1.60) {
+          gantryConfiguration[0] = my_part.pose.position.x - 0.2;
+      }
+      else if(gantryConfiguration[2] > 1.50 && gantryConfiguration[2] < 1.60) {
+          gantryConfiguration[0] = my_part.pose.position.x + 0.2;
+      } 
+   } else{                        //bin_logical cameras
+         gantryConfiguration[0] = my_part.pose.position.x - 0.2;
+         gantryConfiguration[1] = -1*my_part.pose.position.y;
+   }
   full_robot_group_.setJointValueTarget(gantryConfiguration);
   full_robot_group_.move();
+
 
 //  goToPresetLocation(logicalCamera12_1_);
 //  goToPresetLocation(logicalCamera12_2_);
