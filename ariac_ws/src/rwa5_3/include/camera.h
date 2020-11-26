@@ -16,6 +16,7 @@
 #include "boost/bind.hpp"
 #include <cmath>
 #include "utils.h"
+#include "competition.h"
 
 
 const int NUM_LOGICAL_CAMERAS = 17;

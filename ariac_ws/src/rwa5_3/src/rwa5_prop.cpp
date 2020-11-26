@@ -1082,13 +1082,16 @@ int main(int argc, char ** argv) {
 
                 //process parts on conveyor belt if parts are detected
                 while(true) {
-                  ros::Duration(10).sleep();
-                  if(!ConveyorFlag && camera.get_conveyor_detected_parts().size()>0) {
-                      ROS_INFO_STREAM("processing conveyor belt");
-                      pickPartsFromConveyor2(camera, comp, gantry, prod, numPickParts);
-                      ConveyorFlag = true;
-                      camera.reset_conveyor_logical_camera();
-                   }
+                    ROS_INFO_STREAM("Inside Conveyor");
+                    ROS_INFO_STREAM(ConveyorFlag);
+                    ROS_INFO_STREAM(camera.get_conveyor_detected_parts().size());
+                    ros::Duration(10).sleep();
+                    if(!ConveyorFlag && camera.get_conveyor_detected_parts().size()>0) {
+                          ROS_INFO_STREAM("processing conveyor belt");
+                          pickPartsFromConveyor2(camera, comp, gantry, prod, numPickParts);
+                          ConveyorFlag = true;
+                          camera.reset_conveyor_logical_camera();
+                    }
                 }
 
 
