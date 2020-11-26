@@ -61,7 +61,8 @@ shelf8_obs_blue1, shelf8_obs_blue2, shelf8_obs_blue3, shelf8_obs_blue4, shelf8_o
 left_gap_0_2, left_gap_1_2, left_gap_1_3, left_gap_2_2, left_gap_2_3, left_gap_3_2, left_gap_3_3,
 middle_gap_0_2, middle_gap_1_2, middle_gap_1_3, middle_gap_2_2, middle_gap_2_3, middle_gap_3_2, middle_gap_3_3,
 right_gap_0_2, right_gap_1_2, right_gap_1_3, right_gap_2_2, right_gap_2_3, right_gap_3_2, right_gap_3_3,
-left_gap_2_green_1, left_gap_2_green_2, left_gap_2_green_3, right_gap_2_blue_1, right_gap_2_blue_2, right_gap_2_blue_3,bin13_1, bin13_2, bin13_3, bin13_4;
+left_gap_2_green_1, left_gap_2_green_2, left_gap_2_green_3, right_gap_2_blue_1, right_gap_2_blue_2, right_gap_2_blue_3,bin13_1, bin13_2, bin13_3, bin13_4,
+logicalCamera12, logicalCamera15, logicalCamera13, logicalCamera16, logicalCamera11, logicalCamera14;
 
 
 typedef struct Part {

@@ -65,7 +65,7 @@ class GantryControl {
     void presetArmLocation(PresetLocation location);
     void placePart(part part, std::string agv, std::string arm);
     void placeFlippedPart(part part, std::string agv, std::string arm);
-    void movetoPart(part my_part);
+    void moveToPart(part my_part);
 
     //--preset locations;
     start start_;
@@ -162,6 +162,17 @@ class GantryControl {
     right_gap_2_blue_1 right_gap_2_blue_1_;
     right_gap_2_blue_2 right_gap_2_blue_2_;
     right_gap_2_blue_3 right_gap_2_blue_3_;
+
+
+    //final
+    logicalCamera12 logicalCamera12_, logicalCamera12_1_, logicalCamera12_2_;
+    logicalCamera15 logicalCamera15_2_;
+    logicalCamera13 logicalCamera13_, logicalCamera13_1_, logicalCamera13_2_;
+    logicalCamera16 logicalCamera16_2_;
+    logicalCamera11 logicalCamera11_, logicalCamera11_1_, logicalCamera11_2_;
+    logicalCamera14 logicalCamera14_2_;
+
+
 
 
   private:

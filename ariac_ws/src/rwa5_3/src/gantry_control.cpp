@@ -531,6 +531,73 @@ void GantryControl::init() {
     right_gap_2_blue_2_.left_arm = {-1.82, -0.40, 1.82, -1.41, -0.25, 0};
     right_gap_2_blue_2_.right_arm = {0.13, -0.13, 0.00, 0.1, 0, 0};
 
+    // -Final
+//    logicalCamera12_.gantry = {-0.80, -1.54, -1.57};;
+//    logicalCamera12_.left_arm = {-1.82, -0.40, 1.82, -1.41, -0.25, 0};
+//    logicalCamera12_.right_arm = {1.25, -3.27, -1.13, 0.88, -0.13, 0};
+
+    logicalCamera12_.gantry = {0, -1.48, 0};
+    logicalCamera12_.left_arm = {-1.48, -2.89, -1.74, -1.72, 0, 0};
+    logicalCamera12_.right_arm = {1.49, -0.34, 1.74, -1.53, 3.14, 0};
+
+    logicalCamera12_1_.gantry = {-14, -1.48, 0};
+    logicalCamera12_1_.left_arm = {-1.48, -2.89, -1.74, -1.72, 0, 0};
+    logicalCamera12_1_.right_arm = {1.49, -0.34, 1.74, -1.53, 3.14, 0};
+
+    logicalCamera12_2_.gantry = {-14.7, -1.80, -1.57};
+    logicalCamera12_2_.left_arm = {0, -2.05, 1.57, -2.65, -1.57, 0};
+    logicalCamera12_2_.right_arm = {1.51, -1.57, 2.8, -1.44, 3.14, 0};
+
+
+    logicalCamera15_2_.gantry = {-15.11, -1.10, -1.57};
+    logicalCamera15_2_.left_arm = {0, -2.05, 1.57, -2.65, -1.57, 0};
+    logicalCamera15_2_.right_arm = {1.51, -1.57, 2.8, -1.44, 3.14, 0};
+
+
+
+    logicalCamera13_.gantry = {0, 1.52, 0};
+    logicalCamera13_.left_arm = {-1.48, -2.89, -1.74, -1.72, 0, 0};
+    logicalCamera13_.right_arm = {1.49, -0.34, 1.74, -1.53, 3.14, 0};
+
+    logicalCamera13_1_.gantry = {-14, 1.52, 0};
+    logicalCamera13_1_.left_arm = {-1.48, -2.89, -1.74, -1.72, 0, 0};
+    logicalCamera13_1_.right_arm = {1.49, -0.34, 1.74, -1.53, 3.14, 0};
+
+    logicalCamera13_2_.gantry = {-14.7, 1.20, -1.57};
+    logicalCamera13_2_.left_arm = {0, -2.05, 1.57, -2.65, -1.57, 0};
+    logicalCamera13_2_.right_arm = {1.51, -1.57, 2.8, -1.44, 3.14, 0};
+
+    logicalCamera16_2_.gantry = {-15.11, 1.90, -1.57};
+    logicalCamera16_2_.left_arm = {0, -2.05, 1.57, -2.65, -1.57, 0};
+    logicalCamera16_2_.right_arm = {1.51, -1.57, 2.8, -1.44, 3.14, 0};
+
+
+
+    logicalCamera11_.gantry = {0, -4.48, 0};
+    logicalCamera11_.left_arm = {-1.48, -2.89, -1.74, -1.72, 0, 0};
+    logicalCamera11_.right_arm = {1.49, -0.34, 1.74, -1.53, 3.14, 0};
+
+    logicalCamera11_1_.gantry = {-14, -4.48, 0};
+    logicalCamera11_1_.left_arm = {-1.48, -2.89, -1.74, -1.72, 0, 0};
+    logicalCamera11_1_.right_arm = {1.49, -0.34, 1.74, -1.53, 3.14, 0};
+
+    logicalCamera11_2_.gantry = {-14.7, -4.80, -1.57};
+    logicalCamera11_2_.left_arm = {0, -2.05, 1.57, -2.65, -1.57, 0};
+    logicalCamera11_2_.right_arm = {1.51, -1.57, 2.8, -1.44, 3.14, 0};
+
+    // --blue - logical camera 15
+    logicalCamera14_2_.gantry = {-15.11, -4.10, -1.57};
+    logicalCamera14_2_.left_arm = {0, -2.05, 1.57, -2.65, -1.57, 0};
+    logicalCamera14_2_.right_arm = {1.51, -1.57, 2.8, -1.44, 3.14, 0};
+
+
+
+
+//    logicalCamera12_2_.gantry = {-13.78, -1.85, -1.57};;
+//    logicalCamera12_2_.left_arm = {0, -2.01, 1.63, -2.76, -1.57, 0};
+//    logicalCamera12_2_.right_arm = {1.25, -3.27, -1.13, 0.88, -0.13, 0};
+
+
 
     /*
      //--start location
@@ -887,20 +954,6 @@ bool GantryControl::pickPart(part part){
 
 //    ros::AsyncSpinner spinner(1);
 //    spinner.start();
-
-    std::vector<double> gantryConfiguration = full_robot_group_.getCurrentJointValues();
-    ROS_INFO_STREAM("gNTRY" << gantryConfiguration[2]);
-    if(gantryConfiguration[2] < 0.2 && gantryConfiguration[2] > -0.2) {
-        gantryConfiguration[1] = -1 * (part.pose.position.y + 1);
-        gantryConfiguration[0] = part.pose.position.x - 0.7;
-    }
-    else if(gantryConfiguration[2] > 3 && gantryConfiguration[2] < 3.2) {
-        gantryConfiguration[1] = -1 * (part.pose.position.y - 0.7);
-        gantryConfiguration[0] = part.pose.position.x + 0.7;
-    }
-    full_robot_group_.setJointValueTarget(gantryConfiguration);
-    full_robot_group_.move();
-
 //    left_arm_group_.setPoseReferenceFrame("world");
     geometry_msgs::Pose currentPose = left_arm_group_.getCurrentPose().pose;
 
@@ -1140,11 +1193,12 @@ void GantryControl::moveToPart(part my_part) {
   auto gantryConfiguration = full_robot_group_.getCurrentJointValues();
   ROS_INFO_STREAM("gNTRY" << gantryConfiguration[2]);
 
-  gantryConfiguration[0] = my_part.pose.position.x;
-
- //change gantry
+  gantryConfiguration[0] = my_part.pose.position.x - 0.2;
+  full_robot_group_.setJointValueTarget(gantryConfiguration);
   full_robot_group_.move();
-  
+
+//  goToPresetLocation(logicalCamera12_1_);
+//  goToPresetLocation(logicalCamera12_2_);
 
 
 

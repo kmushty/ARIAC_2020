@@ -103,16 +103,23 @@ void initWayPoints(std::map<std::string,std::vector<PresetLocation>> &presetLoc,
     // waypoints from start position position to logical_camera
     presetLoc["logical_camera_2"] = {gantry.bin16_};                                                          
     presetLoc["logical_camera_6"] = {gantry.bin13_};
-    presetLoc["logical_camera_11"] = {gantry.shelf5_1_, gantry.shelf5_2_, gantry.shelf5_3_};
+//    presetLoc["logical_camera_11"] = {gantry.shelf5_1_, gantry.shelf5_2_, gantry.shelf5_3_};
 //    presetLoc["logical_camera_12"] = {gantry.shelf8_1_, gantry.shelf8_2_, gantry.shelf8_3_};
-    presetLoc["logical_camera_14"] = {gantry.shelf5_1_, gantry.shelf5_4_, gantry.shelf5_5_};
+//    presetLoc["logical_camera_14"] = {gantry.shelf5_1_, gantry.shelf5_4_, gantry.shelf5_5_};
 //    presetLoc["logical_camera_15"] = {gantry.shelf8_1_, gantry.shelf8_2_, gantry.shelf8_3_};
-    presetLoc["logical_camera_13"] = {gantry.shelf11_1_, gantry.shelf11_2_, gantry.shelf11_3_};
-    presetLoc["logical_camera_16"] = {gantry.shelf11_1_, gantry.shelf11_2_, gantry.shelf11_3_};
-    presetLoc["logical_camera_15"] = {gantry.shelf8_obs_blue1_, gantry.shelf8_obs_blue2_, gantry.shelf8_obs_blue3_, gantry.right_gap_2_blue_1_, gantry.right_gap_2_blue_2_};
-    presetLoc["logical_camera_12"] = {gantry.shelf8_obs_green1_, gantry.shelf8_obs_green2_, gantry.shelf8_obs_green3_, gantry.left_gap_2_green_1_, gantry.left_gap_2_green_2_};
+//    presetLoc["logical_camera_13"] = {gantry.shelf11_1_, gantry.shelf11_2_, gantry.shelf11_3_};
+//    presetLoc["logical_camera_16"] = {gantry.shelf11_1_, gantry.shelf11_2_, gantry.shelf11_3_};
+//    presetLoc["logical_camera_15"] = {gantry.shelf8_obs_blue1_, gantry.shelf8_obs_blue2_, gantry.shelf8_obs_blue3_, gantry.right_gap_2_blue_1_, gantry.right_gap_2_blue_2_};
+//    presetLoc["logical_camera_12"] = {gantry.shelf8_obs_green1_, gantry.shelf8_obs_green2_, gantry.shelf8_obs_green3_, gantry.left_gap_2_green_1_, gantry.left_gap_2_green_2_};
 //    presetLoc["logical_camera_15"] = {gantry.right_gap_2_blue_1_, gantry.right_gap_2_blue_2_};
 //    presetLoc["logical_camera_12"] = {gantry.left_gap_2_green_1_, gantry.left_gap_2_green_2_};
+    presetLoc["logical_camera_12"] = {gantry.logicalCamera12_, gantry.logicalCamera12_1_, gantry.logicalCamera12_2_};
+    presetLoc["logical_camera_15"] = {gantry.logicalCamera12_, gantry.logicalCamera12_1_, gantry.logicalCamera15_2_};
+    presetLoc["logical_camera_13"] = {gantry.logicalCamera13_, gantry.logicalCamera13_1_, gantry.logicalCamera13_2_};
+    presetLoc["logical_camera_16"] = {gantry.logicalCamera13_, gantry.logicalCamera13_1_, gantry.logicalCamera16_2_};
+    presetLoc["logical_camera_11"] = {gantry.logicalCamera11_, gantry.logicalCamera11_1_, gantry.logicalCamera11_2_};
+    presetLoc["logical_camera_14"] = {gantry.logicalCamera11_, gantry.logicalCamera11_1_, gantry.logicalCamera14_2_};
+
 
 
 
@@ -169,14 +176,16 @@ void moveToLocation(std::map<std::string,std::vector<PresetLocation>> &presetLoc
         gantry.goToPresetLocation(waypoint);
 }
 
-void moveToLocation2(std::map<std::string,std::vector<PresetLocation>> &presetLoc, part part,GantryControl &gantry){
-    auto vec = presetLoc[part.logicalCameraName];
+void moveToLocation2(std::map<std::string,std::vector<PresetLocation>> &presetLoc, part my_part,GantryControl &gantry){
+    auto vec = presetLoc[my_part.logicalCameraName];
+    int count =0;
     for(auto waypoint :vec){
         gantry.goToPresetLocation(waypoint);
-        break;
+//        ros::Duration(10).sleep();
+        ROS_INFO_STREAM("iiiiiiiin way point");
     }
-    std::vector<double> gantryConfiguration =  full_robot_group_.getCurrentJointValues();
-
+    gantry.moveToPart(my_part);
+    //modify to pick part
 }
 
 void retraceSteps(std::map<std::string,std::vector<PresetLocation>> &presetLoc, std::string location,GantryControl &gantry) {
@@ -650,9 +659,10 @@ void processPart(product prod, GantryControl &gantry, Camera &camera, Competitio
                     planAndExecutePath( prod, my_part, presetLoc, camera, gantry, comp, parts.second.logicalCameraName, aisle_num);
                 }
                 else {
-                    moveToLocation(presetLoc, parts.second.logicalCameraName, gantry);
+                    moveToLocation2(presetLoc, my_part, gantry);
+//                    gantry.moveToPart(my_part);
                     gantry.pickPart(my_part);
-                    moveFromLocationToStart(presetLoc, parts.second.logicalCameraName, gantry);
+                    moveFromLocationToStart(presetLoc, my_part.logicalCameraName, gantry);
                 }
 
 

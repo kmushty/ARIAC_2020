@@ -34,5 +34,9 @@ TODO List
 
 
 
+1. Make the preset for green  -- without obs
+2. Make the preset for blue   -- without obs
+
+
 
 
