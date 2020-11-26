@@ -988,6 +988,7 @@ int main(int argc, char ** argv) {
 
     std::string c_state = comp.getCompetitionState();
     comp.getClock();
+    comp_ref = &comp;
 
     GantryControl gantry(node);                                                                              //initialize gantry
     gantry.init();
