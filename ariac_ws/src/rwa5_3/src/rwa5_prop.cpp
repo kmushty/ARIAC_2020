@@ -43,6 +43,9 @@
 const double LENGTH_OF_AISLE = 14.2;
 const int NUM_LOGICAL_CAMERAS_PER_AISLE = 4;
 const int TIMELIMIT_THRESHOLD = 40;
+const std::vector<double> AISLE_Y = {-5,-1.54, 1.54, 5};
+
+
 
 //coordinates obtainted from gazebo
 const double END_LOCATION_X = -16.793;
@@ -62,9 +65,202 @@ std::map<std::string,std::vector<PresetLocation>> presetLoc;
 
 
 
+
+
+
+void initWayPoints(std::map<std::string,std::vector<PresetLocation>> &presetLoc, GantryControl &gantry){
+    /******************************************************************************
+     *     SHELF LOGICAL CAMERAS
+     ******************************************************************************/
+
+    ///////////////////////////////////////////////////////////////////////////////
+    // shelf logical_cameras waypoints associated with aisles
+    // ///////////////////////////////////////////////////////////////////////////
+    
+    // shelf logical_cameras without gaps
+    presetLoc["logical_camera_11_aisle1_long"] = {gantry.logical_11_14_aisle_1_short_, gantry.logical_11_14_aisle_1_short_1_, gantry.logical_11_14_aisle_1_long_2_};
+    presetLoc["logical_camera_11_aisle1_short"] = {gantry.logical_11_14_aisle_1_short_, gantry.logical_11_14_aisle_1_short_1_, gantry.logical_11_14_aisle_1_short_2_};
+    presetLoc["logical_camera_14_aisle1_long"] = {gantry.logical_11_14_aisle_1_short_, gantry.logical_11_14_aisle_1_short_1_, gantry.logical_11_14_aisle_1_long_2_};
+    presetLoc["logical_camera_14_aisle1_short"] = {gantry.logical_11_14_aisle_1_short_, gantry.logical_11_14_aisle_1_short_1_, gantry.logical_11_14_aisle_1_short_2_};
+
+    presetLoc["logical_camera_11_aisle0_long"] =  {gantry.logical_11_14_aisle_0_short_, gantry.logical_11_14_aisle_0_short_1_, gantry.logical_11_14_aisle_0_long_2_};
+    presetLoc["logical_camera_11_aisle0_short"] = {gantry.logical_11_14_aisle_0_short_, gantry.logical_11_14_aisle_0_short_1_, gantry.logical_11_14_aisle_0_short_2_};
+    presetLoc["logical_camera_14_aisle0_long"] =  {gantry.logical_11_14_aisle_0_short_, gantry.logical_11_14_aisle_0_short_1_, gantry.logical_11_14_aisle_0_long_2_};
+    presetLoc["logical_camera_14_aisle0_short"] = {gantry.logical_11_14_aisle_0_short_, gantry.logical_11_14_aisle_0_short_1_, gantry.logical_11_14_aisle_0_short_2_};
+
+
+    presetLoc["logical_camera_12_aisle2_long"] =  {gantry.logical_12_15_aisle_2_short_, gantry.logical_12_15_aisle_2_short_1_, gantry.logical_12_15_aisle_2_long_2_};
+    presetLoc["logical_camera_12_aisle2_short"] = {gantry.logical_12_15_aisle_2_short_, gantry.logical_12_15_aisle_2_short_1_, gantry.logical_12_15_aisle_2_short_2_};
+    presetLoc["logical_camera_15_aisle2_long"] =  {gantry.logical_12_15_aisle_2_short_, gantry.logical_12_15_aisle_2_short_1_, gantry.logical_12_15_aisle_2_long_2_};
+    presetLoc["logical_camera_15_aisle2_short"] = {gantry.logical_12_15_aisle_2_short_, gantry.logical_12_15_aisle_2_short_1_, gantry.logical_12_15_aisle_2_short_2_};
+
+    presetLoc["logical_camera_12_aisle1_long"] =  {gantry.logical_12_15_aisle_1_short_, gantry.logical_12_15_aisle_1_short_1_, gantry.logical_12_15_aisle_1_long_2_};
+    presetLoc["logical_camera_12_aisle1_short"] = {gantry.logical_12_15_aisle_1_short_, gantry.logical_12_15_aisle_1_short_1_, gantry.logical_12_15_aisle_1_short_2_};
+    presetLoc["logical_camera_15_aisle1_long"] =  {gantry.logical_12_15_aisle_1_short_, gantry.logical_12_15_aisle_1_short_1_, gantry.logical_12_15_aisle_1_long_2_};
+    presetLoc["logical_camera_15_aisle1_short"] = {gantry.logical_12_15_aisle_1_short_, gantry.logical_12_15_aisle_1_short_1_, gantry.logical_12_15_aisle_1_short_2_};
+
+
+    presetLoc["logical_camera_13_aisle3_long"] =  {gantry.logical_13_16_aisle_3_short_, gantry.logical_13_16_aisle_3_short_1_, gantry.logical_13_16_aisle_3_long_2_};
+    presetLoc["logical_camera_13_aisle3_short"] = {gantry.logical_13_16_aisle_3_short_, gantry.logical_13_16_aisle_3_short_1_, gantry.logical_13_16_aisle_3_short_2_};
+    presetLoc["logical_camera_16_aisle3_long"] =  {gantry.logical_13_16_aisle_3_short_, gantry.logical_13_16_aisle_3_short_1_, gantry.logical_13_16_aisle_3_long_2_};
+    presetLoc["logical_camera_16_aisle3_short"] = {gantry.logical_13_16_aisle_3_short_, gantry.logical_13_16_aisle_3_short_1_, gantry.logical_13_16_aisle_3_short_2_};
+
+    presetLoc["logical_camera_13_aisle2_long"] =  {gantry.logical_13_16_aisle_2_short_, gantry.logical_13_16_aisle_2_short_1_, gantry.logical_13_16_aisle_2_long_2_};
+    presetLoc["logical_camera_13_aisle2_short"] = {gantry.logical_13_16_aisle_2_short_, gantry.logical_13_16_aisle_2_short_1_, gantry.logical_13_16_aisle_2_short_2_};
+    presetLoc["logical_camera_16_aisle2_long"] =  {gantry.logical_13_16_aisle_2_short_, gantry.logical_13_16_aisle_2_short_1_, gantry.logical_13_16_aisle_2_long_2_};
+    presetLoc["logical_camera_16_aisle2_short"] = {gantry.logical_13_16_aisle_2_short_, gantry.logical_13_16_aisle_2_short_1_, gantry.logical_13_16_aisle_2_short_2_};
+      
+
+    // shelf logical_cameras with gaps 
+    
+    //right gaps
+    presetLoc["right_gap_0_logical_camera_12_long"] =  {gantry.right_gap_default_, gantry.right_gap_0_2_, gantry.logical_12_15_aisle_2_short_1_, gantry.logical_12_15_aisle_2_long_2_};
+    presetLoc["right_gap_0_logical_camera_12_short"] = {gantry.right_gap_default_, gantry.right_gap_0_2_, gantry.logical_12_15_aisle_2_short_1_, gantry.logical_12_15_aisle_2_short_2_};
+    presetLoc["right_gap_0_logical_camera_15_long"] =  {gantry.right_gap_default_, gantry.right_gap_0_2_, gantry.logical_12_15_aisle_2_short_1_, gantry.logical_12_15_aisle_2_long_2_};
+    presetLoc["right_gap_0_logical_camera_15_short"] = {gantry.right_gap_default_, gantry.right_gap_0_2_, gantry.logical_12_15_aisle_2_short_1_, gantry.logical_12_15_aisle_2_short_2_};
+
+    presetLoc["right_gap_1_logical_camera_12_long"] =  {gantry.right_gap_default_, gantry.right_gap_1_2_, gantry.right_gap_1_3_, gantry.logical_12_15_aisle_2_short_1_, gantry.logical_12_15_aisle_2_long_2_};
+    presetLoc["right_gap_1_logical_camera_12_short"] = {gantry.right_gap_default_, gantry.right_gap_1_2_, gantry.right_gap_1_3_, gantry.logical_12_15_aisle_2_short_1_, gantry.logical_12_15_aisle_2_short_2_};
+    presetLoc["right_gap_1_logical_camera_15_long"] =  {gantry.right_gap_default_, gantry.right_gap_1_2_, gantry.right_gap_1_3_, gantry.logical_12_15_aisle_2_short_1_, gantry.logical_12_15_aisle_2_long_2_};
+    presetLoc["right_gap_1_logical_camera_15_short"] = {gantry.right_gap_default_, gantry.right_gap_1_2_, gantry.right_gap_1_3_, gantry.logical_12_15_aisle_2_short_1_, gantry.logical_12_15_aisle_2_short_2_};
+
+    presetLoc["right_gap_2_logical_camera_12_long"] = {gantry.right_gap_default_, gantry.right_gap_2_2_, gantry.right_gap_2_3_, gantry.logical_12_15_aisle_2_short_1_, gantry.logical_12_15_aisle_2_long_2_};
+    presetLoc["right_gap_2_logical_camera_12_short"] = {gantry.right_gap_default_, gantry.right_gap_2_2_, gantry.right_gap_2_3_, gantry.logical_12_15_aisle_2_short_1_, gantry.logical_12_15_aisle_2_short_2_};
+    presetLoc["right_gap_2_logical_camera_15_long"] = {gantry.right_gap_default_, gantry.right_gap_2_2_, gantry.right_gap_2_3_, gantry.logical_12_15_aisle_2_short_1_, gantry.logical_12_15_aisle_2_long_2_};
+    presetLoc["right_gap_2_logical_camera_15_short"] = {gantry.right_gap_default_, gantry.right_gap_2_2_, gantry.right_gap_2_3_, gantry.logical_12_15_aisle_2_short_1_, gantry.logical_12_15_aisle_2_short_2_};
+
+    presetLoc["right_gap_3_logical_camera_12_long"] =  {gantry.right_gap_default_, gantry.right_gap_3_2_, gantry.right_gap_3_3_, gantry.logical_12_15_aisle_2_short_1_, gantry.logical_12_15_aisle_2_long_2_};
+    presetLoc["right_gap_3_logical_camera_12_short"] = {gantry.right_gap_default_, gantry.right_gap_3_2_, gantry.right_gap_3_3_, gantry.logical_12_15_aisle_2_short_1_, gantry.logical_12_15_aisle_2_short_2_};
+    presetLoc["right_gap_3_logical_camera_15_long"] =  {gantry.right_gap_default_, gantry.right_gap_3_2_, gantry.right_gap_3_3_, gantry.logical_12_15_aisle_2_short_1_, gantry.logical_12_15_aisle_2_long_2_};
+    presetLoc["right_gap_3_logical_camera_15_short"] = {gantry.right_gap_default_, gantry.right_gap_3_2_, gantry.right_gap_3_3_, gantry.logical_12_15_aisle_2_short_1_, gantry.logical_12_15_aisle_2_short_2_};
+
+    //left gaps
+    presetLoc["left_gap_0_logical_camera_12_long"] =  {gantry.left_gap_default_, gantry.left_gap_0_2_, gantry.logical_12_15_aisle_1_short_1_, gantry.logical_12_15_aisle_1_long_2_};
+    presetLoc["left_gap_0_logical_camera_12_short"] = {gantry.left_gap_default_, gantry.left_gap_0_2_, gantry.logical_12_15_aisle_1_short_1_, gantry.logical_12_15_aisle_1_short_2_};
+    presetLoc["left_gap_0_logical_camera_15_long"] =  {gantry.left_gap_default_, gantry.left_gap_0_2_, gantry.logical_12_15_aisle_1_short_1_, gantry.logical_12_15_aisle_1_long_2_};
+    presetLoc["left_gap_0_logical_camera_15_short"] = {gantry.left_gap_default_, gantry.left_gap_0_2_, gantry.logical_12_15_aisle_1_short_1_, gantry.logical_12_15_aisle_1_short_2_};
+
+    presetLoc["left_gap_1_logical_camera_12_long"] =  {gantry.left_gap_default_, gantry.left_gap_1_2_, gantry.left_gap_1_3_, gantry.logical_12_15_aisle_1_short_1_, gantry.logical_12_15_aisle_1_long_2_};
+    presetLoc["left_gap_1_logical_camera_12_short"] = {gantry.left_gap_default_, gantry.left_gap_1_2_, gantry.left_gap_1_3_, gantry.logical_12_15_aisle_1_short_1_, gantry.logical_12_15_aisle_1_short_2_};
+    presetLoc["left_gap_1_logical_camera_15_long"] =  {gantry.left_gap_default_, gantry.left_gap_1_2_, gantry.left_gap_1_3_, gantry.logical_12_15_aisle_1_short_1_, gantry.logical_12_15_aisle_1_long_2_};
+    presetLoc["left_gap_1_logical_camera_15_short"] = {gantry.left_gap_default_, gantry.left_gap_1_2_, gantry.left_gap_1_3_, gantry.logical_12_15_aisle_1_short_1_, gantry.logical_12_15_aisle_1_short_2_};
+
+    presetLoc["left_gap_2_logical_camera_12_long"] =  {gantry.left_gap_default_, gantry.left_gap_2_2_, gantry.left_gap_2_3_, gantry.logical_12_15_aisle_1_short_1_, gantry.logical_12_15_aisle_1_long_2_};
+    presetLoc["left_gap_2_logical_camera_12_short"] = {gantry.left_gap_default_, gantry.left_gap_2_2_, gantry.left_gap_2_3_, gantry.logical_12_15_aisle_1_short_1_, gantry.logical_12_15_aisle_1_short_2_};
+    presetLoc["left_gap_2_logical_camera_15_long"] =  {gantry.left_gap_default_, gantry.left_gap_2_2_, gantry.left_gap_2_3_, gantry.logical_12_15_aisle_1_short_1_, gantry.logical_12_15_aisle_1_long_2_};
+    presetLoc["left_gap_2_logical_camera_15_short"] = {gantry.left_gap_default_, gantry.left_gap_2_2_, gantry.left_gap_2_3_, gantry.logical_12_15_aisle_1_short_1_, gantry.logical_12_15_aisle_1_short_2_};
+
+    presetLoc["left_gap_3_logical_camera_12_long"] =  {gantry.left_gap_default_, gantry.left_gap_3_2_, gantry.left_gap_3_3_, gantry.logical_12_15_aisle_1_short_1_, gantry.logical_12_15_aisle_1_long_2_};
+    presetLoc["left_gap_3_logical_camera_12_short"] = {gantry.left_gap_default_, gantry.left_gap_3_2_, gantry.left_gap_3_3_, gantry.logical_12_15_aisle_1_short_1_, gantry.logical_12_15_aisle_1_short_2_};
+    presetLoc["left_gap_3_logical_camera_15_long"] =  {gantry.left_gap_default_, gantry.left_gap_3_2_, gantry.left_gap_3_3_, gantry.logical_12_15_aisle_1_short_1_, gantry.logical_12_15_aisle_1_long_2_};
+    presetLoc["left_gap_3_logical_camera_15_short"] = {gantry.left_gap_default_, gantry.left_gap_3_2_, gantry.left_gap_3_3_, gantry.logical_12_15_aisle_1_short_1_, gantry.logical_12_15_aisle_1_short_2_};
+
+
+    //middle gaps
+    presetLoc["middle_gap_0_logical_camera_13_long"] =  {gantry.middle_gap_default_aisle1_, gantry.middle_gap_0_2_aisle1_, gantry.logical_13_16_aisle_2_short_1_, gantry.logical_13_16_aisle_2_long_2_};
+    presetLoc["middle_gap_0_logical_camera_13_short"] = {gantry.middle_gap_default_aisle1_, gantry.middle_gap_0_2_aisle1_, gantry.logical_13_16_aisle_2_short_1_, gantry.logical_13_16_aisle_2_short_2_};
+    presetLoc["middle_gap_0_logical_camera_16_long"] =  {gantry.middle_gap_default_aisle1_, gantry.middle_gap_0_2_aisle1_, gantry.logical_13_16_aisle_2_short_1_, gantry.logical_13_16_aisle_2_long_2_};
+    presetLoc["middle_gap_0_logical_camera_16_short"] = {gantry.middle_gap_default_aisle1_, gantry.middle_gap_0_2_aisle1_, gantry.logical_13_16_aisle_2_short_1_, gantry.logical_13_16_aisle_2_short_2_};
+
+    presetLoc["middle_gap_1_logical_camera_13_long"] =  {gantry.middle_gap_default_aisle1_, gantry.middle_gap_1_2_aisle1_, gantry.middle_gap_1_3_aisle1_, gantry.logical_13_16_aisle_2_short_1_, gantry.logical_13_16_aisle_2_long_2_};
+    presetLoc["middle_gap_1_logical_camera_13_short"] = {gantry.middle_gap_default_aisle1_, gantry.middle_gap_1_2_aisle1_, gantry.middle_gap_1_3_aisle1_, gantry.logical_13_16_aisle_2_short_1_, gantry.logical_13_16_aisle_2_short_2_};
+    presetLoc["middle_gap_1_logical_camera_16_long"] =  {gantry.middle_gap_default_aisle1_, gantry.middle_gap_1_2_aisle1_, gantry.middle_gap_1_3_aisle1_, gantry.logical_13_16_aisle_2_short_1_, gantry.logical_13_16_aisle_2_long_2_};
+    presetLoc["middle_gap_1_logical_camera_16_short"] = {gantry.middle_gap_default_aisle1_, gantry.middle_gap_1_2_aisle1_, gantry.middle_gap_1_3_aisle1_, gantry.logical_13_16_aisle_2_short_1_, gantry.logical_13_16_aisle_2_short_2_};
+
+    presetLoc["middle_gap_2_logical_camera_13_long"] =  {gantry.middle_gap_default_aisle1_, gantry.middle_gap_2_2_aisle1_, gantry.middle_gap_2_3_aisle1_, gantry.logical_13_16_aisle_2_short_1_, gantry.logical_13_16_aisle_2_long_2_};
+    presetLoc["middle_gap_2_logical_camera_13_short"] = {gantry.middle_gap_default_aisle1_, gantry.middle_gap_2_2_aisle1_, gantry.middle_gap_2_3_aisle1_, gantry.logical_13_16_aisle_2_short_1_, gantry.logical_13_16_aisle_2_short_2_};
+    presetLoc["middle_gap_2_logical_camera_16_long"] =  {gantry.middle_gap_default_aisle1_, gantry.middle_gap_2_2_aisle1_, gantry.middle_gap_2_3_aisle1_, gantry.logical_13_16_aisle_2_short_1_, gantry.logical_13_16_aisle_2_long_2_};
+    presetLoc["middle_gap_2_logical_camera_16_short"] = {gantry.middle_gap_default_aisle1_, gantry.middle_gap_2_2_aisle1_, gantry.middle_gap_2_3_aisle1_, gantry.logical_13_16_aisle_2_short_1_, gantry.logical_13_16_aisle_2_short_2_};
+
+    presetLoc["middle_gap_3_logical_camera_13_long"] =  {gantry.middle_gap_default_aisle1_, gantry.middle_gap_3_2_aisle1_, gantry.middle_gap_3_3_aisle1_, gantry.logical_13_16_aisle_2_short_1_, gantry.logical_13_16_aisle_2_long_2_};
+    presetLoc["middle_gap_3_logical_camera_13_short"] = {gantry.middle_gap_default_aisle1_, gantry.middle_gap_3_2_aisle1_, gantry.middle_gap_3_3_aisle1_, gantry.logical_13_16_aisle_2_short_1_, gantry.logical_13_16_aisle_2_short_2_};
+    presetLoc["middle_gap_3_logical_camera_16_long"] =  {gantry.middle_gap_default_aisle1_, gantry.middle_gap_3_2_aisle1_, gantry.middle_gap_3_3_aisle1_, gantry.logical_13_16_aisle_2_short_1_, gantry.logical_13_16_aisle_2_long_2_};
+    presetLoc["middle_gap_3_logical_camera_16_short"] = {gantry.middle_gap_default_aisle1_, gantry.middle_gap_3_2_aisle1_, gantry.middle_gap_3_3_aisle1_, gantry.logical_13_16_aisle_2_short_1_, gantry.logical_13_16_aisle_2_short_2_};
+
+
+
+    presetLoc["middle_gap_0_logical_camera_11_long"] =  {gantry.middle_gap_default_aisle2_, gantry.middle_gap_0_2_aisle2_, gantry.logical_11_14_aisle_1_short_1_, gantry.logical_11_14_aisle_1_long_2_};
+    presetLoc["middle_gap_0_logical_camera_11_short"] = {gantry.middle_gap_default_aisle2_, gantry.middle_gap_0_2_aisle2_, gantry.logical_11_14_aisle_1_short_1_, gantry.logical_11_14_aisle_1_short_2_};
+    presetLoc["middle_gap_0_logical_camera_14_long"] =  {gantry.middle_gap_default_aisle2_, gantry.middle_gap_0_2_aisle2_, gantry.logical_11_14_aisle_1_short_1_, gantry.logical_11_14_aisle_1_long_2_};
+    presetLoc["middle_gap_0_logical_camera_14_short"] = {gantry.middle_gap_default_aisle2_, gantry.middle_gap_0_2_aisle2_, gantry.logical_11_14_aisle_1_short_1_, gantry.logical_11_14_aisle_1_short_2_};
+
+    presetLoc["middle_gap_1_logical_camera_11_long"] =  {gantry.middle_gap_default_aisle2_, gantry.middle_gap_1_2_aisle2_, gantry.middle_gap_1_3_aisle2_, gantry.logical_11_14_aisle_1_short_1_, gantry.logical_13_16_aisle_1_long_2_};
+    presetLoc["middle_gap_1_logical_camera_11_short"] = {gantry.middle_gap_default_aisle2_, gantry.middle_gap_1_2_aisle2_, gantry.middle_gap_1_3_aisle2_, gantry.logical_11_14_aisle_1_short_1_, gantry.logical_13_16_aisle_1_short_2_};
+    presetLoc["middle_gap_1_logical_camera_14_long"] =  {gantry.middle_gap_default_aisle2_, gantry.middle_gap_1_2_aisle2_, gantry.middle_gap_1_3_aisle2_, gantry.logical_11_14_aisle_1_short_1_, gantry.logical_13_16_aisle_1_long_2_};
+    presetLoc["middle_gap_1_logical_camera_14_short"] = {gantry.middle_gap_default_aisle2_, gantry.middle_gap_1_2_aisle2_, gantry.middle_gap_1_3_aisle2_, gantry.logical_11_14_aisle_1_short_1_, gantry.logical_13_16_aisle_1_short_2_};
+
+    presetLoc["middle_gap_2_logical_camera_11_long"] =  {gantry.middle_gap_default_aisle2_, gantry.middle_gap_2_2_aisle2_, gantry.middle_gap_2_3_aisle2_, gantry.logical_11_14_aisle_1_short_1_, gantry.logical_13_16_aisle_1_long_2_};
+    presetLoc["middle_gap_2_logical_camera_11_short"] = {gantry.middle_gap_default_aisle2_, gantry.middle_gap_2_2_aisle2_, gantry.middle_gap_2_3_aisle2_, gantry.logical_11_14_aisle_1_short_1_, gantry.logical_13_16_aisle_1_short_2_};
+    presetLoc["middle_gap_2_logical_camera_14_long"] =  {gantry.middle_gap_default_aisle2_, gantry.middle_gap_2_2_aisle2_, gantry.middle_gap_2_3_aisle2_, gantry.logical_11_14_aisle_1_short_1_, gantry.logical_13_16_aisle_1_long_2_};
+    presetLoc["middle_gap_2_logical_camera_14_short"] = {gantry.middle_gap_default_aisle2_, gantry.middle_gap_2_2_aisle2_, gantry.middle_gap_2_3_aisle2_, gantry.logical_11_14_aisle_1_short_1_, gantry.logical_13_16_aisle_1_short_2_};
+
+    presetLoc["middle_gap_3_logical_camera_11_long"] =  {gantry.middle_gap_default_aisle2_, gantry.middle_gap_3_2_aisle2_, gantry.middle_gap_3_3_aisle2_, gantry.logical_11_14_aisle_1_short_1_, gantry.logical_13_16_aisle_1_long_2_};
+    presetLoc["middle_gap_3_logical_camera_11_short"] = {gantry.middle_gap_default_aisle2_, gantry.middle_gap_3_2_aisle2_, gantry.middle_gap_3_3_aisle2_, gantry.logical_11_14_aisle_1_short_1_, gantry.logical_13_16_aisle_1_short_2_};
+    presetLoc["middle_gap_3_logical_camera_14_long"] =  {gantry.middle_gap_default_aisle2_, gantry.middle_gap_3_2_aisle2_, gantry.middle_gap_3_3_aisle2_, gantry.logical_11_14_aisle_1_short_1_, gantry.logical_13_16_aisle_1_long_2_};
+    presetLoc["middle_gap_3_logical_camera_14_short"] = {gantry.middle_gap_default_aisle2_, gantry.middle_gap_3_2_aisle2_, gantry.middle_gap_3_3_aisle2_, gantry.logical_11_14_aisle_1_short_1_, gantry.logical_13_16_aisle_1_short_2_};
+
+
+    ///////////////////////////////////////////////////////////////////////////////
+    // shelf logical_cameras without aisles
+    // ///////////////////////////////////////////////////////////////////////////
+    presetLoc["logical_camera_0_long"] = {gantry.logical_0_4_short_, gantry.logical_0_4_long_1_};
+    presetLoc["logical_camera_0_short"] = {gantry.logical_0_4_short_, gantry.logical_0_4_short_1_};
+    presetLoc["logical_camera_4_long"] = {gantry.logical_0_4_short_, gantry.logical_0_4_long_1_};
+    presetLoc["logical_camera_4_short"] = {gantry.logical_0_4_short_, gantry.logical_0_4_short_1_};
+    
+
+    presetLoc["logical_camera_3_short"] = {gantry.logical_3_7_short_, gantry.logical_3_7_short_1_};
+    presetLoc["logical_camera_3_long"] = {gantry.logical_3_7_short_, gantry.logical_3_7_long_1_};
+    presetLoc["logical_camera_7_short"] = {gantry.logical_3_7_short_, gantry.logical_3_7_short_1_};
+    presetLoc["logical_camera_7_long"] = {gantry.logical_3_7_short_, gantry.logical_3_7_long_1_};
+
+
+    /***********************************************************************
+     *   BIN LOGICAL CAMERAS
+     **********************************************************************/
+     presetLoc["logical_camera_1"] = {gantry.start_};
+     presetLoc["logical_camera_2"] = {gantry.start_};
+     presetLoc["logical_camera_5"] = {gantry.start_};
+     presetLoc["logical_camera_6"] = {gantry.start_};
+
+
+
+    /*******************************************************************
+     *   USEFUL PRESET LOCATIONS
+     ******************************************************************/
+    presetLoc["start"] = {gantry.start_};                                                                     
+    presetLoc["agv2"] = {gantry.agv2_};
+    presetLoc["agv1"] = {gantry.agv1_};
+    presetLoc["agv2_faultyG"] = {gantry.agv2_faultyG_};
+    presetLoc["agv1_faultyG"] = {gantry.agv1_faultyG_};
+    presetLoc["flipped_pulley_agv2"] = {gantry.agv2_go_to_flipped_pulley_};//verified
+    presetLoc["flipped_pulley_agv1"] = {gantry.agv1_go_to_flipped_pulley_};//verified
+    presetLoc["agv2_flipped_final"]  = {gantry.agv2_flipped1_};//verified
+    presetLoc["agv1_flipped_final"]  = {gantry.agv1_flipped1_};//verified
+    presetLoc["agv2_right_arm_drop_flip"]  = {gantry.agv2_flipped_};//verified
+    presetLoc["agv1_right_arm_drop_flip"]  = {gantry.agv1_flipped_};//verified
+    presetLoc["agv2_left_arm_drop"]  = {gantry.agv2_drop_};//verified
+    presetLoc["agv1_left_arm_drop"]  = {gantry.agv1_drop_};//verified
+    presetLoc["movingPart"] = {gantry.movingPart_};
+    presetLoc["pickmovingPart"] = {gantry.movingPart1_, gantry.movingPart_};
+    presetLoc["agv1_gasket_part_green"] = {gantry.agv1_gasket_part_green_};
+    presetLoc["agv2_disk_part_green"] = {gantry.agv2_};
+
+    
+    /**********************************************************************
+     *    CONVEYOR PRESET LOCATIONS
+     ********************************************************************/
+    presetLoc["conveyorPart_1"] = {gantry.bin13_1_};
+    presetLoc["conveyorPart_2"] = {gantry.bin13_2_};
+    presetLoc["conveyorPart_3"] = {gantry.bin13_3_};
+    presetLoc["conveyorPart_4"] = {gantry.bin13_4_};
+}
+
+
 bool compIsAlmostOver(int threshold, Competition &comp){
    return std::abs(comp.getClock()-500) <= threshold;
 }
+
 
 void agvDeliveryService(std::string agv_id, ros::ServiceClient &agvDelivery1, ros::ServiceClient &agvDelivery2, std::string shipmentType){
     
@@ -98,113 +294,14 @@ void agvDeliveryService(std::string agv_id, ros::ServiceClient &agvDelivery1, ro
 
 
 
-void initWayPoints(std::map<std::string,std::vector<PresetLocation>> &presetLoc, GantryControl &gantry){
-    
-    // waypoints from start position position to logical_camera
-    presetLoc["logical_camera_2"] = {gantry.bin16_};                                                          
-    presetLoc["logical_camera_6"] = {gantry.bin13_};
-//    presetLoc["logical_camera_11"] = {gantry.shelf5_1_, gantry.shelf5_2_, gantry.shelf5_3_};
-//    presetLoc["logical_camera_12"] = {gantry.shelf8_1_, gantry.shelf8_2_, gantry.shelf8_3_};
-//    presetLoc["logical_camera_14"] = {gantry.shelf5_1_, gantry.shelf5_4_, gantry.shelf5_5_};
-//    presetLoc["logical_camera_15"] = {gantry.shelf8_1_, gantry.shelf8_2_, gantry.shelf8_3_};
-//    presetLoc["logical_camera_13"] = {gantry.shelf11_1_, gantry.shelf11_2_, gantry.shelf11_3_};
-//    presetLoc["logical_camera_16"] = {gantry.shelf11_1_, gantry.shelf11_2_, gantry.shelf11_3_};
-//    presetLoc["logical_camera_15"] = {gantry.shelf8_obs_blue1_, gantry.shelf8_obs_blue2_, gantry.shelf8_obs_blue3_, gantry.right_gap_2_blue_1_, gantry.right_gap_2_blue_2_};
-//    presetLoc["logical_camera_12"] = {gantry.shelf8_obs_green1_, gantry.shelf8_obs_green2_, gantry.shelf8_obs_green3_, gantry.left_gap_2_green_1_, gantry.left_gap_2_green_2_};
-//    presetLoc["logical_camera_15"] = {gantry.right_gap_2_blue_1_, gantry.right_gap_2_blue_2_};
-//    presetLoc["logical_camera_12"] = {gantry.left_gap_2_green_1_, gantry.left_gap_2_green_2_};
-//    presetLoc["logical_camera_12"] = {gantry.logicalCamera12_, gantry.logicalCamera12_1_, gantry.logicalCamera12_2_};
-//    presetLoc["logical_camera_15"] = {gantry.logicalCamera12_, gantry.logicalCamera12_1_, gantry.logicalCamera15_2_};
-//    presetLoc["logical_camera_13"] = {gantry.logicalCamera13_, gantry.logicalCamera13_1_, gantry.logicalCamera13_2_};
-//    presetLoc["logical_camera_16"] = {gantry.logicalCamera13_, gantry.logicalCamera13_1_, gantry.logicalCamera16_2_};
-//    presetLoc["logical_camera_11"] = {gantry.logicalCamera11_, gantry.logicalCamera11_1_, gantry.logicalCamera11_2_};
-//    presetLoc["logical_camera_14"] = {gantry.logicalCamera11_, gantry.logicalCamera11_1_, gantry.logicalCamera14_2_};
-
-//    presetLoc["logical_camera_11"] = {gantry.logical_11_14_aisle_1_short_, gantry.logical_11_14_aisle_1_short_1_, gantry.logical_11_14_aisle_1_long_2_};
-//    presetLoc["logical_camera_14"] = {gantry.logical_11_14_aisle_1_short_, gantry.logical_11_14_aisle_1_short_1_, gantry.logical_11_14_aisle_1_short_2_};
-//
-//    presetLoc["logical_camera_12"] = {gantry.logical_12_15_aisle_2_short_, gantry.logical_12_15_aisle_2_short_1_, gantry.logical_12_15_aisle_2_long_2_};
-//    presetLoc["logical_camera_15"] = {gantry.logical_12_15_aisle_2_short_, gantry.logical_12_15_aisle_2_short_1_, gantry.logical_12_15_aisle_2_short_2_};
-//
-//    presetLoc["logical_camera_13"] = {gantry.logical_13_16_aisle_3_short_, gantry.logical_13_16_aisle_3_short_1_, gantry.logical_13_16_aisle_3_long_2_};
-//    presetLoc["logical_camera_16"] = {gantry.logical_13_16_aisle_3_short_, gantry.logical_13_16_aisle_3_short_1_, gantry.logical_13_16_aisle_3_short_2_};
-
-//    presetLoc["logical_camera_12"] = {gantry.right_gap_default_, gantry.right_gap_2_2_, gantry.right_gap_2_3_, gantry.temp2_, gantry.logical_11_14_aisle_1_short_1_, gantry.logical_11_14_aisle_1_long_2_};
-//    presetLoc["logical_camera_15"] = {gantry.right_gap_default_, gantry.right_gap_2_2_, gantry.right_gap_2_3_, gantry.temp2_, gantry.logical_11_14_aisle_1_short_1_, gantry.logical_11_14_aisle_1_short_2_};
-
-    presetLoc["logical_camera_12"] = {gantry.middle_gap_default_aisle1_, gantry.middle_gap_1_2_aisle1_, gantry.middle_gap_1_3_aisle1_};
-    presetLoc["logical_camera_15"] = {gantry.middle_gap_default_aisle1_, gantry.middle_gap_1_2_aisle1_, gantry.middle_gap_1_3_aisle1_};
-
-
-    presetLoc["logical_camera_1"] = {gantry.start_};
-    presetLoc["logical_camera_2"] = {gantry.start_};
-    presetLoc["logical_camera_5"] = {gantry.start_};
-    presetLoc["logical_camera_6"] = {gantry.start_};
-
-    presetLoc["logical_camera_0"] = {gantry.logical_0_4_short_, gantry.logical_0_4_long_1_};
-    presetLoc["logical_camera_4"] = {gantry.logical_0_4_short_, gantry.logical_0_4_short_1_};
-    presetLoc["logical_camera_3"] = {gantry.logical_3_7_short_, gantry.logical_3_7_short_1_};
-    presetLoc["logical_camera_7"] = {gantry.logical_3_7_short_, gantry.logical_3_7_long_1_};
-
-
-
-    // useful presetloc
-    presetLoc["start"] = {gantry.start_};                                                                     
-    presetLoc["agv2"] = {gantry.agv2_};
-    presetLoc["agv1"] = {gantry.agv1_};
-    presetLoc["agv2_faultyG"] = {gantry.agv2_faultyG_};
-    presetLoc["agv1_faultyG"] = {gantry.agv1_faultyG_};
-    presetLoc["flipped_pulley_agv2"] = {gantry.agv2_go_to_flipped_pulley_};//verified
-    presetLoc["flipped_pulley_agv1"] = {gantry.agv1_go_to_flipped_pulley_};//verified
-    presetLoc["agv2_flipped_final"]  = {gantry.agv2_flipped1_};//verified
-    presetLoc["agv1_flipped_final"]  = {gantry.agv1_flipped1_};//verified
-    presetLoc["agv2_right_arm_drop_flip"]  = {gantry.agv2_flipped_};//verified
-    presetLoc["agv1_right_arm_drop_flip"]  = {gantry.agv1_flipped_};//verified
-    presetLoc["agv2_left_arm_drop"]  = {gantry.agv2_drop_};//verified
-    presetLoc["agv1_left_arm_drop"]  = {gantry.agv1_drop_};//verified
-    presetLoc["movingPart"] = {gantry.movingPart_};
-    presetLoc["pickmovingPart"] = {gantry.movingPart1_, gantry.movingPart_};
-    presetLoc["agv1_gasket_part_green"] = {gantry.agv1_gasket_part_green_};
-    presetLoc["agv2_disk_part_green"] = {gantry.agv2_};
-
-    // gaps
-    presetLoc["left_gap_0"] = {gantry.left_gap_default_, gantry.left_gap_0_2_};
-    presetLoc["left_gap_1"] = {gantry.left_gap_default_, gantry.left_gap_1_2_, gantry.left_gap_1_3_};
-    presetLoc["left_gap_2"] = {gantry.left_gap_default_, gantry.left_gap_2_2_, gantry.left_gap_2_3_};
-//    presetLoc["left_gap_2"] = {gantry.shelf8_obs_green1_, gantry.shelf8_obs_green2_, gantry.shelf8_obs_green3_};
-//    presetLoc["left_gap_3"] = {gantry.left_gap_default_, gantry.left_gap_3_2_, gantry.left_gap_3_3_};
-
-//    presetLoc["middle_gap_0"] = {gantry.middle_gap_default_, gantry.middle_gap_0_2_};
-//    presetLoc["middle_gap_1"] = {gantry.middle_gap_default_, gantry.middle_gap_1_2_, gantry.middle_gap_1_3_};
-//    presetLoc["middle_gap_2"] = {gantry.middle_gap_default_, gantry.middle_gap_2_2_, gantry.middle_gap_2_3_};
-//    presetLoc["middle_gap_3"] = {gantry.middle_gap_default_, gantry.middle_gap_3_2_, gantry.middle_gap_3_3_};
-
-    presetLoc["right_gap_0"] = {gantry.right_gap_default_, gantry.right_gap_0_2_};
-    presetLoc["right_gap_1"] = {gantry.right_gap_default_, gantry.right_gap_1_2_, gantry.right_gap_1_3_};
-    presetLoc["right_gap_2"] = {gantry.right_gap_default_, gantry.right_gap_2_2_, gantry.right_gap_2_3_};
-//    presetLoc["right_gap_2"] = {gantry.shelf8_obs_blue1_, gantry.shelf8_obs_blue2_, gantry.shelf8_obs_blue3_};
-//    presetLoc["right_gap_3"] = {gantry.right_gap_default_, gantry.right_gap_3_2_, gantry.right_gap_3_3_};
-    
-    
-     
-    //conveyor
-    presetLoc["conveyorPart_1"] = {gantry.bin13_1_};
-    presetLoc["conveyorPart_2"] = {gantry.bin13_2_};
-    presetLoc["conveyorPart_3"] = {gantry.bin13_3_};
-    presetLoc["conveyorPart_4"] = {gantry.bin13_4_};
-}
-
-
-
-
 void moveToLocation(std::map<std::string,std::vector<PresetLocation>> &presetLoc, std::string location,GantryControl &gantry){
     auto vec = presetLoc[location];
     for(auto waypoint :vec)
         gantry.goToPresetLocation(waypoint);
 }
 
-void moveToLocation2(std::map<std::string,std::vector<PresetLocation>> &presetLoc, part my_part,GantryControl &gantry){
-    auto vec = presetLoc[my_part.logicalCameraName];
+void moveToLocation2(std::map<std::string,std::vector<PresetLocation>> &presetLoc, part my_part,GantryControl &gantry,std::string location){
+    auto vec = presetLoc[location];
     int count =0;
     for(auto waypoint :vec){
           gantry.goToPresetLocation(waypoint);
@@ -436,25 +533,98 @@ std::vector<std::string> determineGaps(){                                       
 }
 
 
-//TODO this is a temporary code.Need to implement full code considering all edge cases
-std::vector<std::string> planPath(int aisle_num){
-   auto gap = determineGaps();
 
-   ROS_INFO_STREAM("In planPath method");
+
+std::vector<int> closestAislesWithoutObstacles(int aisle_num) {
+
+    std::vector<int> result;
+    int i = aisle_num , j = aisle_num ,closest = 10, index=aisle_num;
+    bool toggle = true;
+    
+    while(i!=0 || j!= 3) {
+      if(!obstacleAssociatedWithAisle[index] && index != aisle_num && abs(index-aisle_num)<= closest){
+             result.push_back(index);
+             closest = abs(index-aisle_num);
+      }
+      if(toggle){
+          index = i;
+          if(i!= 0) i--;
+          toggle = false;
+       }else{
+         index = j;
+         if(j!=3) j++;
+         toggle = true;
+       }
+    }
+    return result;
+}
+
+
+std::string getGapName(std::string gapType){
+
+   auto gaps = determineGaps();
+   for(auto gap: gaps) {
+     std::string token = gap.substr(0,gap.find("-"));
+     if(token == gapType)
+        return gap;
+   }
+   return "None";
+}
+
+
+std::vector<std::string> planPath(int aisle_num, part my_part){
+   std::vector<std::string> plan;
    
-   ROS_INFO_STREAM("printing gaps");
-   ROS_INFO_STREAM("aisle_num " << aisle_num);
-   for(auto a:gap)
-     std::cout << a << std::endl;
+   std::vector<std::string> gapType{"left_gap", "middle_gap", "right_gap"};
+   auto closest_aisles_wo  = closestAislesWithoutObstacles(aisle_num);
+   ROS_INFO_STREAM("In planPath");
 
-   std::vector<std::string> plan;  
-   if(aisle_num == 1)
-      plan.push_back(gap[0]);
-   else
-      plan.push_back(gap[2]);
+   if(closest_aisles_wo.size() == 1) {
+      if(aisle_num = 0){
+           if(closest_aisles_wo[0] == 1)
+               return std::vector<std::string> {"no_gap_needed","-","1","long"};
+           else
+               return std::vector<std::string> {"gap_needed", getGapName("middle_gap"),"2","long"};
+      }else if(aisle_num = 3) {
+           if(closest_aisles_wo[0] == 2)
+               return std::vector<std::string> {"no_gap_needed","-","2","long"};
+           else
+               return std::vector<std::string> {"gap_needed", getGapName("middle_gap"),"2","long"};
+      }else if(aisle_num = 1) {
+            if(closest_aisles_wo[0] == 0){
+               if(abs((abs(my_part.y) - abs(AISLE_Y[0]))) < 2)      // select closest aisle to part
+                   return std::vector<std::string> {"no_gap_needed","-","0","long"};
+               else
+                   return std::vector<std::string> {"gap_needed",getGapName("left_gap"),"0","short"};
+            }
+            else{   //closest aisle is 2
+               if(abs((abs(my_part.y) - abs(AISLE_Y[2]))) < 2)      // select closest aisle to part
+                   return std::vector<std::string> {"no_gap_needed","-","2","long"};
+               else
+                   return std::vector<std::string> {"gap_needed",getGapName("middle_gap"),"2","short"};
+            }
+      }else{ 
+        if(closest_aisles_wo[0] == 1) {
+            if(abs((abs(my_part.y) - abs(AISLE_Y[1]))) < 2)      // select closest aisle to part
+                   return std::vector<std::string> {"no_gap_needed","-","1","long"};
+            else
+                   return std::vector<std::string> {"gap_needed",getGapName("middle_gap"),"1","short"};
+        }
+        else{
+            if(abs((abs(my_part.y) - abs(AISLE_Y[3]))) < 2)      // select closest aisle to part
+                return std::vector<std::string> {"no_gap_needed","-","3","long"};
+            else
+                return std::vector<std::string> {"gap_needed",getGapName("right_gap"),"3","short"};
+         }
+      }
+   }else{
+     for(auto aisle:closest_aisles_wo){
+        if(abs((abs(my_part.y) - abs(AISLE_Y[aisle]))) < 2)      // select closest aisle to part
+          return std::vector<std::string> {"no_gap_needed","-",std::to_string(aisle),"long"};
+     }
+   }
 
-   ROS_INFO_STREAM("Exited planPath method");
-
+   ROS_INFO_STREAM("Exited planPath");
    return plan;
 }
 
@@ -599,33 +769,34 @@ void estimateObstacleAttributes(Camera &camera,int aisle_num) {
 }
 
 
+
 void planAndExecutePath(product prod, part my_part,std::map<std::string, std::vector<PresetLocation>> &presetLoc, 
                         Camera &camera, GantryControl &gantry, Competition &comp, std::string location, int aisle_num) {
 
    ROS_INFO_STREAM("Plan and execute method");
    
-   auto gaps = planPath(aisle_num);
+   auto plan = planPath(aisle_num,my_part);
+   std::string location;
 
-   ROS_INFO_STREAM("is obstacle valid " << obstacleAssociatedWithAisle[aisle_num].is_valid_obstacle);
-   ROS_INFO_STREAM("aisle_num " << aisle_num);
+   if(plan[0] == "no_gap_needed") {
+       location = my_part.logicalCameraName + "_aisle" + plan[2] + "_" + plan[3];
+       moveToLocation(presetLoc, location, gantry);
+       gantry.pickPart(my_part);
 
-   ROS_INFO_STREAM("is obstacle valid "<<obstacleAssociatedWithAisle[aisle_num].is_valid_obstacle);
+       retraceSteps(presetLoc, location, gantry);
+       moveFromLocationToStart(presetLoc, gaps[i], gantry);
+   }
+   else{
+       location = plan[1] + "_" + my_part.logicalCameraName + "_" + plan[3];
+       while(!obstacleAssociatedWithAisle[aisle_num].is_valid_obstacle)
+            estimateObstacleAttributes(camera,aisle_num);
 
-
-   int threshold = 3;
-   for(int i =0; i<gaps.size();i++) {
-      ROS_INFO_STREAM("move to gap:"<< gaps[i]);
-      moveToLocation(presetLoc, gaps[i], gantry);                                            //move to preset location
-      ros::Duration(3).sleep();                                                              //wait for robot to reach gap
-      
-      while(!obstacleAssociatedWithAisle[aisle_num].is_valid_obstacle)
-       estimateObstacleAttributes(camera,aisle_num);
-
-      if(i == gaps.size()-1) {
-          while(true) {
+       while(true) {
                auto vec = estimateLocation(aisle_num, comp.getClock());                      //estimate Location
              
                //TODO instead of 6.0 will need to get x coordinate of gap
+               //      and also make more robust
+               //      Dynamic presetLoc from gap
                if(vec[0] == "toward" && std::abs(std::stod(vec[1])+6.0) <= threshold) {            
                   ROS_INFO_STREAM("Location is " <<  location);
                   moveToLocation(presetLoc, location, gantry);
@@ -634,10 +805,8 @@ void planAndExecutePath(product prod, part my_part,std::map<std::string, std::ve
                   moveFromLocationToStart(presetLoc, gaps[i], gantry);
                   break;
                }
-           }
-       }
-   }
-   ROS_INFO_STREAM("Exited out of Plan and Execute method");
+         }
+    }
 }
 
 
@@ -680,6 +849,7 @@ void processPart(product prod, GantryControl &gantry, Camera &camera, Competitio
 //                camera.removeElement(prod.type, parts.first);
                 
                 int aisle_num = aisleAssociatedWithPart(my_part);
+
                 if (aisle_num != -1 && obstacleInAisle[aisle_num]) {
                     ROS_INFO_STREAM("In process part- obstacle in aisle");
                     ROS_INFO_STREAM(parts.second.logicalCameraName);
@@ -687,10 +857,10 @@ void processPart(product prod, GantryControl &gantry, Camera &camera, Competitio
                     planAndExecutePath( prod, my_part, presetLoc, camera, gantry, comp, parts.second.logicalCameraName, aisle_num);
                 }
                 else {
-                    moveToLocation2(presetLoc, my_part, gantry);
-//                    gantry.moveToPart(my_part);
+                    std::string location = my_part.logicalCameraName + "_aisle" + std::to_string(aisle_num) + "_short_";
+                    moveToLocation2(presetLoc, my_part, gantry, location);
                     gantry.pickPart(my_part);
-                    moveFromLocationToStart(presetLoc, my_part.logicalCameraName, gantry);
+                    moveFromLocationToStart(presetLoc, location, gantry);
                 }
 
 
