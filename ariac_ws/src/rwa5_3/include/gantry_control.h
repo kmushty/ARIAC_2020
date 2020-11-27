@@ -185,6 +185,8 @@ class GantryControl {
     logical_3_7_short logical_3_7_short_, logical_3_7_short_1_;
     logical_3_7_long logical_3_7_long_1_;
 
+    temp temp1_, temp2_;
+
 
 
   private:

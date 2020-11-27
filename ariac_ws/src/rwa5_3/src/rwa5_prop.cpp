@@ -120,16 +120,19 @@ void initWayPoints(std::map<std::string,std::vector<PresetLocation>> &presetLoc,
 //    presetLoc["logical_camera_11"] = {gantry.logicalCamera11_, gantry.logicalCamera11_1_, gantry.logicalCamera11_2_};
 //    presetLoc["logical_camera_14"] = {gantry.logicalCamera11_, gantry.logicalCamera11_1_, gantry.logicalCamera14_2_};
 
-    presetLoc["logical_camera_11"] = {gantry.logical_11_14_aisle_1_short_, gantry.logical_11_14_aisle_1_short_1_, gantry.logical_11_14_aisle_1_long_2_};
-    presetLoc["logical_camera_14"] = {gantry.logical_11_14_aisle_1_short_, gantry.logical_11_14_aisle_1_short_1_, gantry.logical_11_14_aisle_1_short_2_};
+//    presetLoc["logical_camera_11"] = {gantry.logical_11_14_aisle_1_short_, gantry.logical_11_14_aisle_1_short_1_, gantry.logical_11_14_aisle_1_long_2_};
+//    presetLoc["logical_camera_14"] = {gantry.logical_11_14_aisle_1_short_, gantry.logical_11_14_aisle_1_short_1_, gantry.logical_11_14_aisle_1_short_2_};
+//
+//    presetLoc["logical_camera_12"] = {gantry.logical_12_15_aisle_2_short_, gantry.logical_12_15_aisle_2_short_1_, gantry.logical_12_15_aisle_2_long_2_};
+//    presetLoc["logical_camera_15"] = {gantry.logical_12_15_aisle_2_short_, gantry.logical_12_15_aisle_2_short_1_, gantry.logical_12_15_aisle_2_short_2_};
+//
+//    presetLoc["logical_camera_13"] = {gantry.logical_13_16_aisle_3_short_, gantry.logical_13_16_aisle_3_short_1_, gantry.logical_13_16_aisle_3_long_2_};
+//    presetLoc["logical_camera_16"] = {gantry.logical_13_16_aisle_3_short_, gantry.logical_13_16_aisle_3_short_1_, gantry.logical_13_16_aisle_3_short_2_};
 
-    presetLoc["logical_camera_12"] = {gantry.logical_12_15_aisle_2_short_, gantry.logical_12_15_aisle_2_short_1_, gantry.logical_12_15_aisle_2_long_2_};
-    presetLoc["logical_camera_15"] = {gantry.logical_12_15_aisle_2_short_, gantry.logical_12_15_aisle_2_short_1_, gantry.logical_12_15_aisle_2_short_2_};
+    presetLoc["logical_camera_12"] = {gantry.right_gap_default_, gantry.right_gap_2_2_, gantry.right_gap_2_3_, gantry.temp2_, gantry.logical_11_14_aisle_1_short_1_, gantry.logical_11_14_aisle_1_long_2_};
+    presetLoc["logical_camera_15"] = {gantry.right_gap_default_, gantry.right_gap_2_2_, gantry.right_gap_2_3_, gantry.temp2_, gantry.logical_11_14_aisle_1_short_1_, gantry.logical_11_14_aisle_1_short_2_};
 
-    presetLoc["logical_camera_13"] = {gantry.logical_13_16_aisle_3_short_, gantry.logical_13_16_aisle_3_short_1_, gantry.logical_13_16_aisle_3_long_2_};
-    presetLoc["logical_camera_16"] = {gantry.logical_13_16_aisle_3_short_, gantry.logical_13_16_aisle_3_short_1_, gantry.logical_13_16_aisle_3_short_2_};
 
-    
     presetLoc["logical_camera_1"] = {gantry.start_};
     presetLoc["logical_camera_2"] = {gantry.start_};
     presetLoc["logical_camera_5"] = {gantry.start_};
@@ -164,9 +167,9 @@ void initWayPoints(std::map<std::string,std::vector<PresetLocation>> &presetLoc,
     // gaps
     presetLoc["left_gap_0"] = {gantry.left_gap_default_, gantry.left_gap_0_2_};
     presetLoc["left_gap_1"] = {gantry.left_gap_default_, gantry.left_gap_1_2_, gantry.left_gap_1_3_};
-//    presetLoc["left_gap_2"] = {gantry.left_gap_default_, gantry.left_gap_2_2_, gantry.left_gap_2_3_};
-    presetLoc["left_gap_2"] = {gantry.shelf8_obs_green1_, gantry.shelf8_obs_green2_, gantry.shelf8_obs_green3_};
-    presetLoc["left_gap_3"] = {gantry.left_gap_default_, gantry.left_gap_3_2_, gantry.left_gap_3_3_};
+    presetLoc["left_gap_2"] = {gantry.left_gap_default_, gantry.left_gap_2_2_, gantry.left_gap_2_3_};
+//    presetLoc["left_gap_2"] = {gantry.shelf8_obs_green1_, gantry.shelf8_obs_green2_, gantry.shelf8_obs_green3_};
+//    presetLoc["left_gap_3"] = {gantry.left_gap_default_, gantry.left_gap_3_2_, gantry.left_gap_3_3_};
 
     presetLoc["middle_gap_0"] = {gantry.middle_gap_default_, gantry.middle_gap_0_2_};
     presetLoc["middle_gap_1"] = {gantry.middle_gap_default_, gantry.middle_gap_1_2_, gantry.middle_gap_1_3_};
@@ -175,9 +178,9 @@ void initWayPoints(std::map<std::string,std::vector<PresetLocation>> &presetLoc,
 
     presetLoc["right_gap_0"] = {gantry.right_gap_default_, gantry.right_gap_0_2_};
     presetLoc["right_gap_1"] = {gantry.right_gap_default_, gantry.right_gap_1_2_, gantry.right_gap_1_3_};
-//    presetLoc["right_gap_2"] = {gantry.right_gap_default_, gantry.right_gap_2_2_, gantry.right_gap_2_3_};
-    presetLoc["right_gap_2"] = {gantry.shelf8_obs_blue1_, gantry.shelf8_obs_blue2_, gantry.shelf8_obs_blue3_};
-    presetLoc["right_gap_3"] = {gantry.right_gap_default_, gantry.right_gap_3_2_, gantry.right_gap_3_3_};
+    presetLoc["right_gap_2"] = {gantry.right_gap_default_, gantry.right_gap_2_2_, gantry.right_gap_2_3_};
+//    presetLoc["right_gap_2"] = {gantry.shelf8_obs_blue1_, gantry.shelf8_obs_blue2_, gantry.shelf8_obs_blue3_};
+//    presetLoc["right_gap_3"] = {gantry.right_gap_default_, gantry.right_gap_3_2_, gantry.right_gap_3_3_};
     
     
      
@@ -1082,18 +1085,18 @@ int main(int argc, char ** argv) {
                 prod.arm_name = "left_arm";
 
                 //process parts on conveyor belt if parts are detected
-                while(true) {
-                    ROS_INFO_STREAM("Inside Conveyor");
-                    ROS_INFO_STREAM(ConveyorFlag);
-                    ROS_INFO_STREAM(camera.get_conveyor_detected_parts().size());
-                    ros::Duration(10).sleep();
-                    if(!ConveyorFlag && camera.get_conveyor_detected_parts().size()>0) {
-                          ROS_INFO_STREAM("processing conveyor belt");
-                          pickPartsFromConveyor2(camera, comp, gantry, prod, numPickParts);
-                          ConveyorFlag = true;
-                          camera.reset_conveyor_logical_camera();
-                    }
-                }
+//                while(true) {
+//                    ROS_INFO_STREAM("Inside Conveyor");
+//                    ROS_INFO_STREAM(ConveyorFlag);
+//                    ROS_INFO_STREAM(camera.get_conveyor_detected_parts().size());
+//                    ros::Duration(10).sleep();
+//                    if(!ConveyorFlag && camera.get_conveyor_detected_parts().size()>0) {
+//                          ROS_INFO_STREAM("processing conveyor belt");
+//                          pickPartsFromConveyor2(camera, comp, gantry, prod, numPickParts);
+//                          ConveyorFlag = true;
+//                          camera.reset_conveyor_logical_camera();
+//                    }
+//                }
 
 
                 // TODO - make high priority order checker more robust

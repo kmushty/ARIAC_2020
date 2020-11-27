@@ -64,7 +64,8 @@ right_gap_0_2, right_gap_1_2, right_gap_1_3, right_gap_2_2, right_gap_2_3, right
 left_gap_2_green_1, left_gap_2_green_2, left_gap_2_green_3, right_gap_2_blue_1, right_gap_2_blue_2, right_gap_2_blue_3,bin13_1, bin13_2, bin13_3, bin13_4,
 logical_12_15_aisle_1_short, logical_12_15_aisle_1_long, logical_13_16_aisle_2_short, logical_13_16_aisle_2_long, logical_11_14_aisle_0_short, logical_11_14_aisle_0_long, logical_11_14_aisle_1_short, logical_11_14_aisle_1_long,
 logical_12_15_aisle_1_short, logical_12_15_aisle_1_long, logical_13_16_aisle_2_short, logical_13_16_aisle_2_long, logical_11_14_aisle_0_short, logical_11_14_aisle_0_long, logical_11_14_aisle_1_short, logical_11_14_aisle_1_long,
-logical_12_15_aisle_2_short, logical_12_15_aisle_2_long, logical_13_16_aisle_3_short, logical_13_16_aisle_3_long, logical_0_4_short, logical_0_4_long, logical_3_7_short, logical_3_7_long;
+logical_12_15_aisle_2_short, logical_12_15_aisle_2_long, logical_13_16_aisle_3_short, logical_13_16_aisle_3_long, logical_0_4_short, logical_0_4_long, logical_3_7_short, logical_3_7_long,
+temp;
 
 
 typedef struct Part {
