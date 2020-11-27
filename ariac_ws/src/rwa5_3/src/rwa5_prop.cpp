@@ -184,20 +184,20 @@ void initWayPoints(std::map<std::string,std::vector<PresetLocation>> &presetLoc,
     presetLoc["middle_gap_0_logical_camera_14_long"] =  {gantry.middle_gap_default_aisle2_, gantry.middle_gap_0_2_aisle2_, gantry.logical_11_14_aisle_1_short_1_, gantry.logical_11_14_aisle_1_long_2_};
     presetLoc["middle_gap_0_logical_camera_14_short"] = {gantry.middle_gap_default_aisle2_, gantry.middle_gap_0_2_aisle2_, gantry.logical_11_14_aisle_1_short_1_, gantry.logical_11_14_aisle_1_short_2_};
 
-    presetLoc["middle_gap_1_logical_camera_11_long"] =  {gantry.middle_gap_default_aisle2_, gantry.middle_gap_1_2_aisle2_, gantry.middle_gap_1_3_aisle2_, gantry.logical_11_14_aisle_1_short_1_, gantry.logical_13_16_aisle_1_long_2_};
-    presetLoc["middle_gap_1_logical_camera_11_short"] = {gantry.middle_gap_default_aisle2_, gantry.middle_gap_1_2_aisle2_, gantry.middle_gap_1_3_aisle2_, gantry.logical_11_14_aisle_1_short_1_, gantry.logical_13_16_aisle_1_short_2_};
-    presetLoc["middle_gap_1_logical_camera_14_long"] =  {gantry.middle_gap_default_aisle2_, gantry.middle_gap_1_2_aisle2_, gantry.middle_gap_1_3_aisle2_, gantry.logical_11_14_aisle_1_short_1_, gantry.logical_13_16_aisle_1_long_2_};
-    presetLoc["middle_gap_1_logical_camera_14_short"] = {gantry.middle_gap_default_aisle2_, gantry.middle_gap_1_2_aisle2_, gantry.middle_gap_1_3_aisle2_, gantry.logical_11_14_aisle_1_short_1_, gantry.logical_13_16_aisle_1_short_2_};
+    presetLoc["middle_gap_1_logical_camera_11_long"] =  {gantry.middle_gap_default_aisle2_, gantry.middle_gap_1_2_aisle2_, gantry.middle_gap_1_3_aisle2_, gantry.logical_11_14_aisle_1_short_1_, gantry.logical_11_14_aisle_1_long_2_};
+    presetLoc["middle_gap_1_logical_camera_11_short"] = {gantry.middle_gap_default_aisle2_, gantry.middle_gap_1_2_aisle2_, gantry.middle_gap_1_3_aisle2_, gantry.logical_11_14_aisle_1_short_1_, gantry.logical_11_14_aisle_1_short_2_};
+    presetLoc["middle_gap_1_logical_camera_14_long"] =  {gantry.middle_gap_default_aisle2_, gantry.middle_gap_1_2_aisle2_, gantry.middle_gap_1_3_aisle2_, gantry.logical_11_14_aisle_1_short_1_, gantry.logical_11_14_aisle_1_long_2_};
+    presetLoc["middle_gap_1_logical_camera_14_short"] = {gantry.middle_gap_default_aisle2_, gantry.middle_gap_1_2_aisle2_, gantry.middle_gap_1_3_aisle2_, gantry.logical_11_14_aisle_1_short_1_, gantry.logical_11_14_aisle_1_short_2_};
 
-    presetLoc["middle_gap_2_logical_camera_11_long"] =  {gantry.middle_gap_default_aisle2_, gantry.middle_gap_2_2_aisle2_, gantry.middle_gap_2_3_aisle2_, gantry.logical_11_14_aisle_1_short_1_, gantry.logical_13_16_aisle_1_long_2_};
-    presetLoc["middle_gap_2_logical_camera_11_short"] = {gantry.middle_gap_default_aisle2_, gantry.middle_gap_2_2_aisle2_, gantry.middle_gap_2_3_aisle2_, gantry.logical_11_14_aisle_1_short_1_, gantry.logical_13_16_aisle_1_short_2_};
-    presetLoc["middle_gap_2_logical_camera_14_long"] =  {gantry.middle_gap_default_aisle2_, gantry.middle_gap_2_2_aisle2_, gantry.middle_gap_2_3_aisle2_, gantry.logical_11_14_aisle_1_short_1_, gantry.logical_13_16_aisle_1_long_2_};
-    presetLoc["middle_gap_2_logical_camera_14_short"] = {gantry.middle_gap_default_aisle2_, gantry.middle_gap_2_2_aisle2_, gantry.middle_gap_2_3_aisle2_, gantry.logical_11_14_aisle_1_short_1_, gantry.logical_13_16_aisle_1_short_2_};
+    presetLoc["middle_gap_2_logical_camera_11_long"] =  {gantry.middle_gap_default_aisle2_, gantry.middle_gap_2_2_aisle2_, gantry.middle_gap_2_3_aisle2_, gantry.logical_11_14_aisle_1_short_1_, gantry.logical_11_14_aisle_1_long_2_};
+    presetLoc["middle_gap_2_logical_camera_11_short"] = {gantry.middle_gap_default_aisle2_, gantry.middle_gap_2_2_aisle2_, gantry.middle_gap_2_3_aisle2_, gantry.logical_11_14_aisle_1_short_1_, gantry.logical_11_14_aisle_1_short_2_};
+    presetLoc["middle_gap_2_logical_camera_14_long"] =  {gantry.middle_gap_default_aisle2_, gantry.middle_gap_2_2_aisle2_, gantry.middle_gap_2_3_aisle2_, gantry.logical_11_14_aisle_1_short_1_, gantry.logical_11_14_aisle_1_long_2_};
+    presetLoc["middle_gap_2_logical_camera_14_short"] = {gantry.middle_gap_default_aisle2_, gantry.middle_gap_2_2_aisle2_, gantry.middle_gap_2_3_aisle2_, gantry.logical_11_14_aisle_1_short_1_, gantry.logical_11_14_aisle_1_short_2_};
 
-    presetLoc["middle_gap_3_logical_camera_11_long"] =  {gantry.middle_gap_default_aisle2_, gantry.middle_gap_3_2_aisle2_, gantry.middle_gap_3_3_aisle2_, gantry.logical_11_14_aisle_1_short_1_, gantry.logical_13_16_aisle_1_long_2_};
-    presetLoc["middle_gap_3_logical_camera_11_short"] = {gantry.middle_gap_default_aisle2_, gantry.middle_gap_3_2_aisle2_, gantry.middle_gap_3_3_aisle2_, gantry.logical_11_14_aisle_1_short_1_, gantry.logical_13_16_aisle_1_short_2_};
-    presetLoc["middle_gap_3_logical_camera_14_long"] =  {gantry.middle_gap_default_aisle2_, gantry.middle_gap_3_2_aisle2_, gantry.middle_gap_3_3_aisle2_, gantry.logical_11_14_aisle_1_short_1_, gantry.logical_13_16_aisle_1_long_2_};
-    presetLoc["middle_gap_3_logical_camera_14_short"] = {gantry.middle_gap_default_aisle2_, gantry.middle_gap_3_2_aisle2_, gantry.middle_gap_3_3_aisle2_, gantry.logical_11_14_aisle_1_short_1_, gantry.logical_13_16_aisle_1_short_2_};
+    presetLoc["middle_gap_3_logical_camera_11_long"] =  {gantry.middle_gap_default_aisle2_, gantry.middle_gap_3_2_aisle2_, gantry.middle_gap_3_3_aisle2_, gantry.logical_11_14_aisle_1_short_1_, gantry.logical_11_14_aisle_1_long_2_};
+    presetLoc["middle_gap_3_logical_camera_11_short"] = {gantry.middle_gap_default_aisle2_, gantry.middle_gap_3_2_aisle2_, gantry.middle_gap_3_3_aisle2_, gantry.logical_11_14_aisle_1_short_1_, gantry.logical_11_14_aisle_1_short_2_};
+    presetLoc["middle_gap_3_logical_camera_14_long"] =  {gantry.middle_gap_default_aisle2_, gantry.middle_gap_3_2_aisle2_, gantry.middle_gap_3_3_aisle2_, gantry.logical_11_14_aisle_1_short_1_, gantry.logical_11_14_aisle_1_long_2_};
+    presetLoc["middle_gap_3_logical_camera_14_short"] = {gantry.middle_gap_default_aisle2_, gantry.middle_gap_3_2_aisle2_, gantry.middle_gap_3_3_aisle2_, gantry.logical_11_14_aisle_1_short_1_, gantry.logical_11_14_aisle_1_short_2_};
 
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -542,7 +542,7 @@ std::vector<int> closestAislesWithoutObstacles(int aisle_num) {
     bool toggle = true;
     
     while(i!=0 || j!= 3) {
-      if(!obstacleAssociatedWithAisle[index] && index != aisle_num && abs(index-aisle_num)<= closest){
+      if(!obstacleInAisle[index] && index != aisle_num && abs(index-aisle_num)<= closest){
              result.push_back(index);
              closest = abs(index-aisle_num);
       }
@@ -592,26 +592,26 @@ std::vector<std::string> planPath(int aisle_num, part my_part){
                return std::vector<std::string> {"gap_needed", getGapName("middle_gap"),"2","long"};
       }else if(aisle_num = 1) {
             if(closest_aisles_wo[0] == 0){
-               if(abs((abs(my_part.y) - abs(AISLE_Y[0]))) < 2)      // select closest aisle to part
+               if(abs((abs(my_part.pose.position.y) - abs(AISLE_Y[0]))) < 2)      // select closest aisle to part
                    return std::vector<std::string> {"no_gap_needed","-","0","long"};
                else
                    return std::vector<std::string> {"gap_needed",getGapName("left_gap"),"0","short"};
             }
             else{   //closest aisle is 2
-               if(abs((abs(my_part.y) - abs(AISLE_Y[2]))) < 2)      // select closest aisle to part
+               if(abs((abs(my_part.pose.position.y) - abs(AISLE_Y[2]))) < 2)      // select closest aisle to part
                    return std::vector<std::string> {"no_gap_needed","-","2","long"};
                else
                    return std::vector<std::string> {"gap_needed",getGapName("middle_gap"),"2","short"};
             }
       }else{ 
         if(closest_aisles_wo[0] == 1) {
-            if(abs((abs(my_part.y) - abs(AISLE_Y[1]))) < 2)      // select closest aisle to part
+            if(abs((abs(my_part.pose.position.y) - abs(AISLE_Y[1]))) < 2)      // select closest aisle to part
                    return std::vector<std::string> {"no_gap_needed","-","1","long"};
             else
                    return std::vector<std::string> {"gap_needed",getGapName("middle_gap"),"1","short"};
         }
         else{
-            if(abs((abs(my_part.y) - abs(AISLE_Y[3]))) < 2)      // select closest aisle to part
+            if(abs((abs(my_part.pose.position.y) - abs(AISLE_Y[3]))) < 2)      // select closest aisle to part
                 return std::vector<std::string> {"no_gap_needed","-","3","long"};
             else
                 return std::vector<std::string> {"gap_needed",getGapName("right_gap"),"3","short"};
@@ -619,7 +619,7 @@ std::vector<std::string> planPath(int aisle_num, part my_part){
       }
    }else{
      for(auto aisle:closest_aisles_wo){
-        if(abs((abs(my_part.y) - abs(AISLE_Y[aisle]))) < 2)      // select closest aisle to part
+        if(abs((abs(my_part.pose.position.y) - abs(AISLE_Y[aisle]))) < 2)      // select closest aisle to part
           return std::vector<std::string> {"no_gap_needed","-",std::to_string(aisle),"long"};
      }
    }
@@ -771,20 +771,21 @@ void estimateObstacleAttributes(Camera &camera,int aisle_num) {
 
 
 void planAndExecutePath(product prod, part my_part,std::map<std::string, std::vector<PresetLocation>> &presetLoc, 
-                        Camera &camera, GantryControl &gantry, Competition &comp, std::string location, int aisle_num) {
+                        Camera &camera, GantryControl &gantry, Competition &comp, int aisle_num) {
 
    ROS_INFO_STREAM("Plan and execute method");
    
    auto plan = planPath(aisle_num,my_part);
    std::string location;
+   float threshold = 0.7; // TODO need to tweak
 
    if(plan[0] == "no_gap_needed") {
        location = my_part.logicalCameraName + "_aisle" + plan[2] + "_" + plan[3];
        moveToLocation(presetLoc, location, gantry);
        gantry.pickPart(my_part);
 
-       retraceSteps(presetLoc, location, gantry);
-       moveFromLocationToStart(presetLoc, gaps[i], gantry);
+//       retraceSteps(presetLoc, location, gantry);
+       moveFromLocationToStart(presetLoc, location, gantry);
    }
    else{
        location = plan[1] + "_" + my_part.logicalCameraName + "_" + plan[3];
@@ -801,8 +802,8 @@ void planAndExecutePath(product prod, part my_part,std::map<std::string, std::ve
                   ROS_INFO_STREAM("Location is " <<  location);
                   moveToLocation(presetLoc, location, gantry);
                   gantry.pickPart(my_part);
-                  retraceSteps(presetLoc, location, gantry);
-                  moveFromLocationToStart(presetLoc, gaps[i], gantry);
+//                  retraceSteps(presetLoc, location, gantry);
+                  moveFromLocationToStart(presetLoc, location, gantry);
                   break;
                }
          }
@@ -854,10 +855,10 @@ void processPart(product prod, GantryControl &gantry, Camera &camera, Competitio
                     ROS_INFO_STREAM("In process part- obstacle in aisle");
                     ROS_INFO_STREAM(parts.second.logicalCameraName);
                     ROS_INFO_STREAM(parts.first);
-                    planAndExecutePath( prod, my_part, presetLoc, camera, gantry, comp, parts.second.logicalCameraName, aisle_num);
+                    planAndExecutePath( prod, my_part, presetLoc, camera, gantry, comp, aisle_num);
                 }
                 else {
-                    std::string location = my_part.logicalCameraName + "_aisle" + std::to_string(aisle_num) + "_short_";
+                    std::string location = my_part.logicalCameraName + "_aisle" + std::to_string(aisle_num) + "_short";
                     moveToLocation2(presetLoc, my_part, gantry, location);
                     gantry.pickPart(my_part);
                     moveFromLocationToStart(presetLoc, location, gantry);
