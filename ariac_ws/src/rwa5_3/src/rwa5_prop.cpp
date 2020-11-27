@@ -129,8 +129,11 @@ void initWayPoints(std::map<std::string,std::vector<PresetLocation>> &presetLoc,
 //    presetLoc["logical_camera_13"] = {gantry.logical_13_16_aisle_3_short_, gantry.logical_13_16_aisle_3_short_1_, gantry.logical_13_16_aisle_3_long_2_};
 //    presetLoc["logical_camera_16"] = {gantry.logical_13_16_aisle_3_short_, gantry.logical_13_16_aisle_3_short_1_, gantry.logical_13_16_aisle_3_short_2_};
 
-    presetLoc["logical_camera_12"] = {gantry.right_gap_default_, gantry.right_gap_2_2_, gantry.right_gap_2_3_, gantry.temp2_, gantry.logical_11_14_aisle_1_short_1_, gantry.logical_11_14_aisle_1_long_2_};
-    presetLoc["logical_camera_15"] = {gantry.right_gap_default_, gantry.right_gap_2_2_, gantry.right_gap_2_3_, gantry.temp2_, gantry.logical_11_14_aisle_1_short_1_, gantry.logical_11_14_aisle_1_short_2_};
+//    presetLoc["logical_camera_12"] = {gantry.right_gap_default_, gantry.right_gap_2_2_, gantry.right_gap_2_3_, gantry.temp2_, gantry.logical_11_14_aisle_1_short_1_, gantry.logical_11_14_aisle_1_long_2_};
+//    presetLoc["logical_camera_15"] = {gantry.right_gap_default_, gantry.right_gap_2_2_, gantry.right_gap_2_3_, gantry.temp2_, gantry.logical_11_14_aisle_1_short_1_, gantry.logical_11_14_aisle_1_short_2_};
+
+    presetLoc["logical_camera_12"] = {gantry.middle_gap_default_aisle1_, gantry.middle_gap_1_2_aisle1_, gantry.middle_gap_1_3_aisle1_};
+    presetLoc["logical_camera_15"] = {gantry.middle_gap_default_aisle1_, gantry.middle_gap_1_2_aisle1_, gantry.middle_gap_1_3_aisle1_};
 
 
     presetLoc["logical_camera_1"] = {gantry.start_};
@@ -171,10 +174,10 @@ void initWayPoints(std::map<std::string,std::vector<PresetLocation>> &presetLoc,
 //    presetLoc["left_gap_2"] = {gantry.shelf8_obs_green1_, gantry.shelf8_obs_green2_, gantry.shelf8_obs_green3_};
 //    presetLoc["left_gap_3"] = {gantry.left_gap_default_, gantry.left_gap_3_2_, gantry.left_gap_3_3_};
 
-    presetLoc["middle_gap_0"] = {gantry.middle_gap_default_, gantry.middle_gap_0_2_};
-    presetLoc["middle_gap_1"] = {gantry.middle_gap_default_, gantry.middle_gap_1_2_, gantry.middle_gap_1_3_};
-    presetLoc["middle_gap_2"] = {gantry.middle_gap_default_, gantry.middle_gap_2_2_, gantry.middle_gap_2_3_};
-    presetLoc["middle_gap_3"] = {gantry.middle_gap_default_, gantry.middle_gap_3_2_, gantry.middle_gap_3_3_};
+//    presetLoc["middle_gap_0"] = {gantry.middle_gap_default_, gantry.middle_gap_0_2_};
+//    presetLoc["middle_gap_1"] = {gantry.middle_gap_default_, gantry.middle_gap_1_2_, gantry.middle_gap_1_3_};
+//    presetLoc["middle_gap_2"] = {gantry.middle_gap_default_, gantry.middle_gap_2_2_, gantry.middle_gap_2_3_};
+//    presetLoc["middle_gap_3"] = {gantry.middle_gap_default_, gantry.middle_gap_3_2_, gantry.middle_gap_3_3_};
 
     presetLoc["right_gap_0"] = {gantry.right_gap_default_, gantry.right_gap_0_2_};
     presetLoc["right_gap_1"] = {gantry.right_gap_default_, gantry.right_gap_1_2_, gantry.right_gap_1_3_};

@@ -137,14 +137,24 @@ class GantryControl {
     left_gap_3_2 left_gap_3_2_;
     left_gap_3_3 left_gap_3_3_;
 
-    middle_gap_default middle_gap_default_;
-    middle_gap_0_2 middle_gap_0_2_;
-    middle_gap_1_2 middle_gap_1_2_;
-    middle_gap_1_3 middle_gap_1_3_;
-    middle_gap_2_2 middle_gap_2_2_;
-    middle_gap_2_3 middle_gap_2_3_;
-    middle_gap_3_2 middle_gap_3_2_;
-    middle_gap_3_3 middle_gap_3_3_;
+    middle_gap_default_aisle1 middle_gap_default_aisle1_;
+    middle_gap_0_2_aisle1 middle_gap_0_2_aisle1_;
+    middle_gap_1_2_aisle1 middle_gap_1_2_aisle1_;
+    middle_gap_1_3_aisle1 middle_gap_1_3_aisle1_;
+    middle_gap_2_2_aisle1 middle_gap_2_2_aisle1_;
+    middle_gap_2_3_aisle1 middle_gap_2_3_aisle1_;
+    middle_gap_3_2_aisle1 middle_gap_3_2_aisle1_;
+    middle_gap_3_3_aisle1 middle_gap_3_3_aisle1_;
+
+    middle_gap_default_aisle2 middle_gap_default_aisle2_;
+    middle_gap_0_2_aisle2 middle_gap_0_2_aisle2_;
+    middle_gap_1_2_aisle2 middle_gap_1_2_aisle2_;
+    middle_gap_1_3_aisle2 middle_gap_1_3_aisle2_;
+    middle_gap_2_2_aisle2 middle_gap_2_2_aisle2_;
+    middle_gap_2_3_aisle2 middle_gap_2_3_aisle2_;
+    middle_gap_3_2_aisle2 middle_gap_3_2_aisle2_;
+    middle_gap_3_3_aisle2 middle_gap_3_3_aisle2_;
+
 
     right_gap_default right_gap_default_;
     right_gap_0_2 right_gap_0_2_;
