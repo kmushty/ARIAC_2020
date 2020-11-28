@@ -512,12 +512,18 @@ std::vector<std::string> determineGaps(){                                       
             if(shelfDistance(name1, name2) >= gapThreshold[0] && shelfDistance(name1, name2) <= gapThreshold[1]){
                 gap.push_back(shelfSide[count-1] + std::to_string((row+1) % shelfStartIndex));
                 countFlag += 1;
+
+                double gap_position = shelfDistance(name1,name2)/2 - shelfPosition(name1).transform.translation.x;
+                gap.push_back(std::to_string(gap_position));
             }
         }
         if(countFlag == 0){
             if(shelfPosition("shelf"+std::to_string(shelf)+"_frame").transform.translation.x >= -2.093989 &&
                shelfPosition("shelf"+std::to_string(shelf)+"_frame").transform.translation.x <= -2.093979){
                 gap.push_back(shelfSide[count-1] + std::to_string((shelfStartIndex - countFlag)));
+
+                double gap_position = shelfDistance(name1,name2)/2 - shelfPosition(name1).transform.translation.x;
+                gap.push_back(std::to_string(gap_position));
             }
             else
                 gap.push_back(shelfSide[count-1] + std::to_string((countFlag)));
@@ -571,6 +577,12 @@ std::string getGapName(std::string gapType){
    return "None";
 }
 
+std::string getGapCoorX(std::string gapName) {
+   auto gaps = determineGaps();
+   auto it = std::find(gaps.begin(),gaps.end(), gapName); 
+   int index = it - gaps.begin() + 1;
+   return gaps[index];
+}
 
 std::vector<std::string> planPath(int aisle_num, part my_part){
    std::vector<std::string> plan;
@@ -587,37 +599,37 @@ std::vector<std::string> planPath(int aisle_num, part my_part){
            if(closest_aisles_wo[0] == 1)
                return std::vector<std::string> {"no_gap_needed","-","1","long"};
            else
-               return std::vector<std::string> {"gap_needed", getGapName("middle_gap"),"2","long"};
+               return std::vector<std::string> {"gap_needed", getGapName("middle_gap"),"2","long", getGapCoorX(getGapName("middle_gap"))};
       }else if(aisle_num == 3) {
            if(closest_aisles_wo[0] == 2)
                return std::vector<std::string> {"no_gap_needed","-","2","long"};
            else
-               return std::vector<std::string> {"gap_needed", getGapName("middle_gap"),"2","long"};
+               return std::vector<std::string> {"gap_needed", getGapName("middle_gap"),"2","long", getGapCoorX(getGapName("middle_gap"))};
       }else if(aisle_num == 1) {
             if(closest_aisles_wo[0] == 0){
                if(abs((abs(my_part.pose.position.y) - abs(AISLE_Y[0]))) < 3)      // select closest aisle to part
                    return std::vector<std::string> {"no_gap_needed","-","0","long"};
                else
-                   return std::vector<std::string> {"gap_needed",getGapName("left_gap"),"0","short"};
+                   return std::vector<std::string> {"gap_needed",getGapName("left_gap"),"0","short", getGapCoorX(getGapName("left_gap"))};
             }
             else{   //closest aisle is 2
                if(abs((abs(my_part.pose.position.y) - abs(AISLE_Y[2]))) < 3)      // select closest aisle to part
                    return std::vector<std::string> {"no_gap_needed","-","2","long"};
                else
-                   return std::vector<std::string> {"gap_needed",getGapName("middle_gap"),"2","short"};
+                   return std::vector<std::string> {"gap_needed",getGapName("middle_gap"),"2","short",getGapCoorX(getGapName("middle_gap"))};
             }
       }else{ 
         if(closest_aisles_wo[0] == 1) {
             if(abs((abs(my_part.pose.position.y) - abs(AISLE_Y[1]))) < 3)      // select closest aisle to part
                    return std::vector<std::string> {"no_gap_needed","-","1","long"};
             else
-                   return std::vector<std::string> {"gap_needed",getGapName("middle_gap"),"1","short"};
+                   return std::vector<std::string> {"gap_needed",getGapName("middle_gap"),"1","short", getGapCoorX(getGapName("middle_gap"))};
         }
         else{
             if(abs((abs(my_part.pose.position.y) - abs(AISLE_Y[3]))) < 3)      // select closest aisle to part
                 return std::vector<std::string> {"no_gap_needed","-","3","long"};
             else
-                return std::vector<std::string> {"gap_needed",getGapName("right_gap"),"3","short"};
+                return std::vector<std::string> {"gap_needed",getGapName("right_gap"),"3","short", getGapCoorX(getGapName("right_gap"))};
          }
       }
    }else{
