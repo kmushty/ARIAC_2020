@@ -313,6 +313,19 @@ void moveToLocation2(std::map<std::string,std::vector<PresetLocation>> &presetLo
     //modify to pick part
 }
 
+void moveToGap(std::map<std::string,std::vector<PresetLocation>> &presetLoc, part my_part,GantryControl &gantry,std::string location){
+    auto vec = presetLoc[location];
+    for(int i=0; i< (vec.size() - 3); i++)
+        gantry.goToPresetLocation(vec[i]);
+}
+
+void moveFromGapToLocation(std::map<std::string,std::vector<PresetLocation>> &presetLoc, part my_part,GantryControl &gantry,std::string location){
+    auto vec = presetLoc[location];
+    for(int i=(vec.size() - 3); i< vec.size(); i++)
+        gantry.goToPresetLocation(vec[i]);
+}
+
+
 void retraceSteps(std::map<std::string,std::vector<PresetLocation>> &presetLoc, std::string location,GantryControl &gantry) {
     auto vec = presetLoc[location];
     for(int i=vec.size()-1; i>=0;i--)
@@ -513,20 +526,22 @@ std::vector<std::string> determineGaps(){                                       
                 gap.push_back(shelfSide[count-1] + std::to_string((row+1) % shelfStartIndex));
                 countFlag += 1;
 
-                double gap_position = shelfDistance(name1,name2)/2 - shelfPosition(name1).transform.translation.x;
+                double gap_position = shelfPosition(name1).transform.translation.x - 4 - (shelfDistance(name1,name2) - 4)/2;
                 gap.push_back(std::to_string(gap_position));
             }
         }
-        if(countFlag == 0){
-            if(shelfPosition("shelf"+std::to_string(shelf)+"_frame").transform.translation.x >= -2.093989 &&
-               shelfPosition("shelf"+std::to_string(shelf)+"_frame").transform.translation.x <= -2.093979){
-                gap.push_back(shelfSide[count-1] + std::to_string((shelfStartIndex - countFlag)));
+        if(countFlag == 0) {
+            if (shelfPosition("shelf" + std::to_string(shelf) + "_frame").transform.translation.x >= -2.093989 &&
+                shelfPosition("shelf" + std::to_string(shelf) + "_frame").transform.translation.x <= -2.093979) {
+                gap.push_back(shelfSide[count - 1] + std::to_string((shelfStartIndex - countFlag)));
 
-                double gap_position = shelfDistance(name1,name2)/2 - shelfPosition(name1).transform.translation.x;
+                double gap_position = shelfPosition(name1).transform.translation.x - 1.0550175;
                 gap.push_back(std::to_string(gap_position));
+            } else {
+                double gap_position = shelfPosition(name1).transform.translation.x + 1.0550175;
+                gap.push_back(shelfSide[count - 1] + std::to_string((countFlag)));
+
             }
-            else
-                gap.push_back(shelfSide[count-1] + std::to_string((countFlag)));
         }
     }
     
@@ -570,7 +585,9 @@ std::string getGapName(std::string gapType){
 
    auto gaps = determineGaps();
    for(auto gap: gaps) {
-     std::string token = gap.substr(0,gap.find("-"));
+     std::string token = gap.substr(0, gap.size()-2);
+     ROS_INFO_STREAM("tOKEN" << token);
+       ROS_INFO_STREAM("Gap Type" << gapType);
      if(token == gapType)
         return gap;
    }
@@ -737,7 +754,7 @@ void estimateObstacleAttributes(Camera &camera,int aisle_num) {
        }
 
        auto it2 = std::find_if(vec.begin(), vec.end(),
-                         [&str = "shelf_breakbeam_4_frame"] 
+                         [&str = "shelf_breakbeam_4_frame"]
                          (nist_gear::Proximity::ConstPtr &msg){return (msg->header).frame_id == str && msg->object_detected; });    
 
        if(it2 != vec.end()){
@@ -806,19 +823,24 @@ void planAndExecutePath(product prod, part my_part,std::map<std::string, std::ve
    }
    else{
        location = plan[1] + "_" + my_part.logicalCameraName + "_" + plan[3];
-       return;
-       while(!obstacleAssociatedWithAisle[aisle_num].is_valid_obstacle)
-            estimateObstacleAttributes(camera,aisle_num);
+//       while(!obstacleAssociatedWithAisle[aisle_num].is_valid_obstacle)
+//            estimateObstacleAttributes(camera,aisle_num);
 
+       // Move to the gap
+       moveToGap(presetLoc, my_part, gantry, location);
        while(true) {
                auto vec = estimateLocation(aisle_num, comp.getClock());                      //estimate Location
              
                //TODO instead of 6.0 will need to get x coordinate of gap
                //      and also make more robust
                //      Dynamic presetLoc from gap
-               if(vec[0] == "toward" && std::abs(std::stod(vec[1])+6.0) <= threshold) {            
+               ROS_INFO_STREAM("Gap Coordinate" << std::stod(plan[4]));
+               ROS_INFO_STREAM("VEC1" << vec[1]);
+               if(vec[0] == "toward" && std::stod(vec[1]) - std::stod(plan[4]) > threshold) {
                   ROS_INFO_STREAM("Location is " <<  location);
-                  moveToLocation(presetLoc, location, gantry);
+                  //Move from gap to location
+                  moveFromGapToLocation(presetLoc, my_part, gantry, location);
+//                  moveToLocation(presetLoc, location, gantry);
                   gantry.pickPart(my_part);
 //                  retraceSteps(presetLoc, location, gantry);
                   moveFromLocationToStart(presetLoc, location, gantry);
@@ -1229,7 +1251,6 @@ int main(int argc, char ** argv) {
 
     ConveyorFlag = false;
     int numPickParts = 4;
-    
 
     //TODO reduce computation 
     std::cout << "estimating obstacles parameters" << std::endl;
@@ -1246,15 +1267,25 @@ int main(int argc, char ** argv) {
     obstacleAssociatedWithAisle[2].is_valid_obstacle= true;
     obstacleAssociatedWithAisle[2].wait_time= 7;
     obstacleAssociatedWithAisle[2].move_time= 9;
-    obstacleAssociatedWithAisle[2].time_stamp1= 9;
+    obstacleAssociatedWithAisle[2].time_stamp1= 25;
 
     obstacleAssociatedWithAisle[1].is_valid_obstacle= true;
     obstacleAssociatedWithAisle[1].wait_time= 7;
     obstacleAssociatedWithAisle[1].move_time= 9;
-    obstacleAssociatedWithAisle[1].time_stamp1= 25;
+    obstacleAssociatedWithAisle[1].time_stamp1= 9;
 
-
-    std::cout << "finished estimating obstacle parameters" << std::endl;
+//    auto  vec = estimateLocation(2,30);
+//    ROS_INFO_STREAM("Time at: " << 30 << " action:" << vec[0] << " location: " <<vec[1]);
+//    vec= estimateLocation(2,45);
+//    ROS_INFO_STREAM("Time at: " << 45 << " action:" << vec[0] << " location: " <<vec[1]);
+//
+//    vec = estimateLocation(2,15);
+//    ROS_INFO_STREAM("Time at: " << 15 << " action:" << vec[0] << " location: " <<vec[1]);
+//
+//    vec = estimateLocation(2,75);
+//    ROS_INFO_STREAM("Time at: " << 75 << " action:" << vec[0] << " location: " <<vec[1]);
+//
+//    std::cout << "finished estimating obstacle parameters" << std::endl;
 
     for(int i = 0; i< orders.size(); i++){
         auto order = orders[i];
