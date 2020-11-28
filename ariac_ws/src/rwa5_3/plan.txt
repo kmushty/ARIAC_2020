@@ -1,20 +1,15 @@
-Sensor blackout
-   eashwar
-   5. Hashmap<hashmap> and modify processPart
 
-    shantam
-   Conveyor implementation
+1. Hp order
+2. sensor blackout
+3. faulty gripper
+4. faulty part
+5. pose
+6. integration
+7. testing on yaml files
+8. change code to run under 500 sim seconds 
+9. moving obstacles -- pending
+10. conveyor
 
-
-   kaushik
-   1. Preset location from gap to part
-   2. complete planPath() function
-
-   ak
-   1. Logic for pathplanning
-
-
-   Modify getTargetPose() to get pose score
 
 
 
