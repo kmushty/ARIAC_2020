@@ -317,10 +317,12 @@ void moveToGap(std::map<std::string,std::vector<PresetLocation>> &presetLoc, par
         gantry.goToPresetLocation(vec[i]);
 }
 
+
 void moveFromGapToLocation(std::map<std::string,std::vector<PresetLocation>> &presetLoc, part my_part,GantryControl &gantry,std::string location){
     auto vec = presetLoc[location];
     for(int i=(vec.size() - 3); i< vec.size(); i++)
         gantry.goToPresetLocation(vec[i]);
+     gantry.moveToPart(my_part);
 }
 
 
@@ -809,7 +811,7 @@ void planAndExecutePath(product prod, part my_part,std::map<std::string, std::ve
    for(int i=0;i < plan.size(); i++)
        ROS_INFO_STREAM(plan[i]);
    std::string location;
-   float threshold = 0.7; // TODO need to tweak
+   float threshold = 0.7; 
 
    if(plan[0] == "no_gap_needed") {
        location = my_part.logicalCameraName + "_aisle" + plan[2] + "_" + plan[3];
