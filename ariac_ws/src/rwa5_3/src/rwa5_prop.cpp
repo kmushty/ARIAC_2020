@@ -43,7 +43,7 @@
 const double LENGTH_OF_AISLE = 14.2;
 const int NUM_LOGICAL_CAMERAS_PER_AISLE = 4;
 const int TIMELIMIT_THRESHOLD = 40;
-const std::vector<double> AISLE_Y = {-5,-1.54, 1.54, 5};
+const std::vector<double> AISLE_Y = {5, 1.54, -1.54, -5};
 
 
 
@@ -541,18 +541,18 @@ std::vector<int> closestAislesWithoutObstacles(int aisle_num) {
     int i = aisle_num , j = aisle_num ,closest = 10, index=aisle_num;
     bool toggle = true;
     
-    while(i!=0 || j!= 3) {
-      if(!obstacleInAisle[index] && index != aisle_num && abs(index-aisle_num)<= closest){
+    while(i!=-1 || j!= 4) {
+      if(index >= 0 && index < 4 && !obstacleInAisle[index] && index != aisle_num && abs(index-aisle_num)<= closest){
              result.push_back(index);
              closest = abs(index-aisle_num);
       }
       if(toggle){
           index = i;
-          if(i!= 0) i--;
+          if(i!= -1) i--;
           toggle = false;
        }else{
          index = j;
-         if(j!=3) j++;
+         if(j!=4) j++;
          toggle = true;
        }
     }
@@ -579,39 +579,42 @@ std::vector<std::string> planPath(int aisle_num, part my_part){
    auto closest_aisles_wo  = closestAislesWithoutObstacles(aisle_num);
    ROS_INFO_STREAM("In planPath");
 
+   for(int i=0;i <closest_aisles_wo.size(); i++)
+       ROS_INFO_STREAM("CLOSEST AISLE NUM" << closest_aisles_wo[i]);
+
    if(closest_aisles_wo.size() == 1) {
-      if(aisle_num = 0){
+      if(aisle_num == 0){
            if(closest_aisles_wo[0] == 1)
                return std::vector<std::string> {"no_gap_needed","-","1","long"};
            else
                return std::vector<std::string> {"gap_needed", getGapName("middle_gap"),"2","long"};
-      }else if(aisle_num = 3) {
+      }else if(aisle_num == 3) {
            if(closest_aisles_wo[0] == 2)
                return std::vector<std::string> {"no_gap_needed","-","2","long"};
            else
                return std::vector<std::string> {"gap_needed", getGapName("middle_gap"),"2","long"};
-      }else if(aisle_num = 1) {
+      }else if(aisle_num == 1) {
             if(closest_aisles_wo[0] == 0){
-               if(abs((abs(my_part.pose.position.y) - abs(AISLE_Y[0]))) < 2)      // select closest aisle to part
+               if(abs((abs(my_part.pose.position.y) - abs(AISLE_Y[0]))) < 3)      // select closest aisle to part
                    return std::vector<std::string> {"no_gap_needed","-","0","long"};
                else
                    return std::vector<std::string> {"gap_needed",getGapName("left_gap"),"0","short"};
             }
             else{   //closest aisle is 2
-               if(abs((abs(my_part.pose.position.y) - abs(AISLE_Y[2]))) < 2)      // select closest aisle to part
+               if(abs((abs(my_part.pose.position.y) - abs(AISLE_Y[2]))) < 3)      // select closest aisle to part
                    return std::vector<std::string> {"no_gap_needed","-","2","long"};
                else
                    return std::vector<std::string> {"gap_needed",getGapName("middle_gap"),"2","short"};
             }
       }else{ 
         if(closest_aisles_wo[0] == 1) {
-            if(abs((abs(my_part.pose.position.y) - abs(AISLE_Y[1]))) < 2)      // select closest aisle to part
+            if(abs((abs(my_part.pose.position.y) - abs(AISLE_Y[1]))) < 3)      // select closest aisle to part
                    return std::vector<std::string> {"no_gap_needed","-","1","long"};
             else
                    return std::vector<std::string> {"gap_needed",getGapName("middle_gap"),"1","short"};
         }
         else{
-            if(abs((abs(my_part.pose.position.y) - abs(AISLE_Y[3]))) < 2)      // select closest aisle to part
+            if(abs((abs(my_part.pose.position.y) - abs(AISLE_Y[3]))) < 3)      // select closest aisle to part
                 return std::vector<std::string> {"no_gap_needed","-","3","long"};
             else
                 return std::vector<std::string> {"gap_needed",getGapName("right_gap"),"3","short"};
@@ -619,7 +622,7 @@ std::vector<std::string> planPath(int aisle_num, part my_part){
       }
    }else{
      for(auto aisle:closest_aisles_wo){
-        if(abs((abs(my_part.pose.position.y) - abs(AISLE_Y[aisle]))) < 2)      // select closest aisle to part
+        if(abs((abs(my_part.pose.position.y) - abs(AISLE_Y[aisle]))) < 3)      // select closest aisle to part
           return std::vector<std::string> {"no_gap_needed","-",std::to_string(aisle),"long"};
      }
    }
@@ -774,14 +777,16 @@ void planAndExecutePath(product prod, part my_part,std::map<std::string, std::ve
                         Camera &camera, GantryControl &gantry, Competition &comp, int aisle_num) {
 
    ROS_INFO_STREAM("Plan and execute method");
-   
    auto plan = planPath(aisle_num,my_part);
+   ROS_INFO_STREAM(plan.size());
+   for(int i=0;i < plan.size(); i++)
+       ROS_INFO_STREAM(plan[i]);
    std::string location;
    float threshold = 0.7; // TODO need to tweak
 
    if(plan[0] == "no_gap_needed") {
        location = my_part.logicalCameraName + "_aisle" + plan[2] + "_" + plan[3];
-       moveToLocation(presetLoc, location, gantry);
+       moveToLocation2(presetLoc, my_part, gantry, location);
        gantry.pickPart(my_part);
 
 //       retraceSteps(presetLoc, location, gantry);
@@ -789,6 +794,7 @@ void planAndExecutePath(product prod, part my_part,std::map<std::string, std::ve
    }
    else{
        location = plan[1] + "_" + my_part.logicalCameraName + "_" + plan[3];
+       return;
        while(!obstacleAssociatedWithAisle[aisle_num].is_valid_obstacle)
             estimateObstacleAttributes(camera,aisle_num);
 
@@ -1205,7 +1211,7 @@ int main(int argc, char ** argv) {
     product prod;                                                                                            //Setting up product
 
 
-    ros::Duration(1.0).sleep();                                                                              //wait for sometime and
+    ros::Duration(3.0).sleep();                                                                              //wait for sometime and
     detectAislesWithObstacles(camera);                                                                       //determine obstacles in Aisles
     
 

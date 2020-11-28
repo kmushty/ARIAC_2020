@@ -108,9 +108,13 @@ const nist_gear::Proximity::ConstPtr &msg, int index) {
 
 
    if(index < 3){
+       aisle_breakbeam_msgs[0].push_back(msg);
+   }else if(index >=3 && index < 6)
        aisle_breakbeam_msgs[1].push_back(msg);
-   }else if(index < 6)
+   else if(index >=6 && index < 9)
        aisle_breakbeam_msgs[2].push_back(msg);
+   else if(index >=9 && index < 12)
+       aisle_breakbeam_msgs[3].push_back(msg);
 
    //ROS_INFO_STREAM("exited  shelf callback");
 }
