@@ -40,17 +40,15 @@
 
 
 
-const double LENGTH_OF_AISLE = 14.2;
+const double LENGTH_OF_AISLE = 15;
 const int NUM_LOGICAL_CAMERAS_PER_AISLE = 4;
 const int TIMELIMIT_THRESHOLD = 40;
-const std::vector<double> AISLE_Y = {5, 1.54, -1.54, -5};
-
-
 
 //coordinates obtainted from gazebo
 const double END_LOCATION_X = -16.793;
-const double BEGIN_LOCATION_X = -1.5778;
+const double BEGIN_LOCATION_X = -1.793;
 const double MID_LOCATION_X = -12.592617;
+const std::vector<double> AISLE_Y = {5, 1.54, -1.54, -5};
 
 
 std::vector<bool> obstacleInAisle(4,false);
@@ -700,7 +698,7 @@ std::vector<std::string> estimateLocation(int aisle_num, double t) {
    ROS_INFO_STREAM("timestamp "<<time_stamp1);
    
 
-   if(td > tf) {
+   if(td >= tf) {
        td  -= tf; 
        if(td <= wait_time) {
           ROS_INFO_STREAM("waiting near conveyor belt with" << (wait_time - td) << " left");
@@ -831,9 +829,6 @@ void planAndExecutePath(product prod, part my_part,std::map<std::string, std::ve
        while(true) {
                auto vec = estimateLocation(aisle_num, comp.getClock());                      //estimate Location
              
-               //TODO instead of 6.0 will need to get x coordinate of gap
-               //      and also make more robust
-               //      Dynamic presetLoc from gap
                ROS_INFO_STREAM("Gap Coordinate" << std::stod(plan[4]));
                ROS_INFO_STREAM("VEC1" << vec[1]);
                if(vec[0] == "toward" && std::stod(vec[1]) - std::stod(plan[4]) > threshold) {
@@ -914,11 +909,11 @@ void processPart(product prod, GantryControl &gantry, Camera &camera, Competitio
                     moveToLocation(presetLoc, prod.agv_id, gantry);                                                //move to desired agv id
 
                 armState = gantry.getGripperState(prod.arm_name);
-
                 //if (!armState.attached)                                                                            //object accidentally fell on the tray
                     //faultyGripper(gantry, prod, camera, my_part_in_tray);
                 //else
-                    gantry.placePart(my_part_in_tray, prod.agv_id, prod.arm_name);                                 //place part on the tray
+                
+                gantry.placePart(my_part_in_tray, prod.agv_id, prod.arm_name);                                 //place part on the tray
 
 
                 /////////////////////////////////////////////////////////////////////////
@@ -1262,30 +1257,30 @@ int main(int argc, char ** argv) {
             //break;
       //}
     //}
-    
-    
-    obstacleAssociatedWithAisle[2].is_valid_obstacle= true;
-    obstacleAssociatedWithAisle[2].wait_time= 7;
-    obstacleAssociatedWithAisle[2].move_time= 9;
-    obstacleAssociatedWithAisle[2].time_stamp1= 25;
-
     obstacleAssociatedWithAisle[1].is_valid_obstacle= true;
     obstacleAssociatedWithAisle[1].wait_time= 7;
     obstacleAssociatedWithAisle[1].move_time= 9;
     obstacleAssociatedWithAisle[1].time_stamp1= 9;
+    
+    obstacleAssociatedWithAisle[2].is_valid_obstacle= true;
+    obstacleAssociatedWithAisle[2].wait_time= 7;
+    obstacleAssociatedWithAisle[2].move_time= 9;
+    obstacleAssociatedWithAisle[2].time_stamp1= 9;
+    
 
-//    auto  vec = estimateLocation(2,30);
-//    ROS_INFO_STREAM("Time at: " << 30 << " action:" << vec[0] << " location: " <<vec[1]);
-//    vec= estimateLocation(2,45);
-//    ROS_INFO_STREAM("Time at: " << 45 << " action:" << vec[0] << " location: " <<vec[1]);
-//
-//    vec = estimateLocation(2,15);
-//    ROS_INFO_STREAM("Time at: " << 15 << " action:" << vec[0] << " location: " <<vec[1]);
-//
-//    vec = estimateLocation(2,75);
-//    ROS_INFO_STREAM("Time at: " << 75 << " action:" << vec[0] << " location: " <<vec[1]);
-//
-//    std::cout << "finished estimating obstacle parameters" << std::endl;
+
+    auto  vec = estimateLocation(2,15);
+    ROS_INFO_STREAM("Time at: " << 15 << " action:" << vec[0] << " location: " <<vec[1]);
+    vec= estimateLocation(2,20);
+    ROS_INFO_STREAM("Time at: " << 20 << " action:" << vec[0] << " location: " <<vec[1]);
+
+    vec = estimateLocation(2,30);
+    ROS_INFO_STREAM("Time at: " << 25 << " action:" << vec[0] << " location: " <<vec[1]);
+
+    vec = estimateLocation(2,40);
+    ROS_INFO_STREAM("Time at: " << 30 << " action:" << vec[0] << " location: " <<vec[1]);
+
+    std::cout << "finished estimating obstacle parameters" << std::endl;
 
     for(int i = 0; i< orders.size(); i++){
         auto order = orders[i];

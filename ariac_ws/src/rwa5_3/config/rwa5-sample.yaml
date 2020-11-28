@@ -19,12 +19,12 @@ shelf_layout:
 
 aisle_layout:
   person_1:
-    location: 1.57
-    start_time: 16
+    location: -1.57
+    start_time: 0
     move_time: 9.
     wait_time: 7.
   person_2:
-    location: -1.57
+    location: 1.57
     start_time: 0
     move_time: 9.
     wait_time: 7.
