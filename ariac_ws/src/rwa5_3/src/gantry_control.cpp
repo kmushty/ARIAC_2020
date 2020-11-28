@@ -36,6 +36,9 @@ void GantryControl::init()
 
     left_arm_group_.setPoseReferenceFrame("world");
 
+    full_robot_group_.setMaxVelocityScalingFactor(1);
+    full_robot_group_.setMaxAccelerationScalingFactor(1);
+
     //--start location
     start_.gantry = {0, 0, 0};
     start_.left_arm = {0.0, -PI / 4, PI / 2, -PI / 4, PI / 2, 0};
@@ -358,17 +361,18 @@ void GantryControl::init()
 
     //LeftGap_default
 
-    left_gap_default_.gantry = {-0.8, -5.18, 0};
+    left_gap_default_.gantry = {-0.8, -5.18, -3.14};
     left_gap_default_.left_arm = {-1.48, -2.89, -1.74, -1.72, 0, 0};
     left_gap_default_.right_arm = {1.49, -0.34, 1.74, -1.53, 3.14, 0};
+//    left_gap_default_.right_arm = {1.76, -3.77, -1.26, -1.53, 3.14, 0};
 
     //RightGap_default
 
 
     right_gap_default_.gantry = {-0.2, 5.18, 3.14};
     right_gap_default_.left_arm = {-1.48, -2.89, -1.74, -1.72, 0, 0};
-    right_gap_default_.right_arm = {1.49, -0.34, 1.74, -1.53, 3.14, 0};
-
+//    right_gap_default_.right_arm = {1.49, -0.34, 1.74, -1.53, 3.14, 0};
+    right_gap_default_.right_arm = {1.76, -3.77, -1.26, -1.53, 3.14, 0};
 
     // middleGap_0
     middle_gap_0_2_aisle1_.gantry = {-3.00, 0, 0};
@@ -490,17 +494,22 @@ void GantryControl::init()
     left_gap_aisle_0to1_1_.right_arm = {1.49, -0.34, 1.74, -1.53, 3.14, 0};
 
     //LeftGap_2
-    left_gap_2_2_.gantry = {-11.3, -5.18, 0};
+    left_gap_2_2_.gantry = {-11.3, -5.18, -3.14};
     left_gap_2_2_.left_arm = {-1.48, -2.89, -1.74, -1.72, 0, 0};
-    left_gap_2_2_.right_arm = {1.49, -0.34, 1.74, -1.53, 3.14, 0};
+//    left_gap_2_2_.right_arm = {1.49, -0.34, 1.74, -1.53, 3.14, 0};
+    left_gap_2_2_.right_arm = {3.14, 0, 0, -1.53, 3.14, 0};
 
-    left_gap_2_3_.gantry = {-11.3, -3.08, 0};
+
+    left_gap_2_3_.gantry = {-10.85, -3.08, -2.64};
     left_gap_2_3_.left_arm = {-1.48, -2.89, -1.74, -1.72, 0, 0};
-    left_gap_2_3_.right_arm = {1.49, -0.34, 1.74, -1.53, 3.14, 0};
+//    left_gap_2_3_.right_arm = {1.49, -0.34, 1.74, -1.53, 3.14, 0};
+    left_gap_2_3_.right_arm = {3.14, 0, 0, -1.53, 3.14, 0};
 
-    left_gap_aisle_0to1_2_.gantry = {-11.3, -1.54, 0};
+    left_gap_aisle_0to1_2_.gantry = {-13.20, -1.12, -2.64};
     left_gap_aisle_0to1_2_.left_arm = {-1.48, -2.89, -1.74, -1.72, 0, 0};
-    left_gap_aisle_0to1_2_.right_arm = {1.49, -0.34, 1.74, -1.53, 3.14, 0};
+//    left_gap_aisle_0to1_2_.right_arm = {1.49, -0.34, 1.74, -1.53, 3.14, 0};
+    left_gap_aisle_0to1_2_.right_arm = {3.14, 0, 0, -1.53, 3.14, 0};
+
 
     //LeftGap_3
     left_gap_3_2_.gantry = {-15.20, -5.18, 0};
@@ -544,17 +553,24 @@ void GantryControl::init()
     right_gap_aisle_3to2_1_.right_arm = {1.49, -0.34, 1.74, -1.53, 3.14, 0};
 
     // rightGap_2
-    right_gap_2_2_.gantry = {-11.3, 5.18, 3.14};
+    right_gap_2_2_.gantry = {-11.3, 5.18, 2.65};
     right_gap_2_2_.left_arm = {-1.48, -2.89, -1.74, -1.72, 0, 0};
-    right_gap_2_2_.right_arm = {1.49, -0.34, 1.74, -1.53, 3.14, 0};
+//    right_gap_2_2_.right_arm = {1.49, -0.34, 1.74, -1.53, 3.14, 0};
+//    right_gap_2_2_.right_arm = {3.14, 0, 0, -1.53, 3.14, 0};
+    right_gap_2_2_.right_arm = {1.76, -3.77, -1.26, -1.53, 3.14, 0};
 
-    right_gap_2_3_.gantry = {-11.30, 3.08, 3.14};
+//    right_gap_2_3_.gantry = {-11.30, 3.08, 3.14};
+    right_gap_2_3_.gantry = {-11.30, 3.08, 2.65};
     right_gap_2_3_.left_arm = {-1.48, -2.89, -1.74, -1.72, 0, 0};
-    right_gap_2_3_.right_arm = {1.49, -0.34, 1.74, -1.53, 3.14, 0};
+//    right_gap_2_3_.right_arm = {1.49, -0.34, 1.74, -1.53, 3.14, 0};
+//    right_gap_2_3_.right_arm = {3.14, 0, 0, -1.53, 3.14, 0};
+    right_gap_2_3_.right_arm = {1.76, -3.77, -1.26, -1.53, 3.14, 0};
 
-    right_gap_aisle_3to2_2_.gantry = {-11.30, 1.54, 3.14};
+    right_gap_aisle_3to2_2_.gantry = {-11.30, 1.16, 2.65};
     right_gap_aisle_3to2_2_.left_arm = {-1.48, -2.89, -1.74, -1.72, 0, 0};
-    right_gap_aisle_3to2_2_.right_arm = {1.49, -0.34, 1.74, -1.53, 3.14, 0};
+//    right_gap_aisle_3to2_2_.right_arm = {1.49, -0.34, 1.74, -1.53, 3.14, 0};
+//    right_gap_aisle_3to2_2_.right_arm = {3.14, 0, 0, -1.53, 3.14, 0};
+    right_gap_aisle_3to2_2_.right_arm = {1.76, -3.77, -1.26, -1.53, 3.14, 0};
 
     // rightGap_3
     right_gap_3_2_.gantry = {-15.20, 5.18, 3.14};
@@ -633,7 +649,9 @@ void GantryControl::init()
 
     logical_12_15_aisle_1_short_2_.gantry = {-14.7, -1.80, -1.57};
     logical_12_15_aisle_1_short_2_.left_arm = {0, -2.05, 1.57, -2.65, -1.57, 0};
-    logical_12_15_aisle_1_short_2_.right_arm = {1.51, -1.57, 2.8, -1.44, 3.14, 0};
+//    logical_12_15_aisle_1_short_2_.right_arm = {1.51, -1.57, 2.8, -1.44, 3.14, 0};
+    logical_12_15_aisle_1_short_2_.right_arm = {3.14, 0.28, 0, -1.53, 3.14, 0};;
+
 
     logical_12_15_aisle_1_long_2_.gantry = {-15.11, -1.10, -1.57};
     logical_12_15_aisle_1_long_2_.left_arm = {0, -2.05, 1.57, -2.65, -1.57, 0};
@@ -699,7 +717,9 @@ void GantryControl::init()
 
     logical_12_15_aisle_2_short_2_.gantry = {-14.3, 1.8, 1.57};
     logical_12_15_aisle_2_short_2_.left_arm = {0, -2.05, 1.57, -2.65, -1.57, 0};
-    logical_12_15_aisle_2_short_2_.right_arm = {1.51, -1.57, 2.8, -1.44, 3.14, 0};
+//    logical_12_15_aisle_2_short_2_.right_arm = {1.51, -1.57, 2.8, -1.44, 3.14, 0};
+//    logical_12_15_aisle_2_short_2_.right_arm = {3.14, 0, 0, -1.53, 3.14, 0};
+    logical_12_15_aisle_2_short_2_.right_arm = {1.76, -3.77, -1.26, -1.53, 3.14, 0};
 
     // --blue - logical camera 15
     logical_12_15_aisle_2_long_2_.gantry = {-14.3, 1.1, 1.57};
@@ -1381,11 +1401,9 @@ bool GantryControl::send_command(trajectory_msgs::JointTrajectory command_msg)
     }
 }
 
-void GantryControl::moveToPart(part my_part)
+void GantryControl::moveToPart(part my_part, PresetLocation preset)
 {
-    auto gantryConfiguration = full_robot_group_.getCurrentJointValues();
-    ROS_INFO_STREAM("gNTRY" << gantryConfiguration[2]);
-
+  auto gantryConfiguration = full_robot_group_.getCurrentJointValues();
   if(my_part.logicalCameraName == "logical_camera_9"){
       gantryConfiguration[0] = my_part.pose.position.x - 0.6;
       gantryConfiguration[1] = -1*my_part.pose.position.y;
@@ -1394,6 +1412,14 @@ void GantryControl::moveToPart(part my_part)
    } else if (my_part.logicalCameraName != "logical_camera_1" && my_part.logicalCameraName != "logical_camera_2" &&
         my_part.logicalCameraName != "logical_camera_5" && my_part.logicalCameraName != "logical_camera_6")
     {
+        gantryConfiguration[1] = preset.gantry[1];
+        gantryConfiguration[2] = preset.gantry[2];
+        for(int i=0; i<6; i++)
+            gantryConfiguration[i+3] = preset.left_arm[i];
+        for(int i=0; i<6; i++)
+            gantryConfiguration[i+9] = preset.right_arm[i];
+        ROS_INFO_STREAM("gNTRY" << gantryConfiguration[2]);
+
         if (gantryConfiguration[2] < -1.50 && gantryConfiguration[2] > -1.60)
         {
             gantryConfiguration[0] = my_part.pose.position.x - 0.2;

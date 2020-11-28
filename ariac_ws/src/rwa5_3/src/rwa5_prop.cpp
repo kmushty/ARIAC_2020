@@ -125,7 +125,7 @@ void initWayPoints(std::map<std::string,std::vector<PresetLocation>> &presetLoc,
     presetLoc["right_gap_2_logical_camera_12_long"] = {gantry.right_gap_default_, gantry.right_gap_2_2_, gantry.right_gap_2_3_, gantry.right_gap_aisle_3to2_2_,  gantry.logical_12_15_aisle_2_short_1_, gantry.logical_12_15_aisle_2_long_2_};
     presetLoc["right_gap_2_logical_camera_12_short"] = {gantry.right_gap_default_, gantry.right_gap_2_2_, gantry.right_gap_2_3_, gantry.right_gap_aisle_3to2_2_, gantry.logical_12_15_aisle_2_short_1_, gantry.logical_12_15_aisle_2_short_2_};
     presetLoc["right_gap_2_logical_camera_15_long"] = {gantry.right_gap_default_, gantry.right_gap_2_2_, gantry.right_gap_2_3_, gantry.right_gap_aisle_3to2_2_, gantry.logical_12_15_aisle_2_short_1_, gantry.logical_12_15_aisle_2_long_2_};
-    presetLoc["right_gap_2_logical_camera_15_short"] = {gantry.right_gap_default_, gantry.right_gap_2_2_, gantry.right_gap_2_3_, gantry.right_gap_aisle_3to2_2_, gantry.logical_12_15_aisle_2_short_1_, gantry.logical_12_15_aisle_2_short_2_};
+    presetLoc["right_gap_2_logical_camera_15_short"] = {gantry.right_gap_default_, gantry.right_gap_2_2_, gantry.right_gap_2_3_, gantry.right_gap_aisle_3to2_2_, /*gantry.logical_12_15_aisle_2_short_1_,*/ gantry.logical_12_15_aisle_2_short_2_};
 
     presetLoc["right_gap_3_logical_camera_12_long"] =  {gantry.right_gap_default_, gantry.right_gap_3_2_, gantry.right_gap_3_3_, gantry.right_gap_aisle_3to2_3_, gantry.logical_12_15_aisle_2_short_1_, gantry.logical_12_15_aisle_2_long_2_};
     presetLoc["right_gap_3_logical_camera_12_short"] = {gantry.right_gap_default_, gantry.right_gap_3_2_, gantry.right_gap_3_3_, gantry.right_gap_aisle_3to2_3_, gantry.logical_12_15_aisle_2_short_1_, gantry.logical_12_15_aisle_2_short_2_};
@@ -144,7 +144,7 @@ void initWayPoints(std::map<std::string,std::vector<PresetLocation>> &presetLoc,
     presetLoc["left_gap_1_logical_camera_15_short"] = {gantry.left_gap_default_, gantry.left_gap_1_2_, gantry.left_gap_1_3_, gantry.left_gap_aisle_0to1_1_, gantry.logical_12_15_aisle_1_short_1_, gantry.logical_12_15_aisle_1_short_2_};
 
     presetLoc["left_gap_2_logical_camera_12_long"] =  {gantry.left_gap_default_, gantry.left_gap_2_2_, gantry.left_gap_2_3_, gantry.left_gap_aisle_0to1_2_, gantry.logical_12_15_aisle_1_short_1_, gantry.logical_12_15_aisle_1_long_2_};
-    presetLoc["left_gap_2_logical_camera_12_short"] = {gantry.left_gap_default_, gantry.left_gap_2_2_, gantry.left_gap_2_3_, gantry.left_gap_aisle_0to1_2_, gantry.logical_12_15_aisle_1_short_1_, gantry.logical_12_15_aisle_1_short_2_};
+    presetLoc["left_gap_2_logical_camera_12_short"] = {gantry.left_gap_default_, gantry.left_gap_2_2_, gantry.left_gap_2_3_, gantry.left_gap_aisle_0to1_2_, /*gantry.logical_12_15_aisle_1_short_1_,*/ gantry.logical_12_15_aisle_1_short_2_};
     presetLoc["left_gap_2_logical_camera_15_long"] =  {gantry.left_gap_default_, gantry.left_gap_2_2_, gantry.left_gap_2_3_, gantry.left_gap_aisle_0to1_2_, gantry.logical_12_15_aisle_1_short_1_, gantry.logical_12_15_aisle_1_long_2_};
     presetLoc["left_gap_2_logical_camera_15_short"] = {gantry.left_gap_default_, gantry.left_gap_2_2_, gantry.left_gap_2_3_, gantry.left_gap_aisle_0to1_2_, gantry.logical_12_15_aisle_1_short_1_, gantry.logical_12_15_aisle_1_short_2_};
 
@@ -301,28 +301,28 @@ void moveToLocation(std::map<std::string,std::vector<PresetLocation>> &presetLoc
 void moveToLocation2(std::map<std::string,std::vector<PresetLocation>> &presetLoc, part my_part,GantryControl &gantry,std::string location){
     auto vec = presetLoc[location];
     int count =0;
-    for(auto waypoint :vec){
-          gantry.goToPresetLocation(waypoint);
+    for(int i=0; i<vec.size(); i++){
+          gantry.goToPresetLocation(vec[i]);
   //        ros::Duration(10).sleep();
           ROS_INFO_STREAM("iiiiiiiin way point");
      }
 
-     gantry.moveToPart(my_part);
+     gantry.moveToPart(my_part, vec[vec.size()-1]);
     //modify to pick part
 }
 
 void moveToGap(std::map<std::string,std::vector<PresetLocation>> &presetLoc, part my_part,GantryControl &gantry,std::string location){
     auto vec = presetLoc[location];
-    for(int i=0; i< (vec.size() - 3); i++)
+    for(int i=0; i< (vec.size() - 2); i++)
         gantry.goToPresetLocation(vec[i]);
 }
 
 
 void moveFromGapToLocation(std::map<std::string,std::vector<PresetLocation>> &presetLoc, part my_part,GantryControl &gantry,std::string location){
     auto vec = presetLoc[location];
-    for(int i=(vec.size() - 3); i< vec.size(); i++)
+    for(int i=(vec.size() - 2); i< vec.size() - 1; i++)
         gantry.goToPresetLocation(vec[i]);
-     gantry.moveToPart(my_part);
+     gantry.moveToPart(my_part, vec[vec.size() - 1]);
 }
 
 
@@ -341,6 +341,20 @@ void moveFromLocationToStart(std::map<std::string,std::vector<PresetLocation>> &
     }
     else{
         for(int i=vec.size()-1; i>=0;i--)
+            gantry.goToPresetLocation(vec[i]);
+        gantry.goToPresetLocation(gantry.start_);
+    }
+}
+
+void moveFromLocationToStartAvoidingObstacles(std::map<std::string,std::vector<PresetLocation>> &presetLoc, std::string location,GantryControl &gantry) {
+    auto vec = presetLoc[location];
+    if(vec.size() == 1){
+        gantry.goToPresetLocation(vec[0]);
+        if(location != "start")
+            gantry.goToPresetLocation(gantry.start_);
+    }
+    else{
+        for(int i=vec.size()-2; i>=0;i--)
             gantry.goToPresetLocation(vec[i]);
         gantry.goToPresetLocation(gantry.start_);
     }
@@ -840,7 +854,7 @@ void planAndExecutePath(product prod, part my_part,std::map<std::string, std::ve
 //                  moveToLocation(presetLoc, location, gantry);
                   gantry.pickPart(my_part);
 //                  retraceSteps(presetLoc, location, gantry);
-                  moveFromLocationToStart(presetLoc, location, gantry);
+                  moveFromLocationToStartAvoidingObstacles(presetLoc, location, gantry);
                   break;
                }
          }
@@ -1150,7 +1164,7 @@ void pickPartsFromConveyor2(Camera &camera, Competition &comp, GantryControl &ga
      double location_y = (comp.getClock() - conveyor_part.conveyor_time)*conveyor_speed + location_y0;
      if(location_y > -10000) {
        conveyor_part.pose.position.y = location_y;
-       gantry.moveToPart(conveyor_part);
+       gantry.moveToPart(conveyor_part, gantry.start_);
      }
 }
 

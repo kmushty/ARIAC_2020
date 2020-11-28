@@ -65,7 +65,7 @@ class GantryControl {
     void presetArmLocation(PresetLocation location);
     void placePart(part part, std::string agv, std::string arm);
     void placeFlippedPart(part part, std::string agv, std::string arm);
-    void moveToPart(part my_part);
+    void moveToPart(part my_part,  PresetLocation preset);
 
     //--preset locations;
     start start_;
