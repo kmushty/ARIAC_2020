@@ -170,10 +170,10 @@ void initWayPoints(std::map<std::string,std::vector<PresetLocation>> &presetLoc,
     presetLoc["middle_gap_1_logical_camera_16_long"] =  {gantry.middle_gap_default_aisle1_, gantry.middle_gap_1_2_aisle1_, gantry.middle_gap_1_3_aisle1_, gantry.middle_gap_aisle_1to2_1_, gantry.logical_13_16_aisle_2_short_1_, gantry.logical_13_16_aisle_2_long_2_};
     presetLoc["middle_gap_1_logical_camera_16_short"] = {gantry.middle_gap_default_aisle1_, gantry.middle_gap_1_2_aisle1_, gantry.middle_gap_1_3_aisle1_, gantry.middle_gap_aisle_1to2_1_, gantry.logical_13_16_aisle_2_short_1_, gantry.logical_13_16_aisle_2_short_2_};
 
-    presetLoc["middle_gap_2_logical_camera_13_long"] =  {gantry.middle_gap_default_aisle1_, gantry.middle_gap_2_2_aisle1_, gantry.middle_gap_2_3_aisle1_, gantry.middle_gap_aisle_1to2_2_, gantry.logical_13_16_aisle_2_short_1_, gantry.logical_13_16_aisle_2_long_2_};
-    presetLoc["middle_gap_2_logical_camera_13_short"] = {gantry.middle_gap_default_aisle1_, gantry.middle_gap_2_2_aisle1_, gantry.middle_gap_2_3_aisle1_, gantry.middle_gap_aisle_1to2_2_, gantry.logical_13_16_aisle_2_short_1_, gantry.logical_13_16_aisle_2_short_2_};
-    presetLoc["middle_gap_2_logical_camera_16_long"] =  {gantry.middle_gap_default_aisle1_, gantry.middle_gap_2_2_aisle1_, gantry.middle_gap_2_3_aisle1_, gantry.middle_gap_aisle_1to2_2_, gantry.logical_13_16_aisle_2_short_1_, gantry.logical_13_16_aisle_2_long_2_};
-    presetLoc["middle_gap_2_logical_camera_16_short"] = {gantry.middle_gap_default_aisle1_, gantry.middle_gap_2_2_aisle1_, gantry.middle_gap_2_3_aisle1_, gantry.middle_gap_aisle_1to2_2_, gantry.logical_13_16_aisle_2_short_1_, gantry.logical_13_16_aisle_2_short_2_};
+    presetLoc["middle_gap_2_logical_camera_13_long"] =  {gantry.middle_gap_default_aisle1_, gantry.middle_gap_2_2_aisle1_, gantry.middle_gap_2_3_aisle1_, gantry.middle_gap_aisle_1to2_2_, /*gantry.logical_13_16_aisle_2_short_1_,*/ gantry.logical_13_16_aisle_2_long_2_};
+    presetLoc["middle_gap_2_logical_camera_13_short"] = {gantry.middle_gap_default_aisle1_, gantry.middle_gap_2_2_aisle1_, gantry.middle_gap_2_3_aisle1_, gantry.middle_gap_aisle_1to2_2_, /*gantry.logical_13_16_aisle_2_short_1_,*/ gantry.logical_13_16_aisle_2_short_2_};
+    presetLoc["middle_gap_2_logical_camera_16_long"] =  {gantry.middle_gap_default_aisle1_, gantry.middle_gap_2_2_aisle1_, gantry.middle_gap_2_3_aisle1_, gantry.middle_gap_aisle_1to2_2_, /*gantry.logical_13_16_aisle_2_short_1_,*/ gantry.logical_13_16_aisle_2_long_2_};
+    presetLoc["middle_gap_2_logical_camera_16_short"] = {gantry.middle_gap_default_aisle1_, gantry.middle_gap_2_2_aisle1_, gantry.middle_gap_2_3_aisle1_, gantry.middle_gap_aisle_1to2_2_, /*gantry.logical_13_16_aisle_2_short_1_,*/ gantry.logical_13_16_aisle_2_short_2_};
 
     presetLoc["middle_gap_3_logical_camera_13_long"] =  {gantry.middle_gap_default_aisle1_, gantry.middle_gap_3_2_aisle1_, gantry.middle_gap_3_3_aisle1_, gantry.middle_gap_aisle_1to2_3_, gantry.logical_13_16_aisle_2_short_1_, gantry.logical_13_16_aisle_2_long_2_};
     presetLoc["middle_gap_3_logical_camera_13_short"] = {gantry.middle_gap_default_aisle1_, gantry.middle_gap_3_2_aisle1_, gantry.middle_gap_3_3_aisle1_, gantry.middle_gap_aisle_1to2_3_, gantry.logical_13_16_aisle_2_short_1_, gantry.logical_13_16_aisle_2_short_2_};
@@ -192,10 +192,10 @@ void initWayPoints(std::map<std::string,std::vector<PresetLocation>> &presetLoc,
     presetLoc["middle_gap_1_logical_camera_14_long"] =  {gantry.middle_gap_default_aisle2_, gantry.middle_gap_1_2_aisle2_, gantry.middle_gap_1_3_aisle2_, gantry.middle_gap_aisle_2to1_1_, gantry.logical_11_14_aisle_1_short_1_, gantry.logical_11_14_aisle_1_long_2_};
     presetLoc["middle_gap_1_logical_camera_14_short"] = {gantry.middle_gap_default_aisle2_, gantry.middle_gap_1_2_aisle2_, gantry.middle_gap_1_3_aisle2_, gantry.middle_gap_aisle_2to1_1_, gantry.logical_11_14_aisle_1_short_1_, gantry.logical_11_14_aisle_1_short_2_};
 
-    presetLoc["middle_gap_2_logical_camera_11_long"] =  {gantry.middle_gap_default_aisle2_, gantry.middle_gap_2_2_aisle2_, gantry.middle_gap_2_3_aisle2_, gantry.middle_gap_aisle_2to1_2_, gantry.logical_11_14_aisle_1_short_1_, gantry.logical_11_14_aisle_1_long_2_};
-    presetLoc["middle_gap_2_logical_camera_11_short"] = {gantry.middle_gap_default_aisle2_, gantry.middle_gap_2_2_aisle2_, gantry.middle_gap_2_3_aisle2_, gantry.middle_gap_aisle_2to1_2_, gantry.logical_11_14_aisle_1_short_1_, gantry.logical_11_14_aisle_1_short_2_};
-    presetLoc["middle_gap_2_logical_camera_14_long"] =  {gantry.middle_gap_default_aisle2_, gantry.middle_gap_2_2_aisle2_, gantry.middle_gap_2_3_aisle2_, gantry.middle_gap_aisle_2to1_2_, gantry.logical_11_14_aisle_1_short_1_, gantry.logical_11_14_aisle_1_long_2_};
-    presetLoc["middle_gap_2_logical_camera_14_short"] = {gantry.middle_gap_default_aisle2_, gantry.middle_gap_2_2_aisle2_, gantry.middle_gap_2_3_aisle2_, gantry.middle_gap_aisle_2to1_2_, gantry.logical_11_14_aisle_1_short_1_, gantry.logical_11_14_aisle_1_short_2_};
+    presetLoc["middle_gap_2_logical_camera_11_long"] =  {gantry.middle_gap_default_aisle2_, gantry.middle_gap_2_2_aisle2_, gantry.middle_gap_2_3_aisle2_, gantry.middle_gap_aisle_2to1_2_, /*gantry.logical_11_14_aisle_1_short_1_,*/ gantry.logical_11_14_aisle_1_long_2_};
+    presetLoc["middle_gap_2_logical_camera_11_short"] = {gantry.middle_gap_default_aisle2_, gantry.middle_gap_2_2_aisle2_, gantry.middle_gap_2_3_aisle2_, gantry.middle_gap_aisle_2to1_2_, /*gantry.logical_11_14_aisle_1_short_1_,*/ gantry.logical_11_14_aisle_1_short_2_};
+    presetLoc["middle_gap_2_logical_camera_14_long"] =  {gantry.middle_gap_default_aisle2_, gantry.middle_gap_2_2_aisle2_, gantry.middle_gap_2_3_aisle2_, gantry.middle_gap_aisle_2to1_2_, /*gantry.logical_11_14_aisle_1_short_1_,*/ gantry.logical_11_14_aisle_1_long_2_};
+    presetLoc["middle_gap_2_logical_camera_14_short"] = {gantry.middle_gap_default_aisle2_, gantry.middle_gap_2_2_aisle2_, gantry.middle_gap_2_3_aisle2_, gantry.middle_gap_aisle_2to1_2_, /*gantry.logical_11_14_aisle_1_short_1_,*/ gantry.logical_11_14_aisle_1_short_2_};
 
     presetLoc["middle_gap_3_logical_camera_11_long"] =  {gantry.middle_gap_default_aisle2_, gantry.middle_gap_3_2_aisle2_, gantry.middle_gap_3_3_aisle2_, gantry.middle_gap_aisle_2to1_3_, gantry.logical_11_14_aisle_1_short_1_, gantry.logical_11_14_aisle_1_long_2_};
     presetLoc["middle_gap_3_logical_camera_11_short"] = {gantry.middle_gap_default_aisle2_, gantry.middle_gap_3_2_aisle2_, gantry.middle_gap_3_3_aisle2_, gantry.middle_gap_aisle_2to1_3_, gantry.logical_11_14_aisle_1_short_1_, gantry.logical_11_14_aisle_1_short_2_};
@@ -298,25 +298,33 @@ void agvDeliveryService(std::string agv_id, ros::ServiceClient &agvDelivery1, ro
 
 void keepTrackOfProcessedParts(part my_part, product prod,GantryControl &gantry,Camera &camera){
   part processed_part = my_part;
+  ROS_INFO_STREAM("Entered Keep track");
   if(camera.isSensorBlackout()){
+      ROS_INFO_STREAM("Entered sensor blackout");
       processed_part.placed_part_pose = gantry.getTargetWorldPose(processed_part.pose,prod.agv_id,prod.arm_name);
       processedParts.push_back(processed_part);
 
   }else {
+    ROS_INFO_STREAM("dID NOT ENTER SENSOR BLACKOUT");
     std::map<std::string,part> parts;
     if (prod.agv_id == "agv2")
-        parts = camera.get_detected_parts()["logical_camera_10"];                 
+        parts = camera.get_agv_detected_parts()["logical_camera_10"];
     else
-        parts = camera.get_detected_parts()["logical_camera_8"];
+        parts = camera.get_agv_detected_parts()["logical_camera_8"];
     
 
     part placed_part = parts.begin()->second;                 
+    ROS_INFO_STREAM("Placed part pose" << placed_part.pose);
     processedParts.push_back(placed_part);
     for(const auto& part: parts){
+      ROS_INFO_STREAM("PLACED PART COUNT " << placed_part.count);
+        ROS_INFO_STREAM("part second count " << part.second.count);
       if(placed_part.count < part.second.count){
         placed_part = part.second;
         processed_part.pose = placed_part.pose;
+        ROS_INFO_STREAM("HERE");
         processedParts[processedParts.size()-1]=processed_part;
+        ROS_INFO_STREAM("HERE1");
       }
     }
   }
@@ -895,7 +903,25 @@ void planAndExecutePath(product prod, part my_part,std::map<std::string, std::ve
 
 
 
-
+std::string getLocationName(part my_part, int aisle_num){
+    std::string location;
+    if(my_part.logicalCameraName == "logical_camera_3" || my_part.logicalCameraName == "logical_camera_7") {
+        if(my_part.pose.position.y > -3.55)
+            location = my_part.logicalCameraName + "_short";
+        else
+            location = my_part.logicalCameraName + "_long";
+    }else if(my_part.logicalCameraName == "logical_camera_0" || my_part.logicalCameraName == "logical_camera_4"){
+        if(my_part.pose.position.y > 3.5)
+            location = my_part.logicalCameraName + "_long";
+        else
+            location = my_part.logicalCameraName + "_short";
+    }else if(my_part.logicalCameraName =="logical_camera_1" || my_part.logicalCameraName =="logical_camera_2" ||
+             my_part.logicalCameraName =="logical_camera_5" || my_part.logicalCameraName =="logical_camera_6"){
+        location = my_part.logicalCameraName;
+    }else
+        location = my_part.logicalCameraName + "_aisle" + std::to_string(aisle_num) + "_short";
+    return location;
+}
 
 void processPart(product prod, GantryControl &gantry, Camera &camera, Competition &comp, bool priority_flag,  bool flip_flag) {
     part my_part, my_part_in_tray, placed_part, actual_part;
@@ -928,8 +954,7 @@ void processPart(product prod, GantryControl &gantry, Camera &camera, Competitio
 
                 ROS_INFO_STREAM("parts .second  "<< parts.second.logicalCameraName);
 
-                //detected_parts.erase(parts.first);
-//                camera.removeElement(prod.type, parts.first);
+//                detected_parts.erase(parts.first);
                 
                 int aisle_num = aisleAssociatedWithPart(my_part);
 
@@ -940,10 +965,9 @@ void processPart(product prod, GantryControl &gantry, Camera &camera, Competitio
                     planAndExecutePath( prod, my_part, presetLoc, camera, gantry, comp, aisle_num);
                 }
                 else {
-                    std::string location = my_part.logicalCameraName + "_aisle" + std::to_string(aisle_num) + "_short";
-                    moveToLocation2(presetLoc, my_part, gantry, location);
+                    moveToLocation2(presetLoc, my_part, gantry, getLocationName(my_part,aisle_num));
                     gantry.pickPart(my_part);
-                    moveFromLocationToStart(presetLoc, location, gantry);
+                    moveFromLocationToStart(presetLoc, getLocationName(my_part,aisle_num), gantry);
                 }
 
 
@@ -962,8 +986,9 @@ void processPart(product prod, GantryControl &gantry, Camera &camera, Competitio
                 
                 
                 gantry.placePart(my_part_in_tray, prod.agv_id, prod.arm_name);                                 //place part on the tray
+                ROS_INFO_STREAM("bEFORE PROCESSED PART");
                 keepTrackOfProcessedParts(my_part, prod,gantry,camera);
-
+                camera.removeElement(prod.type, parts.first);
                 foundPart = true;
                 break;
             }
@@ -1101,6 +1126,8 @@ void processShipment(nist_gear::Shipment &ship,Camera &camera, GantryControl &ga
           if (camera.get_faulty_poses()[prod.agv_id].size() > 0)
               removeReplaceFaultyProductsAndDeliver(camera, gantry, prod.agv_id, agv1Delivery, agv2Delivery,
                                                     ship.shipment_type, comp);
+          else
+              agvDeliveryService(prod.agv_id, agv1Delivery, agv2Delivery, ship.shipment_type);
      }
 }
 
@@ -1348,15 +1375,15 @@ int main(int argc, char ** argv) {
             //break;
       //}
     //}
-    obstacleAssociatedWithAisle[1].is_valid_obstacle= true;
-    obstacleAssociatedWithAisle[1].wait_time= 7;
-    obstacleAssociatedWithAisle[1].move_time= 9;
-    obstacleAssociatedWithAisle[1].time_stamp1= 9;
-    
     obstacleAssociatedWithAisle[2].is_valid_obstacle= true;
     obstacleAssociatedWithAisle[2].wait_time= 7;
     obstacleAssociatedWithAisle[2].move_time= 9;
     obstacleAssociatedWithAisle[2].time_stamp1= 9;
+    
+    obstacleAssociatedWithAisle[3].is_valid_obstacle= true;
+    obstacleAssociatedWithAisle[3].wait_time= 7;
+    obstacleAssociatedWithAisle[3].move_time= 9;
+    obstacleAssociatedWithAisle[3].time_stamp1= 9;
     
 
 
@@ -1464,6 +1491,8 @@ int main(int argc, char ** argv) {
                 //TODO sensor blackout
                 if(faulty_poses[prod.agv_id].size() > 0)
                     removeReplaceFaultyProductsAndDeliver(camera,gantry,prod.agv_id,agv1Delivery,agv2Delivery,order.shipments[j].shipment_type, comp);
+                else
+                    agvDeliveryService(prod.agv_id,agv1Delivery,agv2Delivery,order.shipments[j].shipment_type);
             }
         }
         ROS_INFO_STREAM("here3");
