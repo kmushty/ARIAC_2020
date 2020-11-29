@@ -62,9 +62,9 @@ const nist_gear::LogicalCameraImage::ConstPtr &msg, int index) {
                                            //std::to_string((int)round(mypart.pose.orientation.z)) +
                                            //std::to_string((int)round(mypart.pose.orientation.w));
 
-            std::string temp = mypart.type + std::to_string((int)std::round(mypart.pose.position.x*10)) +
-                                             std::to_string((int)std::round(mypart.pose.position.y*10)) +
-                                             std::to_string((int)std::round(mypart.pose.position.z*10));
+            std::string temp = mypart.type + std::to_string((int)std::round(mypart.pose.position.x*10));
+                                             //std::to_string((int)std::round(mypart.pose.position.y*10)) +
+                                            // std::to_string((int)std::round(mypart.pose.position.z*10));
 
             if(key == "logical_camera_9") {                           // conveyor belt logical camera
               mypart.conveyor_time = (*comp_ref).getClock();
@@ -326,6 +326,10 @@ std::map<int,std::vector<nist_gear::Proximity::ConstPtr>> Camera::get_aisle_brea
     
 void Camera::removeElement(std::string prod_type, std::string prod){
   detected_parts[prod_type].erase(prod);
+}
+
+void Camera::removeAllElements(std::string prod_type){
+    detected_parts[prod_type].clear();
 }
     
 

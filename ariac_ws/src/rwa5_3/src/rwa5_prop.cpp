@@ -955,7 +955,11 @@ void processPart(product prod, GantryControl &gantry, Camera &camera, Competitio
                 ROS_INFO_STREAM("parts .second  "<< parts.second.logicalCameraName);
 
 //                detected_parts.erase(parts.first);
-                
+                if(!camera.isSensorBlackout())
+                    camera.removeAllElements(prod.type);
+                else
+                    camera.removeElement(prod.type, parts.first);
+
                 int aisle_num = aisleAssociatedWithPart(my_part);
 
                 if (aisle_num != -1 && obstacleInAisle[aisle_num]) {
@@ -992,19 +996,19 @@ void processPart(product prod, GantryControl &gantry, Camera &camera, Competitio
 
                 auto hx = camera.get_detected_parts()[prod.type];
                 ROS_INFO_STREAM("Printing detected part(s before");
-                for(const auto & parts: detected_parts){
+                for(const auto & parts: hx){
                     ROS_INFO_STREAM("parts .firts "<< parts.first);
                     ROS_INFO_STREAM("parts .second  "<< parts.second.logicalCameraName);
                 }
 
                 ROS_INFO_STREAM("part to key remove is " << parts.first);
                 ROS_INFO_STREAM("part to type remove is " << parts.first);
-                camera.removeElement(prod.type, parts.first);
+
 
                 hx = camera.get_detected_parts()[prod.type];
 
                 ROS_INFO_STREAM("Printing detected after");
-                for(const auto & parts: detected_parts){
+                for(const auto & parts: hx){
                     ROS_INFO_STREAM("parts .firts "<< parts.first);
                     ROS_INFO_STREAM("parts .second  "<< parts.second.logicalCameraName);
                 }

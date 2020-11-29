@@ -72,6 +72,7 @@ public:
     std::map<int,std::vector<nist_gear::Proximity::ConstPtr>> get_aisle_breakbeam_msgs(); 
     
     void removeElement(std::string prod_type, std::string prod);
+    void removeAllElements(std::string prod_type);
 
 
     std::map<std::string,std::map<std::string,geometry_msgs::Pose>> get_faulty_poses();
