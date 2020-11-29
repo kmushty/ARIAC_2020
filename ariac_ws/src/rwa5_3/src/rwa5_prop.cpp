@@ -988,7 +988,27 @@ void processPart(product prod, GantryControl &gantry, Camera &camera, Competitio
                 gantry.placePart(my_part_in_tray, prod.agv_id, prod.arm_name);                                 //place part on the tray
                 ROS_INFO_STREAM("bEFORE PROCESSED PART");
                 keepTrackOfProcessedParts(my_part, prod,gantry,camera);
+
+
+                auto hx = camera.get_detected_parts()[prod.type];
+                ROS_INFO_STREAM("Printing detected part(s before");
+                for(const auto & parts: detected_parts){
+                    ROS_INFO_STREAM("parts .firts "<< parts.first);
+                    ROS_INFO_STREAM("parts .second  "<< parts.second.logicalCameraName);
+                }
+
+                ROS_INFO_STREAM("part to key remove is " << parts.first);
+                ROS_INFO_STREAM("part to type remove is " << parts.first);
                 camera.removeElement(prod.type, parts.first);
+
+                hx = camera.get_detected_parts()[prod.type];
+
+                ROS_INFO_STREAM("Printing detected after");
+                for(const auto & parts: detected_parts){
+                    ROS_INFO_STREAM("parts .firts "<< parts.first);
+                    ROS_INFO_STREAM("parts .second  "<< parts.second.logicalCameraName);
+                }
+
                 foundPart = true;
                 break;
             }

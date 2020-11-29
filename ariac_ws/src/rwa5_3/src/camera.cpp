@@ -54,14 +54,17 @@ const nist_gear::LogicalCameraImage::ConstPtr &msg, int index) {
 
             std::string key = "logical_camera_" + std::to_string(index);
             mypart.logicalCameraName = key;
-            std::string temp = mypart.type + std::to_string((int)round(mypart.pose.position.x)) +
-                                           std::to_string((int)round(mypart.pose.position.y)) +
-                                           std::to_string((int)round(mypart.pose.position.z)) +
-                                           std::to_string((int)round(mypart.pose.orientation.x)) +
-                                           std::to_string((int)round(mypart.pose.orientation.y)) +
-                                           std::to_string((int)round(mypart.pose.orientation.z)) +
-                                           std::to_string((int)round(mypart.pose.orientation.w));
+            //std::string temp = mypart.type + std::to_string((int)round(mypart.pose.position.x)) +
+                                           //std::to_string((int)round(mypart.pose.position.y)) +
+                                           //std::to_string((int)round(mypart.pose.position.z)) +
+                                           //std::to_string((int)round(mypart.pose.orientation.x)) +
+                                           //std::to_string((int)round(mypart.pose.orientation.y)) +
+                                           //std::to_string((int)round(mypart.pose.orientation.z)) +
+                                           //std::to_string((int)round(mypart.pose.orientation.w));
 
+            std::string temp = mypart.type + std::to_string((int)std::round(mypart.pose.position.x*10)) +
+                                             std::to_string((int)std::round(mypart.pose.position.y*10)) +
+                                             std::to_string((int)std::round(mypart.pose.position.z*10));
 
             if(key == "logical_camera_9") {                           // conveyor belt logical camera
               mypart.conveyor_time = (*comp_ref).getClock();
