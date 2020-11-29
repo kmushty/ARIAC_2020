@@ -1068,8 +1068,58 @@ void removeProduct(Camera &camera, GantryControl &gantry, product &prod) {
 }
 
 
+void processShipment(nist_gear::Shipment &ship,Camera &camera, GantryControl &gantry,Competition &comp, 
+                    ros::ServiceClient &agv2Delivery, ros::ServiceClient &agv1Delivery){
 
-//TODO ;Add more functionality
+      for (int k = 0; k < ship.products.size(); k++) {
+          auto product = ship.products[k];
+
+          prod.type = product.type;
+          prod.pose = product.pose;
+          prod.agv_id = ship.agv_id;
+          prod.arm_name = "left_arm";
+            
+          processPart(prod, gantry, camera, comp, false, false);
+
+          moveFromLocationToStart(presetLoc, "start", gantry);
+          ROS_INFO("HELLO1");
+
+          if (compIsAlmostOver(TIMELIMIT_THRESHOLD, comp)) {
+              agvDeliveryService(prod.agv_id, agv1Delivery, agv2Delivery, order.shipments[j].shipment_type);
+              stop_processing = true;
+              break;
+          }
+      }
+
+      if (compIsAlmostOver(TIMELIMIT_THRESHOLD, comp)) {
+          agvDeliveryService(prod.agv_id, agv1Delivery, agv2Delivery, order.shipments[j].shipment_type);
+          stop_processing = true;
+          break;
+      } else {
+          //TODO sensor blackout
+          if (camera.get_faulty_poses()[prod.agv_id].size() > 0)
+              removeReplaceFaultyProductsAndDeliver(camera, gantry, prod.agv_id, agv1Delivery, agv2Delivery,
+                                                    order.shipments[j].shipment_type, comp);
+     }
+}
+
+
+void addWantedParts(std::vector<product> wanted_products, GantryControl &gantry, Camera &camera, Competition &comp) {
+  for(int i=0; i< wanted_products.size(); i++) {
+     processPart(wanted_products[i], gantry, camera, comp, false, true);
+}
+
+void repositionParts(std::vector<part> reposition_parts,std::string agv_id, GantryControl &gantry, Camera &camera, Competition &comp) {
+
+
+}
+
+void removeUnwatedParts(std::vector<part> unwanted_parts,std::string agv_id GantryControl &gantry, Camera &camera, Competition &comp) {
+
+
+}
+
+
 void processHPOrder(nist_gear::Order &order,Camera &camera, GantryControl &gantry,Competition &comp, 
                     ros::ServiceClient &agv2Delivery, ros::ServiceClient &agv1Delivery, std::string previous_order_agv_id){
 
@@ -1111,43 +1161,13 @@ void processHPOrder(nist_gear::Order &order,Camera &camera, GantryControl &gantr
                   }
               }
               unwanted_parts = processedParts; 
-              //remove unwanted_parts
-              //reposition_parts
-              //add wanted_parts
-              
-        }else {
-            for (int k = 0; k < ship.products.size(); k++) {
-                auto product = ship.products[k];
+              processedParts = std::vector<part>{};
 
-                prod.type = product.type;
-                prod.pose = product.pose;
-                prod.agv_id = ship.agv_id;
-                prod.arm_name = "left_arm";
-                  
-                processPart(prod, gantry, camera, comp, false, false);
-
-                moveFromLocationToStart(presetLoc, "start", gantry);
-                ROS_INFO("HELLO1");
-
-                if (compIsAlmostOver(TIMELIMIT_THRESHOLD, comp)) {
-                    agvDeliveryService(prod.agv_id, agv1Delivery, agv2Delivery, order.shipments[j].shipment_type);
-                    stop_processing = true;
-                    break;
-                }
-            }
-
-            if (compIsAlmostOver(TIMELIMIT_THRESHOLD, comp)) {
-                agvDeliveryService(prod.agv_id, agv1Delivery, agv2Delivery, order.shipments[j].shipment_type);
-                stop_processing = true;
-                break;
-            } else {
-                //TODO sensor blackout
-                if (camera.get_faulty_poses()[prod.agv_id].size() > 0)
-                    removeReplaceFaultyProductsAndDeliver(camera, gantry, prod.agv_id, agv1Delivery, agv2Delivery,
-                                                          order.shipments[j].shipment_type, comp);
-            }
-        }
-    } 
+              removeUnwatedParts(unwanted_parts,agv_id,gantry,camera,comp);
+              repositionParts(reposition_parts,agv_id,gantry,camera,comp);
+              addWantedParts(wanted_products, gantry, camera, comp);
+        }else 
+             processShipment(ship,camera, gantry,comp, agv2Delivery, agv1Delivery);
 }
 
 
