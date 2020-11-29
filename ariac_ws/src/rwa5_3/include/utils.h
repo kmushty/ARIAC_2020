@@ -74,6 +74,8 @@ typedef struct Part {
   std::string logicalCameraName;
   geometry_msgs::Pose pose; // model pose (in frame)
   geometry_msgs::Pose save_pose;
+  geometry_msgs::Pose placed_part_pose;
+  geometry_msgs::Pose reposition_pose;
   std::string frame; // model frame (e.g., "logical_camera_1_frame")
   ros::Time time_stamp;
   std::string id;

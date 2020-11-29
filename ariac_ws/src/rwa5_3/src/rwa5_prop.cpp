@@ -40,6 +40,7 @@
 
 
 
+
 const double LENGTH_OF_AISLE = 15;
 const int NUM_LOGICAL_CAMERAS_PER_AISLE = 4;
 const int TIMELIMIT_THRESHOLD = 40;
@@ -51,14 +52,18 @@ const double MID_LOCATION_X = -12.592617;
 const std::vector<double> AISLE_Y = {5, 1.54, -1.54, -5};
 
 
+//keep track of env
 std::vector<bool> obstacleInAisle(4,false);
 std::vector<obstacle>  obstacleAssociatedWithAisle;
+std::vector<part> processedParts;
 
+//useful flags
 bool stop_processing;
 bool HighPriorityOrderInitiated;
 bool ConveyorFlag;
 bool PreviousOrderAgvChange;
 
+//store all preset locations
 std::map<std::string,std::vector<PresetLocation>> presetLoc;
 
 
@@ -290,6 +295,31 @@ void agvDeliveryService(std::string agv_id, ros::ServiceClient &agvDelivery1, ro
     ROS_INFO("AGV delivery successful");
 }
 
+
+void keepTrackOfProcessedParts(part my_part, product prod,Gantrycontrol &gantry,Camera &camera){
+  part processed_part = my_part
+  if(isSensorBlackout()){
+      processed_part.placed_part_pose = gantry.getTargetWorldPose(processed_part.pose,prod.agv_id,prod.arm_name);
+      processedParts.push(processed_part);
+
+  }else {
+    std::map<std::string,part> parts;
+    if (prod.agv_id == "agv2")
+        parts = camera.get_detected_parts()["logical_camera_10"];                 
+    else
+        parts = camera.get_detected_parts()["logical_camera_8"];
+    
+    placed_part = parts.begin()->second;                 
+    processedParts.push_back(placed_part);
+    for(const auto& part: parts){
+      if(placed_part.count < part.second.count){
+        placed_part = part.second;
+        processed_part.pose = placed_part.pose;
+        processedParts[processedParts.size()-1]=processed_part;
+      }
+    }
+  }
+}
 
 
 void moveToLocation(std::map<std::string,std::vector<PresetLocation>> &presetLoc, std::string location,GantryControl &gantry){
@@ -929,16 +959,9 @@ void processPart(product prod, GantryControl &gantry, Camera &camera, Competitio
                     //faultyGripper(gantry, prod, camera, my_part_in_tray);
                 //else
                 
+                
                 gantry.placePart(my_part_in_tray, prod.agv_id, prod.arm_name);                                 //place part on the tray
-
-
-                /////////////////////////////////////////////////////////////////////////
-                // check pose to see if it matches with what expected
-                // otherwise redo it again and again to match expeced pose
-                //
-                //
-                //
-                //////////////////////////////////////////////////////////////////////////
+                keepTrackOfProcessedParts(my_part, prod,gantry,camera)
 
                 foundPart = true;
                 break;
@@ -1052,59 +1075,79 @@ void processHPOrder(nist_gear::Order &order,Camera &camera, GantryControl &gantr
 
     ROS_INFO_STREAM("Processing HP order");
     product prod;
-    bool wanted = true;
+    std::vector<part> unwanted_parts;
+    std::vector<product> wanted_products;
+    std::vector<part> reposition_parts;
 
-
-    for(int j=0; j<order.shipments.size(); j++) {
+    for(int j=0; j<order.shipments.size(); j++){
         auto ship = order.shipments[j];
+        
+        if (ship.agv_id == previous_order_agv_id) {
+            PreviousOrderAgvChange = true;
+       
+              for(int k=0; k< ship.products.size(); k++){
+                  auto product = ship.products[k];
 
-        for (int k = 0; k < ship.products.size(); k++) {
-            auto product = ship.products[k];
+                  prod.type = product.type;
+                  prod.pose = product.pose;
+                  prod.agv_id = ship.agv_id;
+                  prod.arm_name = "left_arm";
 
+                  count = 0;
+                  bool found = false;
+                  for(int i=0; i< processParts.size(); i++) {
+                      if(prod.type == processPart[i].type){
+                         part new_part = processPart[i];
+                         new_part.reposition_pose.pose = prod.pose;
+                         reposition_parts.push_back(new_part);
+                         processPart.erase(processPart.begin()+i);
+                         found = true;
+                         break;
+                      }
+                  }
 
-            if (ship.agv_id == previous_order_agv_id)
-                PreviousOrderAgvChange = true;
+                  if(found == false){
+                     wanted_products.push_back(prod);
+                  }
+              }
+              unwanted_parts = processedParts; 
+              //remove unwanted_parts
+              //reposition_parts
+              //add wanted_parts
+              
+        }else {
+            for (int k = 0; k < ship.products.size(); k++) {
+                auto product = ship.products[k];
 
-
-            prod.type = product.type;
-            prod.pose = product.pose;
-            prod.agv_id = ship.agv_id;
-            prod.arm_name = "left_arm";
-
-            if (wanted) {
+                prod.type = product.type;
+                prod.pose = product.pose;
+                prod.agv_id = ship.agv_id;
+                prod.arm_name = "left_arm";
+                  
                 processPart(prod, gantry, camera, comp, false, false);
-                ros::Duration(3.0).sleep();
-                ros::spinOnce();
-                ros::spinOnce();
-                //if(camera.get_is_faulty(prod.agv_id)) {
-                //removeFaultyProduct(camera,gantry,prod);
-                //k--;                                                                                         //process product again
-                //}
-            } else
-                removeProduct(camera, gantry, prod);
 
-            moveFromLocationToStart(presetLoc, "start", gantry);
-            ROS_INFO("HELLO1");
+                moveFromLocationToStart(presetLoc, "start", gantry);
+                ROS_INFO("HELLO1");
+
+                if (compIsAlmostOver(TIMELIMIT_THRESHOLD, comp)) {
+                    agvDeliveryService(prod.agv_id, agv1Delivery, agv2Delivery, order.shipments[j].shipment_type);
+                    stop_processing = true;
+                    break;
+                }
+            }
 
             if (compIsAlmostOver(TIMELIMIT_THRESHOLD, comp)) {
                 agvDeliveryService(prod.agv_id, agv1Delivery, agv2Delivery, order.shipments[j].shipment_type);
                 stop_processing = true;
                 break;
+            } else {
+                //TODO sensor blackout
+                if (camera.get_faulty_poses()[prod.agv_id].size() > 0)
+                    removeReplaceFaultyProductsAndDeliver(camera, gantry, prod.agv_id, agv1Delivery, agv2Delivery,
+                                                          order.shipments[j].shipment_type, comp);
             }
         }
-
-
-        if (compIsAlmostOver(TIMELIMIT_THRESHOLD, comp)) {
-            agvDeliveryService(prod.agv_id, agv1Delivery, agv2Delivery, order.shipments[j].shipment_type);
-            stop_processing = true;
-            break;
-        } else {
-            //TODO sensor blackout
-            if (camera.get_faulty_poses()[prod.agv_id].size() > 0)
-                removeReplaceFaultyProductsAndDeliver(camera, gantry, prod.agv_id, agv1Delivery, agv2Delivery,
-                                                      order.shipments[j].shipment_type, comp);
-        }
-    }
+    } 
 }
 
 
@@ -1349,8 +1392,9 @@ int main(int argc, char ** argv) {
                     else
                        k--;                                                      //build previous part
                 }
-                else
+                else {
                     processPart(prod, gantry, camera, comp, false, true);        //Remove flip_flag after degugging
+                }
 
 
                 //TODO - Make checker for faulty more robust
