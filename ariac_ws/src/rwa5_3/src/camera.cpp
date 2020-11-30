@@ -51,77 +51,73 @@ const nist_gear::LogicalCameraImage::ConstPtr &msg, int index) {
             //p_w.pose.orientation.w);
 
 
-             
+
 
             std::string key = "logical_camera_" + std::to_string(index);
             mypart.logicalCameraName = key;
             //std::string temp = mypart.type + std::to_string((int)round(mypart.pose.position.x)) +
-                                           //std::to_string((int)round(mypart.pose.position.y)) +
-                                           //std::to_string((int)round(mypart.pose.position.z)) +
-                                           //std::to_string((int)round(mypart.pose.orientation.x)) +
-                                           //std::to_string((int)round(mypart.pose.orientation.y)) +
-                                           //std::to_string((int)round(mypart.pose.orientation.z)) +
-                                           //std::to_string((int)round(mypart.pose.orientation.w));
+            //std::to_string((int)round(mypart.pose.position.y)) +
+            //std::to_string((int)round(mypart.pose.position.z)) +
+            //std::to_string((int)round(mypart.pose.orientation.x)) +
+            //std::to_string((int)round(mypart.pose.orientation.y)) +
+            //std::to_string((int)round(mypart.pose.orientation.z)) +
+            //std::to_string((int)round(mypart.pose.orientation.w));
 
-            std::string temp = mypart.type + std::to_string((int)std::round(mypart.pose.position.x*10));
-                                             //std::to_string((int)std::round(mypart.pose.position.y*10)) +
-                                            // std::to_string((int)std::round(mypart.pose.position.z*10));
+            std::string temp = mypart.type + std::to_string((int) std::round(mypart.pose.position.x * 10));
+            //std::to_string((int)std::round(mypart.pose.position.y*10)) +
+            // std::to_string((int)std::round(mypart.pose.position.z*10));
 
-            if(key == "logical_camera_9") {                           // conveyor belt logical camera
-              mypart.conveyor_time = (*comp_ref).getClock();
-              conveyor_detected_parts[key] = mypart;
-            }                                                               
-
-                
-            else if(key == "logical_camera_8" || key=="logical_camera_10") {  // agv_logical camera
-              if(!std::isnan(mypart.pose.position.x) && !std::isnan(mypart.pose.position.y) && !std::isnan(mypart.pose.position.z)) {
-                    if(agv_detected_parts.find(mypart.type) == agv_detected_parts.end()) {
-                          mypart.count = agv_detected_parts[key].size() + 1;
-                          agv_detected_parts[key][temp] =   mypart;
-                    }
-                    else{
+            if (key == "logical_camera_9") {                           // conveyor belt logical camera
+                mypart.conveyor_time = (*comp_ref).getClock();
+                conveyor_detected_parts[key] = mypart;
+            } else if (key == "logical_camera_8" || key == "logical_camera_10") {  // agv_logical camera
+                if (!std::isnan(mypart.pose.position.x) && !std::isnan(mypart.pose.position.y) &&
+                    !std::isnan(mypart.pose.position.z)) {
+                    if (agv_detected_parts.find(mypart.type) == agv_detected_parts.end()) {
+                        mypart.count = agv_detected_parts[key].size() + 1;
+                        agv_detected_parts[key][temp] = mypart;
+                    } else {
                         bool exist = false;
                         auto vec = agv_detected_parts[mypart.type];
-                        if(vec.size() < 4) {
-                            for(auto part:vec){
-                              if((std::max(part.second.pose.position.x,mypart.pose.position.x)  -
-                                  std::max(part.second.pose.position.x,mypart.pose.position.x)) < 0.2 && 
-                                 (std::min(part.second.pose.position.y,mypart.pose.position.y)  -
-                                  std::min(part.second.pose.position.y,mypart.pose.position.y)) < 0.2 )
-                                  exist = true; 
-                            } 
-                            if(!exist){
-                                mypart.count = agv_detected_parts[key].size() + 1;
-                                agv_detected_parts[key][temp] =   mypart;
+                        if (vec.size() < 4) {
+                            for (auto part:vec) {
+                                if ((std::max(part.second.pose.position.x, mypart.pose.position.x) -
+                                     std::max(part.second.pose.position.x, mypart.pose.position.x)) < 0.2 &&
+                                    (std::min(part.second.pose.position.y, mypart.pose.position.y) -
+                                     std::min(part.second.pose.position.y, mypart.pose.position.y)) < 0.2)
+                                    exist = true;
                             }
-                      }
-                 }
-             }
-        }
-
-            else {                                                   //logical cameras for shelfs and bins
-              if(!std::isnan(mypart.pose.position.x) && !std::isnan(mypart.pose.position.y) && !std::isnan(mypart.pose.position.z)) {
-                    if(detected_parts.find(mypart.type) == detected_parts.end())
-                        detected_parts[mypart.type][temp] = mypart;
-                    else{
-                      bool exist = false;
-                      auto vec = detected_parts[mypart.type];
-                      if(vec.size() < 4) {
-                         for(auto part:vec){
-                           if(std::max(part.second.pose.position.x,mypart.pose.position.x) -
-                              std::min(part.second.pose.position.x,mypart.pose.position.x) < 0.2)
-                              exist = true; 
-                         } 
-                         if(!exist)
-                             detected_parts[mypart.type][temp] = mypart;
+                            if (!exist) {
+                                mypart.count = agv_detected_parts[key].size() + 1;
+                                agv_detected_parts[key][temp] = mypart;
+                            }
+                        }
                     }
-                      
-               }
+                }
+            } else {                                                   //logical cameras for shelfs and bins
+                if (!std::isnan(mypart.pose.position.x) && !std::isnan(mypart.pose.position.y) &&
+                    !std::isnan(mypart.pose.position.z)) {
+                    if (detected_parts.find(mypart.type) == detected_parts.end())
+                        detected_parts[mypart.type][temp] = mypart;
+                    else {
+                        bool exist = false;
+                        auto vec = detected_parts[mypart.type];
+                        if (vec.size() < 4) {
+                            for (auto part:vec) {
+                                if (std::max(part.second.pose.position.x, mypart.pose.position.x) -
+                                    std::min(part.second.pose.position.x, mypart.pose.position.x) < 0.2)
+                                    exist = true;
+                            }
+                            if (!exist)
+                                detected_parts[mypart.type][temp] = mypart;
+                        }
+
+                    }
+                }
             }
         }
     }
 }
-
 
 
 void Camera::break_beam_callback(const nist_gear::Proximity::ConstPtr &msg) {
@@ -251,8 +247,8 @@ std::map<std::string,std::map<std::string,part>>  Camera::get_detected_parts(){
 //}
 
 
-void Camera::quality_control_sensor_callback1(const nist_gear::LogicalCameraImage &msg){
-    if(msg.models.size() > 0) {
+void Camera::quality_control_sensor_callback1(const nist_gear::LogicalCameraImage &msg) {
+    if (msg.models.size() > 0) {
         //ROS_INFO_STREAM("msg obtainted" << msg.models[8].pose);
 
         is_faulty1 = true;
@@ -272,28 +268,28 @@ void Camera::quality_control_sensor_callback1(const nist_gear::LogicalCameraImag
         //ROS_INFO_STREAM("Pose of part in world frame" << p_w.pose);
 
         faulty_pose1 = p_w.pose;
-        std::string key = std::to_string((int)round(p_w.pose.position.x)) +
-                          std::to_string((int)round(p_w.pose.position.y));
+        std::string key = std::to_string((int) round(p_w.pose.position.x)) +
+                          std::to_string((int) round(p_w.pose.position.y));
 
-        
-       if(faulty_poses.find("agv1") == faulty_poses.end()) {
+
+        if (faulty_poses.find("agv1") == faulty_poses.end()) {
             faulty_poses["agv1"][key] = p_w.pose;
-       }
-       else{
-           bool exist = false;
-           auto vec = faulty_poses["agv1"];
-           if(vec.size() < 4) {
-               for(auto part:vec){
-                 if((std::max(part.second.position.x,p_w.pose.position.x)  -
-                     std::max(part.second.position.x,p_w.pose.position.x)) < 0.2 && 
-                    (std::min(part.second.position.y,p_w.pose.position.y)  -
-                     std::min(part.second.position.y,p_w.pose.position.y)) < 0.2 )
-                     exist = true; 
-               } 
-               if(!exist){
-                   faulty_poses["agv1"][key] = p_w.pose;
-               }
-         }
+        } else {
+            bool exist = false;
+            auto vec = faulty_poses["agv1"];
+            if (vec.size() < 4) {
+                for (auto part:vec) {
+                    if ((std::max(part.second.position.x, p_w.pose.position.x) -
+                         std::max(part.second.position.x, p_w.pose.position.x)) < 0.2 &&
+                        (std::min(part.second.position.y, p_w.pose.position.y) -
+                         std::min(part.second.position.y, p_w.pose.position.y)) < 0.2)
+                        exist = true;
+                }
+                if (!exist) {
+                    faulty_poses["agv1"][key] = p_w.pose;
+                }
+            }
+        }
     }
 }
 
