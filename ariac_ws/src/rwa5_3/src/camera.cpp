@@ -51,6 +51,7 @@ const nist_gear::LogicalCameraImage::ConstPtr &msg, int index) {
             //p_w.pose.orientation.w);
 
 
+             
 
             std::string key = "logical_camera_" + std::to_string(index);
             mypart.logicalCameraName = key;
@@ -74,16 +75,50 @@ const nist_gear::LogicalCameraImage::ConstPtr &msg, int index) {
                 
             else if(key == "logical_camera_8" || key=="logical_camera_10") {  // agv_logical camera
               if(!std::isnan(mypart.pose.position.x) && !std::isnan(mypart.pose.position.y) && !std::isnan(mypart.pose.position.z)) {
-                     mypart.count = agv_detected_parts[key].size() + 1;
-                     agv_detected_parts[key][temp] =   mypart;
-              }
-            }
+                    if(agv_detected_parts.find(mypart.type) == agv_detected_parts.end()) {
+                          mypart.count = agv_detected_parts[key].size() + 1;
+                          agv_detected_parts[key][temp] =   mypart;
+                    }
+                    else{
+                        bool exist = false;
+                        auto vec = agv_detected_parts[mypart.type];
+                        if(vec.size() < 4) {
+                            for(auto part:vec){
+                              if((std::max(part.second.pose.position.x,mypart.pose.position.x)  -
+                                  std::max(part.second.pose.position.x,mypart.pose.position.x)) < 0.2 && 
+                                 (std::min(part.second.pose.position.y,mypart.pose.position.y)  -
+                                  std::min(part.second.pose.position.y,mypart.pose.position.y)) < 0.2 )
+                                  exist = true; 
+                            } 
+                            if(!exist){
+                                mypart.count = agv_detected_parts[key].size() + 1;
+                                agv_detected_parts[key][temp] =   mypart;
+                            }
+                      }
+                 }
+             }
+        }
 
             else {                                                   //logical cameras for shelfs and bins
-                if(!std::isnan(mypart.pose.position.x) && !std::isnan(mypart.pose.position.y) && !std::isnan(mypart.pose.position.z)) 
-                    detected_parts[mypart.type][temp] = mypart;
+              if(!std::isnan(mypart.pose.position.x) && !std::isnan(mypart.pose.position.y) && !std::isnan(mypart.pose.position.z)) {
+                    if(detected_parts.find(mypart.type) == detected_parts.end())
+                        detected_parts[mypart.type][temp] = mypart;
+                    else{
+                      bool exist = false;
+                      auto vec = detected_parts[mypart.type];
+                      if(vec.size() < 4) {
+                         for(auto part:vec){
+                           if(std::max(part.second.pose.position.x,mypart.pose.position.x) -
+                              std::min(part.second.pose.position.x,mypart.pose.position.x) < 0.2)
+                              exist = true; 
+                         } 
+                         if(!exist)
+                             detected_parts[mypart.type][temp] = mypart;
+                    }
+                      
+               }
             }
-         }
+        }
     }
 }
 
@@ -238,13 +273,27 @@ void Camera::quality_control_sensor_callback1(const nist_gear::LogicalCameraImag
 
         faulty_pose1 = p_w.pose;
         std::string key = std::to_string((int)round(p_w.pose.position.x)) +
-                          std::to_string((int)round(p_w.pose.position.y)) +
-                          std::to_string((int)round(p_w.pose.position.z)) +
-                          std::to_string((int)round(p_w.pose.orientation.x)) +
-                          std::to_string((int)round(p_w.pose.orientation.y)) +
-                          std::to_string((int)round(p_w.pose.orientation.z)) +
-                          std::to_string((int)round(p_w.pose.orientation.w));
-        faulty_poses["agv1"][key] = p_w.pose;
+                          std::to_string((int)round(p_w.pose.position.y));
+
+        
+       if(faulty_poses.find("agv1") == faulty_poses.end()) {
+            faulty_poses["agv1"][key] = p_w.pose;
+       }
+       else{
+           bool exist = false;
+           auto vec = faulty_poses["agv1"];
+           if(vec.size() < 4) {
+               for(auto part:vec){
+                 if((std::max(part.second.position.x,p_w.pose.position.x)  -
+                     std::max(part.second.position.x,p_w.pose.position.x)) < 0.2 && 
+                    (std::min(part.second.position.y,p_w.pose.position.y)  -
+                     std::min(part.second.position.y,p_w.pose.position.y)) < 0.2 )
+                     exist = true; 
+               } 
+               if(!exist){
+                   faulty_poses["agv1"][key] = p_w.pose;
+               }
+         }
     }
 }
 
@@ -277,7 +326,26 @@ void Camera::quality_control_sensor_callback2(const nist_gear::LogicalCameraImag
                           std::to_string((int)round(p_w.pose.orientation.y)) +
                           std::to_string((int)round(p_w.pose.orientation.z)) +
                           std::to_string((int)round(p_w.pose.orientation.w));
-        faulty_poses["agv2"][key] = p_w.pose;
+
+       if(faulty_poses.find("agv2") == faulty_poses.end()) {
+            faulty_poses["agv2"][key] = p_w.pose;
+       }
+       else{
+           bool exist = false;
+           auto vec = faulty_poses["agv2"];
+           if(vec.size() < 4) {
+               for(auto part:vec){
+                 if((std::max(part.second.position.x,p_w.pose.position.x)  -
+                     std::max(part.second.position.x,p_w.pose.position.x)) < 0.2 && 
+                    (std::min(part.second.position.y,p_w.pose.position.y)  -
+                     std::min(part.second.position.y,p_w.pose.position.y)) < 0.2 )
+                     exist = true; 
+               } 
+               if(!exist){
+                   faulty_poses["agv2"][key] = p_w.pose;
+               }
+           }
+       }
     }
 }
 
