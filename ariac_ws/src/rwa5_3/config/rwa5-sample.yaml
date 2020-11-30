@@ -53,7 +53,7 @@ orders:
 #          rpy: [0, 0, 'pi/4']
 
 belt_models:
-  piston_rod_part_red:
+  pulley_part_red:
     8.0:
       pose:
         xyz: [0.0, 4.3, 0.92]

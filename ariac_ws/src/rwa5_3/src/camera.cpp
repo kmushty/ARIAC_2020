@@ -92,7 +92,7 @@ const nist_gear::LogicalCameraImage::ConstPtr &msg, int index) {
 void Camera::break_beam_callback(const nist_gear::Proximity::ConstPtr &msg) {
     //ROS_INFO_STREAM("in break beam callback");
     if (msg->object_detected) {  // If there is an object in proximity.
-        //break_beam_triggered = true;
+        break_beam_triggered = true;
         ROS_WARN_ONCE("Break beam triggered.");
     }
     //ROS_INFO_STREAM("exited break beam callback");

@@ -179,25 +179,25 @@ class GantryControl {
 
 
     //final
-    logical_11_14_aisle_0_short logical_11_14_aisle_0_short_, logical_11_14_aisle_0_short_1_, logical_11_14_aisle_0_short_2_;
-    logical_11_14_aisle_0_long logical_11_14_aisle_0_long_2_;
-    logical_12_15_aisle_1_short logical_12_15_aisle_1_short_, logical_12_15_aisle_1_short_1_, logical_12_15_aisle_1_short_2_;
-    logical_12_15_aisle_1_long logical_12_15_aisle_1_long_2_;
-    logical_13_16_aisle_2_short logical_13_16_aisle_2_short_, logical_13_16_aisle_2_short_1_, logical_13_16_aisle_2_short_2_;
-    logical_13_16_aisle_2_long logical_13_16_aisle_2_long_2_;
+    logical_11_14_aisle_0_short logical_11_14_aisle_0_short_, logical_11_14_aisle_0_short_1_, logical_11_14_aisle_0_short_2_, logical_11_14_aisle_0_short_2_gap_;
+    logical_11_14_aisle_0_long logical_11_14_aisle_0_long_2_, logical_11_14_aisle_0_long_2_gap_;
+    logical_12_15_aisle_1_short logical_12_15_aisle_1_short_, logical_12_15_aisle_1_short_1_, logical_12_15_aisle_1_short_2_, logical_12_15_aisle_1_short_2_gap_;
+    logical_12_15_aisle_1_long logical_12_15_aisle_1_long_2_, logical_12_15_aisle_1_long_2_gap_;
+    logical_13_16_aisle_2_short logical_13_16_aisle_2_short_, logical_13_16_aisle_2_short_1_, logical_13_16_aisle_2_short_2_, logical_13_16_aisle_2_short_2_gap_;
+    logical_13_16_aisle_2_long logical_13_16_aisle_2_long_2_, logical_13_16_aisle_2_long_2_gap_;
 
-    logical_11_14_aisle_1_short logical_11_14_aisle_1_short_, logical_11_14_aisle_1_short_1_, logical_11_14_aisle_1_short_2_;
-    logical_11_14_aisle_1_long logical_11_14_aisle_1_long_2_;
-    logical_12_15_aisle_2_short logical_12_15_aisle_2_short_, logical_12_15_aisle_2_short_1_, logical_12_15_aisle_2_short_2_;
-    logical_12_15_aisle_2_long logical_12_15_aisle_2_long_2_;
-    logical_13_16_aisle_3_short logical_13_16_aisle_3_short_, logical_13_16_aisle_3_short_1_, logical_13_16_aisle_3_short_2_;
-    logical_13_16_aisle_3_long logical_13_16_aisle_3_long_2_;
+    logical_11_14_aisle_1_short logical_11_14_aisle_1_short_, logical_11_14_aisle_1_short_1_, logical_11_14_aisle_1_short_2_, logical_11_14_aisle_1_short_2_gap_;
+    logical_11_14_aisle_1_long logical_11_14_aisle_1_long_2_, logical_11_14_aisle_1_long_2_gap_;
+    logical_12_15_aisle_2_short logical_12_15_aisle_2_short_, logical_12_15_aisle_2_short_1_, logical_12_15_aisle_2_short_2_, logical_12_15_aisle_2_short_2_gap_;
+    logical_12_15_aisle_2_long logical_12_15_aisle_2_long_2_, logical_12_15_aisle_2_long_2_gap_;
+    logical_13_16_aisle_3_short logical_13_16_aisle_3_short_, logical_13_16_aisle_3_short_1_, logical_13_16_aisle_3_short_2_, logical_13_16_aisle_3_short_2_gap_;
+    logical_13_16_aisle_3_long logical_13_16_aisle_3_long_2_, logical_13_16_aisle_3_long_2_gap_;
 
     logical_0_4_short logical_0_4_short_, logical_0_4_short_1_;
-    logical_0_4_long logical_0_4_long_1_;
+    logical_0_4_long logical_0_4_long_, logical_0_4_long_1_;
 
     logical_3_7_short logical_3_7_short_, logical_3_7_short_1_;
-    logical_3_7_long logical_3_7_long_1_;
+    logical_3_7_long logical_3_7_long_,logical_3_7_long_1_;
 
     temp temp1_, temp2_;
 
