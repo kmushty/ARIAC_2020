@@ -1,3 +1,7 @@
+Update preset location after flipping
+Conveyor - check if the parts are in the bin
+faulty gripper
+Doxygen
 
 1. Hp order
 2. sensor blackout
@@ -15,7 +19,7 @@ YAML files
 
 Eashwar
 Conveyor - disk-part, pulley-part
-baseline, highpriority 4,5
+
 
 
 Kaushik

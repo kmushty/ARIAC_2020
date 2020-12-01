@@ -51,6 +51,7 @@ class GantryControl {
 
 //    bool pickPart(part part, std::string arm_name);
     bool pickPart(part part);
+    bool pickPulleyPart(part part);
     
     /// Send command message to robot controller
     bool send_command(trajectory_msgs::JointTrajectory command_msg);
@@ -74,6 +75,8 @@ class GantryControl {
     agv1 agv1_;
     agv2_faultyG agv2_faultyG_;
     agv1_faultyG agv1_faultyG_;
+    agv2_faultyP agv2_faultyP_;
+    agv1_faultyP agv1_faultyP_;
     agv1_drop agv1_drop_;
     agv2_drop agv2_drop_;
     bin13 bin13_;
@@ -123,6 +126,8 @@ class GantryControl {
     agv1_flipped agv1_flipped_;
     agv1_flipped1 agv1_flipped1_;
     movingPart movingPart_;
+    movingPartDisk movingPartDisk_;
+    movingPartGear movingPartGear_;
     movingPart1 movingPart1_;
     agv1_gasket_part_green agv1_gasket_part_green_;
 

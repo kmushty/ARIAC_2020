@@ -126,6 +126,8 @@ void Camera::break_beam_callback(const nist_gear::Proximity::ConstPtr &msg) {
         break_beam_triggered = true;
         ROS_WARN_ONCE("Break beam triggered.");
     }
+    else
+        break_beam_triggered = false;
     //ROS_INFO_STREAM("exited break beam callback");
 }
 
@@ -139,6 +141,7 @@ const nist_gear::Proximity::ConstPtr &msg, int index) {
         ROS_INFO_STREAM("Break beam " + std::to_string(index) +"  triggered.");
         triggered_shelf_breakbeams[index] = true;
     }
+
 
 
    if(index < 3){

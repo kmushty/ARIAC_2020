@@ -97,9 +97,19 @@ void GantryControl::init()
     agv2_.right_arm = {PI, -PI / 4, PI / 2, -PI / 4, PI / 2, 0};
 
     //--agv1
-    agv1_.gantry = {-0.6, -6.9, 0.0};
+    agv1_.gantry = {0.6, -6.9, 0};
     agv1_.left_arm = {0.0, -PI / 4, PI / 2, -PI / 4, PI / 2, 0};
     agv1_.right_arm = {PI, -PI / 4, PI / 2, -PI / 4, PI / 2, 0};
+
+    agv2_faultyP_.gantry = {0.4, 6.9, 3.54};
+    agv2_faultyP_.left_arm = {0.0, -PI / 4, PI / 2, -PI / 4, PI / 2, 0};
+    agv2_faultyP_.right_arm = {PI, -PI / 4, PI / 2, -PI / 4, PI / 2, 0};
+
+    //--agv1
+    agv1_faultyP_.gantry = {-0.4, -6.9, 0.4};
+    agv1_faultyP_.left_arm = {0.0, -PI / 4, PI / 2, -PI / 4, PI / 2, 0};
+    agv1_faultyP_.right_arm = {PI, -PI / 4, PI / 2, -PI / 4, PI / 2, 0};
+
 
     //--agv2_1 for faulty gripper
     //    agv2_faultyG_.gantry = {0.6, 6.9, PI};
@@ -226,18 +236,18 @@ void GantryControl::init()
     // agv2_flipped1_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
     agv2_flipped1_.right_arm = {PI, -PI / 4, PI / 2, -PI / 4, PI / 2, 0};
 
-    agv2_flipped_.gantry = {0.6, 6.30, 0};
+    agv2_flipped_.gantry = {0.6, 6.6, 0};
     agv2_flipped_.left_arm = {0.0, -PI / 4, PI / 2, -PI / 4, PI / 2, 0};
-    agv2_flipped_.right_arm = {1.57, -1.57, -2.26, 0.13, 0, 0.13};
+    agv2_flipped_.right_arm = {PI, -PI / 4, PI / 2, -PI / 4, PI / 2, 0};
 
     agv1_flipped1_.gantry = {-0.6, -6.9, 3.14};
     agv1_flipped1_.left_arm = {0.0, -PI / 4, PI / 2, -PI / 4, PI / 2, 0};
     // agv2_flipped1_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
     agv1_flipped1_.right_arm = {PI, -PI / 4, PI / 2, -PI / 4, PI / 2, 0};
 
-    agv1_flipped_.gantry = {-0.6, -6.45, PI};
+    agv1_flipped_.gantry = {-0.6, -6.6, PI};
     agv1_flipped_.left_arm = {0.0, -PI / 4, PI / 2, -PI / 4, PI / 2, 0};
-    agv1_flipped_.right_arm = {1.57, -1.57, -2.26, 0.13, 0, 0.13};
+    agv1_flipped_.right_arm = {PI, -PI / 4, PI / 2, -PI / 4, PI / 2, 0};
 
     agv1_drop_.gantry = {-0.6, -6.30, 0};
     agv1_drop_.left_arm = {0.0, -PI / 4, PI / 2, -PI / 4, PI / 2, 0};
@@ -247,9 +257,18 @@ void GantryControl::init()
     agv2_drop_.left_arm = {0.0, -PI / 4, PI / 2, -PI / 4, PI / 2, 0};
     agv2_drop_.right_arm = {PI, -PI / 4, PI / 2, -PI / 4, PI / 2, 0};
 
-    movingPart_.gantry = {-0.16, -0.22, -1.57};
+    movingPart_.gantry = {-0.16, -0.26, -1.57};
     movingPart_.left_arm = {0.0, -0.63, 1.38, -0.73, PI / 2, 0};
     movingPart_.right_arm = {PI, -PI / 4, PI / 2, -PI / 4, PI / 2, 0};
+
+    movingPartDisk_.gantry = {-0.16, -0.08, -1.57};
+    movingPartDisk_.left_arm = {0.0, -0.63, 1.38, -0.73, PI / 2, 0};
+    movingPartDisk_.right_arm = {PI, -PI / 4, PI / 2, -PI / 4, PI / 2, 0};
+
+    movingPartGear_.gantry = {-0.16, 0.02, -1.57};
+    movingPartGear_.left_arm = {0.0, -0.63, 1.38, -0.73, PI / 2, 0};
+    movingPartGear_.right_arm = {PI, -PI / 4, PI / 2, -PI / 4, PI / 2, 0};
+
 
     movingPart1_.gantry = {-0.16, -0.22, -1.57};
     movingPart1_.left_arm = {0.0, -PI / 4, PI / 2, -PI / 4, PI / 2, 0};
@@ -1272,6 +1291,71 @@ bool GantryControl::pickPart(part part)
             state = getGripperState("left_arm");
             // ros::spinOnce();
         }
+        left_arm_group_.setPoseTarget(currentPose);
+    }
+    return false;
+}
+
+
+bool GantryControl::pickPulleyPart(part part)
+{
+    //--Activate gripper
+    activateGripper("left_arm");
+
+    //    ros::AsyncSpinner spinner(1);
+    //    spinner.start();
+    //    left_arm_group_.setPoseReferenceFrame("world");
+    geometry_msgs::Pose currentPose = left_arm_group_.getCurrentPose().pose;
+
+    //    ROS_INFO_STREAM("[left_arm_group_]= " << currentPose.position.x << ", " << currentPose.position.y << "," << currentPose.position.z);
+
+    part.pose.position.z = part.pose.position.z + model_height.at(part.type) + GRIPPER_HEIGHT - EPSILON - 0.07;
+    part.pose.orientation.x = currentPose.orientation.x;
+    part.pose.orientation.y = currentPose.orientation.y;
+    part.pose.orientation.z = currentPose.orientation.z;
+    part.pose.orientation.w = currentPose.orientation.w;
+    //    ROS_INFO_STREAM("["<< part.type<<"]= " << part.pose.position.x << ", " << part.pose.position.y << "," << part.pose.position.z << "," << part.pose.orientation.x << "," << part.pose.orientation.y << "," << part.pose.orientation.z << "," << part.pose.orientation.w);
+
+    auto state = getGripperState("left_arm");
+    while (!state.enabled)
+    {
+        ROS_INFO_STREAM("Activating Gripper again");
+        activateGripper("left_arm");
+        state = getGripperState("left_arm");
+    }
+    //    if (state.enabled) {
+    ROS_INFO_STREAM("[Gripper] = enabled");
+    //--Move arm to part
+    left_arm_group_.setPoseTarget(part.pose);
+    left_arm_group_.move();
+    state = getGripperState("left_arm");
+    if (state.attached)
+    {
+        ROS_INFO_STREAM("[Gripper] = object attached");
+        //--Move arm to previous position
+        left_arm_group_.setPoseTarget(currentPose);
+        left_arm_group_.move();
+        /*goToPresetLocation(start_);*/
+        return true;
+    }
+    else
+    {
+        ROS_INFO_STREAM("[Gripper] = object not attached");
+        int max_attempts{5};
+        int current_attempt{0};
+        while (!state.attached)
+        {
+            left_arm_group_.setPoseTarget(currentPose);
+            left_arm_group_.move();
+            ros::Duration(0.5).sleep();
+            left_arm_group_.setPoseTarget(part.pose);
+            left_arm_group_.move();
+            activateGripper("left_arm");
+            ROS_INFO_STREAM(state.attached);
+            state = getGripperState("left_arm");
+            // ros::spinOnce();
+        }
+        left_arm_group_.setPoseTarget(currentPose);
     }
     return false;
 }
@@ -1504,6 +1588,19 @@ void GantryControl::moveToPart(part my_part, PresetLocation preset)
     else if(my_part.logicalCameraName == "logical_camera_3" || my_part.logicalCameraName == "logical_camera_7")
   {
       gantryConfiguration[0] = my_part.pose.position.x - 0.2;
+  }
+    else if(my_part.logicalCameraName == "logical_camera_8"){
+      ROS_INFO_STREAM("MOve part logical camera 8");
+      gantryConfiguration[0] = my_part.pose.position.x - 0.2;
+      if(-1*my_part.pose.position.y > -6.9)
+        gantryConfiguration[1] = -1*my_part.pose.position.y;
+
+    }
+  else if(my_part.logicalCameraName == "logical_camera_10"){
+      ROS_INFO_STREAM("MOve part logical camera 10");
+      gantryConfiguration[0] = my_part.pose.position.x + 0.4;
+      if(-1*my_part.pose.position.y < 6.9)
+          gantryConfiguration[1] = -1*my_part.pose.position.y;
   }
     else
     {

@@ -67,13 +67,14 @@ public:
     void reset_shelf_breakbeams();
     void reset_agv_logical_camera(std::string);
     void reset_conveyor_logical_camera();
+
     
 
     std::map<int,std::vector<nist_gear::Proximity::ConstPtr>> get_aisle_breakbeam_msgs(); 
     
     void removeElement(std::string prod_type, std::string prod);
     void removeAllElements(std::string prod_type);
-
+    void removeAllFaultyElements(std::string agv_name);
 
     std::map<std::string,std::map<std::string,geometry_msgs::Pose>> get_faulty_poses();
 
