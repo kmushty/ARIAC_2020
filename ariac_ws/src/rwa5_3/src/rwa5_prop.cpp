@@ -1074,13 +1074,13 @@ void removeReplaceFaultyProductsAndDeliver(Camera &camera,GantryControl &gantry,
     product prod;                                 
     for(const auto & faulty_pose: faulty_poses) {
       for(const auto & part: parts) {
-         if(abs(part.second.pose.position.x - faulty_pose.second.position.x)< 0.2 &&
-            abs(part.second.pose.position.y - faulty_pose.second.position.y)< 0.2 &&
-            abs(part.second.pose.position.z - faulty_pose.second.position.z)< 0.2 &&
-            abs(part.second.pose.orientation.x - faulty_pose.second.orientation.x)< 0.2 &&
-            abs(part.second.pose.orientation.y - faulty_pose.second.orientation.y)< 0.2 &&
-            abs(part.second.pose.orientation.z - faulty_pose.second.orientation.z)< 0.2 &&
-            abs(part.second.pose.orientation.w - faulty_pose.second.orientation.w)< 0.2 ) {
+         if(std::max(part.second.pose.position.x,faulty_pose.second.position.x) - std::min(part.second.position.x,faulty_pose.second.position.x)< 0.2 &&
+            std::max(part.second.pose.position.y,faulty_pose.second.position.y)- std::min(part.second.position.x,faulty_pose.second.position.x)< 0.2 &&
+            std::max(part.second.pose.position.z,faulty_pose.second.position.z)- std::min(part.second.position.x,faulty_pose.second.position.x)< 0.2 ) {
+            //abs(part.second.pose.orientation.x - faulty_pose.second.orientation.x)< 0.2 &&
+            //abs(part.second.pose.orientation.y - faulty_pose.second.orientation.y)< 0.2 &&
+            //abs(part.second.pose.orientation.z - faulty_pose.second.orientation.z)< 0.2 &&
+            //abs(part.second.pose.orientation.w - faulty_pose.second.orientation.w)< 0.2 ) {
 
             gantry.pickPart(part.second);
                                   //TODO drop part
@@ -1104,6 +1104,8 @@ void removeReplaceFaultyProductsAndDeliver(Camera &camera,GantryControl &gantry,
       }else 
          processPart(product, gantry, camera, comp, true,  true);
     }
+
+    camera.removeAllFaultyElements(agv_id);
 
     if(!delivered)
          agvDeliveryService(agv_id,agv1Delivery,agv2Delivery,shipment_type);

@@ -424,3 +424,9 @@ void Camera::removefaultyPose(std::string agv_name, std::string faulty_pose) {
     faulty_poses[agv_name].erase(faulty_pose);
 }
 
+
+void Camera::removeAllFaultyElements(std::string agv_name){
+    faulty_poses[agv_name].clear();
+}
+
+
