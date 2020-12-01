@@ -822,11 +822,14 @@ void estimateObstacleAttributes(Camera &camera,int aisle_num) {
     auto aisle_breakbeam_msgs  = camera.get_aisle_breakbeam_msgs();
 
     auto vec = aisle_breakbeam_msgs[aisle_num];
-    if(obstacleInAisle[aisle_num] == true  &&  vec.size() > 8) {
+    if(obstacleInAisle[aisle_num] == true  &&  obstacleAssociatedWithAisle[aisle].is_valid_obstacle == false && vec.size() > 12) {
+       std::string str1 =  "shelf_breakbeam_" + std::to_string(aisle_num*3 + 2) + "_frame";
+       std::string str2 =  "shelf_breakbeam_" + std::to_string(aisle_num*3 + 1) + "_frame";
+
        ROS_INFO_STREAM("estimating velocity for aisle" << aisle_num);
        ROS_INFO_STREAM("vector size is " << vec.size());
        auto it = std::find_if(vec.begin(), vec.end(),
-                         [&str = "shelf_breakbeam_5_frame"] 
+                         [&str = str1] 
                          (nist_gear::Proximity::ConstPtr &msg){return (msg->header).frame_id == str && msg->object_detected; });    
 
        ROS_INFO_STREAM("aisle number is "<< aisle_num);
@@ -842,7 +845,7 @@ void estimateObstacleAttributes(Camera &camera,int aisle_num) {
        }
 
        auto it2 = std::find_if(vec.begin(), vec.end(),
-                         [&str = "shelf_breakbeam_4_frame"]
+                         [&str = str2]
                          (nist_gear::Proximity::ConstPtr &msg){return (msg->header).frame_id == str && msg->object_detected; });    
 
        if(it2 != vec.end()){
@@ -865,14 +868,14 @@ void estimateObstacleAttributes(Camera &camera,int aisle_num) {
 
        ROS_INFO_STREAM(sec2 - sec1);
        double wait_time = round(sec2 - sec1);
-       double move_time = round(3*sec3 - sec1 - wait_time);
+       double move_time = round(sec3 - sec1 - wait_time);
        ROS_INFO_STREAM(sec3 - sec2);
 
        double velocity = LENGTH_OF_AISLE/move_time;
 
        obstacle human;
-       human.wait_time = 7;//wait_time;
-       human.move_time = 9;//move_time;
+       human.wait_time = wait_time;
+       human.move_time = move_time;
        human.time_stamp1 = sec1;
        human.is_valid_obstacle = true;
          
@@ -884,8 +887,8 @@ void estimateObstacleAttributes(Camera &camera,int aisle_num) {
        ROS_INFO_STREAM("wait time is " << wait_time);
        ROS_INFO_STREAM("move time is " << move_time);
        
-       ROS_INFO_STREAM("exited estimateObstacleAttributes method");
     }
+      ROS_INFO_STREAM("exited estimateObstacleAttributes method");
 }
 
 
@@ -911,8 +914,9 @@ void planAndExecutePath(product prod, part my_part,std::map<std::string, std::ve
    }
    else{
        location = plan[1] + "_" + my_part.logicalCameraName + "_" + plan[3];
-//       while(!obstacleAssociatedWithAisle[aisle_num].is_valid_obstacle)
-//            estimateObstacleAttributes(camera,aisle_num);
+
+       while(!obstacleAssociatedWithAisle[aisle_num].is_valid_obstacle)
+             estimateObstacleAttributes(camera,aisle_num);
 
        // Move to the gap
        moveToGap(presetLoc, my_part, gantry, location);
@@ -1475,25 +1479,16 @@ int main(int argc, char ** argv) {
     ConveyorFlag = false;
     int numPickParts = 4;
 
-    //TODO reduce computation 
-    std::cout << "estimating obstacles parameters" << std::endl;
-    //while(true){
-      
-      //if(obstacleInAisle[2]){
-        //estimateObstacleAttributes(camera,2);
-        //if(obstacleAssociatedWithAisle[2].is_valid_obstacle)
-            //break;
-      //}
     //}
-    obstacleAssociatedWithAisle[2].is_valid_obstacle= true;
-    obstacleAssociatedWithAisle[2].wait_time= 7;
-    obstacleAssociatedWithAisle[2].move_time= 9;
-    obstacleAssociatedWithAisle[2].time_stamp1= 9;
+    //obstacleAssociatedWithAisle[2].is_valid_obstacle= true;
+    //obstacleAssociatedWithAisle[2].wait_time= 7;
+    //obstacleAssociatedWithAisle[2].move_time= 9;
+    //obstacleAssociatedWithAisle[2].time_stamp1= 9;
 
-    obstacleAssociatedWithAisle[3].is_valid_obstacle= true;
-    obstacleAssociatedWithAisle[3].wait_time= 7;
-    obstacleAssociatedWithAisle[3].move_time= 9;
-    obstacleAssociatedWithAisle[3].time_stamp1= 9;
+    //obstacleAssociatedWithAisle[3].is_valid_obstacle= true;
+    //obstacleAssociatedWithAisle[3].wait_time= 7;
+    //obstacleAssociatedWithAisle[3].move_time= 9;
+    //obstacleAssociatedWithAisle[3].time_stamp1= 9;
 
 
 
