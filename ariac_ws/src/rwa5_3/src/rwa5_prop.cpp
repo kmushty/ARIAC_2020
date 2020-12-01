@@ -822,7 +822,7 @@ void estimateObstacleAttributes(Camera &camera,int aisle_num) {
     auto aisle_breakbeam_msgs  = camera.get_aisle_breakbeam_msgs();
 
     auto vec = aisle_breakbeam_msgs[aisle_num];
-    if(obstacleInAisle[aisle_num] == true  &&  obstacleAssociatedWithAisle[aisle].is_valid_obstacle == false && vec.size() > 12) {
+    if(obstacleInAisle[aisle_num] == true  &&  obstacleAssociatedWithAisle[aisle_num].is_valid_obstacle == false && vec.size() > 12) {
        std::string str1 =  "shelf_breakbeam_" + std::to_string(aisle_num*3 + 2) + "_frame";
        std::string str2 =  "shelf_breakbeam_" + std::to_string(aisle_num*3 + 1) + "_frame";
 
