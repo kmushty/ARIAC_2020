@@ -400,18 +400,33 @@ void moveFromLocationToStart(std::map<std::string,std::vector<PresetLocation>> &
     }
 }
 
-void moveFromLocationToStartAvoidingObstacles(std::map<std::string,std::vector<PresetLocation>> &presetLoc, std::string location,GantryControl &gantry) {
+void moveFromLocationToGoal(product prod, part my_part, std::map<std::string,std::vector<PresetLocation>> &presetLoc, std::string location,GantryControl &gantry) {
     auto vec = presetLoc[location];
-    if(vec.size() == 1){
-        gantry.goToPresetLocation(vec[0]);
-        if(location != "start")
-            gantry.goToPresetLocation(gantry.start_);
+    if(my_part.logicalCameraName == "logical_camera_1" || my_part.logicalCameraName == "logical_camera_5" ||
+       my_part.logicalCameraName == "logical_camera_2" || my_part.logicalCameraName == "logical_camera_6"){
+        gantry.goToPresetLocation(gantry.start_);
+        gantry.goToPresetLocation(presetLoc[prod.agv_id][0]);
     }
-    else{
-        for(int i=vec.size()-2; i>=0;i--)
+    else if(my_part.logicalCameraName == "logical_camera_0" || my_part.logicalCameraName == "logical_camera_4" ||
+            my_part.logicalCameraName == "logical_camera_7" || my_part.logicalCameraName == "logical_camera_3"){
+        for(int i=vec.size()-1; i>=0;i--)
             gantry.goToPresetLocation(vec[i]);
         gantry.goToPresetLocation(gantry.start_);
+        gantry.goToPresetLocation(presetLoc[prod.agv_id][0]);
     }
+    else{
+        for(int i=vec.size()-1; i>=0;i--)
+            gantry.goToPresetLocation(vec[i]);
+        gantry.goToPresetLocation(presetLoc[prod.agv_id][0]);
+    }
+}
+
+void moveFromLocationToGoalAvoidingObstacles(product prod, std::map<std::string,std::vector<PresetLocation>> &presetLoc, std::string location,GantryControl &gantry) {
+    auto vec = presetLoc[location];
+    for(int i=vec.size()-2; i>=0;i--)
+        gantry.goToPresetLocation(vec[i]);
+    gantry.goToPresetLocation(presetLoc[prod.agv_id][0]);
+
 }
 
 
@@ -887,7 +902,7 @@ void planAndExecutePath(product prod, part my_part,std::map<std::string, std::ve
        gantry.pickPart(my_part);
 
 //       retraceSteps(presetLoc, location, gantry);
-       moveFromLocationToStart(presetLoc, location, gantry);
+       moveFromLocationToGoal(prod, my_part,presetLoc, location, gantry);
    }
    else{
        location = plan[1] + "_" + my_part.logicalCameraName + "_" + plan[3];
@@ -908,7 +923,7 @@ void planAndExecutePath(product prod, part my_part,std::map<std::string, std::ve
 //                  moveToLocation(presetLoc, location, gantry);
                   gantry.pickPart(my_part);
 //                  retraceSteps(presetLoc, location, gantry);
-                  moveFromLocationToStartAvoidingObstacles(presetLoc, location, gantry);
+                  moveFromLocationToGoalAvoidingObstacles(prod, presetLoc, location, gantry);
                   break;
                }
          }
@@ -984,7 +999,7 @@ void processPart(product prod, GantryControl &gantry, Camera &camera, Competitio
                     moveToLocation2(presetLoc, my_part, gantry, getLocationName(my_part,aisle_num));
                     gantry.pickPart(my_part);
                     ROS_INFO_STREAM("AFTER" << getLocationName(my_part,aisle_num));
-                    moveFromLocationToStart(presetLoc, getLocationName(my_part,aisle_num), gantry);
+                    moveFromLocationToGoal(prod, my_part, presetLoc, getLocationName(my_part,aisle_num), gantry);
                 }
 
 
@@ -993,8 +1008,8 @@ void processPart(product prod, GantryControl &gantry, Camera &camera, Competitio
                     flipPart(gantry, my_part_in_tray, prod);
                     moveToLocation(presetLoc,prod.agv_id+"_flipped",gantry);
                 }
-                else
-                    moveToLocation(presetLoc, prod.agv_id, gantry);                                                //move to desired agv id
+//                else
+//                    moveToLocation(presetLoc, prod.agv_id, gantry);                                                //move to desired agv id
 
                 armState = gantry.getGripperState(prod.arm_name);
                 //if (!armState.attached)                                                                            //object accidentally fell on the tray
