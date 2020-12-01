@@ -970,10 +970,6 @@ void processPart(product prod, GantryControl &gantry, Camera &camera, Competitio
                 ROS_INFO_STREAM("parts .second  "<< parts.second.logicalCameraName);
 
 //                detected_parts.erase(parts.first);
-                if(!camera.isSensorBlackout())
-                    camera.removeAllElements(prod.type);
-                else
-                    camera.removeElement(prod.type, parts.first);
 
                 int aisle_num = aisleAssociatedWithPart(my_part);
 
@@ -1004,8 +1000,15 @@ void processPart(product prod, GantryControl &gantry, Camera &camera, Competitio
                 //if (!armState.attached)                                                                            //object accidentally fell on the tray
                     //faultyGripper(gantry, prod, camera, my_part_in_tray);
                 //else
-                
-                
+
+                if(!camera.isSensorBlackout()) {
+                    camera.removeAllElements(prod.type);
+                    ROS_INFO_STREAM("rEMOVING ALL ELEMENTS");
+                }
+                else {
+                    camera.removeElement(prod.type, parts.first);
+                    ROS_INFO_STREAM("rEMOVING ELEMENTS");
+                }
                 gantry.placePart(my_part_in_tray, prod.agv_id, prod.arm_name);                                 //place part on the tray
                 ROS_INFO_STREAM("bEFORE PROCESSED PART");
                 keepTrackOfProcessedParts(my_part, prod,gantry,camera);
