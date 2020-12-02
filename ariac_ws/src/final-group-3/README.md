@@ -17,4 +17,4 @@ cd ariac_ws
 source devel/setup.bash
 rosrun final-group-3 rwa3_node
 ```
-In order to view the doxygen documentation webpage follow the path: /Ariac/ariac_ws/src/final-group-3/html/index.html and open the file using the browser
+In order to view the doxygen documentation open webpage using index.html present in doxygen/html folder in final-group-3 package.

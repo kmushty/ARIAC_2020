@@ -1003,8 +1003,10 @@ void processPart(product prod, GantryControl &gantry, Camera &camera, Competitio
             //camera.reset_agv_logical_camera("logical_camera_8");
             //ROS_INFO_STREAM("rEMOVING ALL ELEMENTS");
         //}
-        detected_parts = camera.get_detected_parts()[prod.type];
-
+        auto check_parts = camera.get_detected_parts();
+        detected_parts = check_parts[prod.type];
+        if(check_parts.find(prod.type) == check_parts.end())
+            return;
         ROS_INFO_STREAM("Printing detected part(s");
         for(const auto & parts: detected_parts){
             ROS_INFO_STREAM("parts .firts "<< parts.first);
@@ -1038,7 +1040,12 @@ void processPart(product prod, GantryControl &gantry, Camera &camera, Competitio
                 else {
                     ROS_INFO_STREAM("bEFORE" << getLocationName(my_part,aisle_num));
                     moveToLocation2(presetLoc, my_part, gantry, getLocationName(my_part,aisle_num));
-                    if( gantry.pickPart(my_part)){
+                    bool state;
+                    if(my_part.type.find("pulley_part") != -1)
+                        state = gantry.pickPulleyPart(my_part);
+                    else
+                        state = gantry.pickPart(my_part);
+                    if(state){
                        ROS_INFO_STREAM("successfully picked part");
                        moveFromLocationToGoal(prod, my_part, presetLoc, getLocationName(my_part,aisle_num), gantry);
                     }
@@ -1315,28 +1322,28 @@ void conveyor(Camera &camera, GantryControl &gantry, product prod){
     imgPart.pose.orientation.w = 1;
 
     auto part = camera.get_conveyor_detected_parts()["logical_camera_9"];
-    if(prod.type.find("pulley_part") != -1){
+    if(part.type.find("pulley_part") != -1){
         moveToLocation(presetLoc, "movingPart", gantry);
         imgPart.pose.position.x = 0;
         imgPart.pose.position.y = -0.46;//-0.5650; //-0.272441; //-0.5700
 //    imgPart.pose.position.z = 0.874991;//0.864004; //0.875004;0.874988
         imgPart.pose.position.z = 0.888;// 0.879 (kinda works)//0.884991
     }
-    else if(prod.type.find("gasket_part") != -1){
+    else if(part.type.find("gasket_part") != -1){
         moveToLocation(presetLoc, "movingPart", gantry);
         imgPart.pose.position.x = 0;
         imgPart.pose.position.y = -0.464;//-0.5650; //-0.272441; //-0.5700
 //    imgPart.pose.position.z = 0.874991;//0.864004; //0.875004;0.874988
         imgPart.pose.position.z = 0.88;// 0.879 (kinda works)//0.884991
     }
-    else if(prod.type.find("disk_part") != -1){
+    else if(part.type.find("disk_part") != -1){
         moveToLocation(presetLoc, "movingPartDisk", gantry);
         imgPart.pose.position.x = 0;
         imgPart.pose.position.y = -0.484;//-0.5650; //-0.272441; //-0.5700
 //    imgPart.pose.position.z = 0.874991;//0.864004; //0.875004;0.874988
         imgPart.pose.position.z = 0.88;// 0.879 (kinda works)//0.884991
     }
-    else if(prod.type.find("gear_part") != -1){
+    else if(part.type.find("gear_part") != -1){
         moveToLocation(presetLoc, "movingPartGear", gantry);
         imgPart.pose.position.x = 0;
         imgPart.pose.position.y = -0.64;//-0.5650; //-0.272441; //-0.5700
@@ -1352,6 +1359,7 @@ void conveyor(Camera &camera, GantryControl &gantry, product prod){
     }
 
     ROS_INFO_STREAM("Picking Part from conveynor");
+    stopAdding = true;
     gantry.pickPart(imgPart);
     moveFromLocationToStart(presetLoc, "pickmovingPart", gantry);
 
@@ -1396,13 +1404,14 @@ void pickPartsFromConveyor2(Camera &camera, Competition &comp, GantryControl &ga
 
 
 
-void pickPartsFromConveyor(Camera &camera, GantryControl &gantry, product prod, int numParts){
+void pickPartsFromConveyor(Camera &camera, Competition &comp, GantryControl &gantry, product prod, int numParts){
     int count = 0, count1 = 0;
     while(count < numParts){
         if(count == 0 && camera.get_break_beam()){
             conveyor(camera, gantry, prod);
             count += 1;
             moveToLocation(presetLoc, "conveyorPart_"+std::to_string(count), gantry);
+            stopAdding = false;
             gantry.deactivateGripper("left_arm");
             moveFromLocationToStart(presetLoc,"start", gantry);
 //            camera.reset_break_beam();
@@ -1411,6 +1420,11 @@ void pickPartsFromConveyor(Camera &camera, GantryControl &gantry, product prod, 
             count1 = 0;
             ROS_INFO_STREAM("HERE3");
             while(!camera.get_break_beam()){
+                if(comp.getClock() > 90){
+                    gantry.deactivateGripper("left_arm");
+                    moveFromLocationToStart(presetLoc,"start", gantry);
+                    break;
+                }
                 count1 = 1;
                 ROS_INFO_STREAM("HERE1");
             }
@@ -1419,6 +1433,7 @@ void pickPartsFromConveyor(Camera &camera, GantryControl &gantry, product prod, 
                 conveyor(camera, gantry, prod);
                 count += 1;
                 moveToLocation(presetLoc, "conveyorPart_"+std::to_string(count), gantry);
+                stopAdding = false;
                 gantry.deactivateGripper("left_arm");
                 moveFromLocationToStart(presetLoc,"start", gantry);
 //                ros::Duration(1).sleep();
@@ -1427,6 +1442,11 @@ void pickPartsFromConveyor(Camera &camera, GantryControl &gantry, product prod, 
                 ROS_INFO_STREAM("HERE2");
             }
 
+        }
+        if(comp.getClock() > 90){
+            gantry.deactivateGripper("left_arm");
+            moveFromLocationToStart(presetLoc,"start", gantry);
+            break;
         }
 
     }
@@ -1493,30 +1513,19 @@ int main(int argc, char ** argv) {
 
 
     ConveyorFlag = false;
-    int numPickParts = 4;
+    bool starting = false;
+    int numPickParts = 3;
 
 
-
-    // for debugging
-    //for(int i = 0; i<4; i++) {
-      //if(obstacleInAisle[i] == true){
-         //while(!obstacleAssociatedWithAisle[i].is_valid_obstacle)
-              //estimateObstacleAttributes(camera,i);
-       //}
-    //}
-
-
-    //}
-    //
-    obstacleAssociatedWithAisle[2].is_valid_obstacle= true;
-    obstacleAssociatedWithAisle[2].wait_time= 7;
-    obstacleAssociatedWithAisle[2].move_time= 9;
-    obstacleAssociatedWithAisle[2].time_stamp1= 9;
-
-    obstacleAssociatedWithAisle[3].is_valid_obstacle= true;
-    obstacleAssociatedWithAisle[3].wait_time= 7;
-    obstacleAssociatedWithAisle[3].move_time= 9;
-    obstacleAssociatedWithAisle[3].time_stamp1= 9;
+//    obstacleAssociatedWithAisle[2].is_valid_obstacle= true;
+//    obstacleAssociatedWithAisle[2].wait_time= 7;
+//    obstacleAssociatedWithAisle[2].move_time= 9;
+//    obstacleAssociatedWithAisle[2].time_stamp1= 9;
+//
+//    obstacleAssociatedWithAisle[3].is_valid_obstacle= true;
+//    obstacleAssociatedWithAisle[3].wait_time= 7;
+//    obstacleAssociatedWithAisle[3].move_time= 9;
+//    obstacleAssociatedWithAisle[3].time_stamp1= 9;
 
 
 
@@ -1558,14 +1567,17 @@ int main(int argc, char ** argv) {
                 prod.arm_name = "left_arm";
 
                 //process parts on conveyor belt if parts are detected
-//                ros::Duration(18.0).sleep();
-//                if(!ConveyorFlag && camera.get_conveyor_detected_parts().size()>0) {
-//                    ROS_INFO_STREAM("processing conveyor belt");
-////                    auto type = camera.get_conveyor_detected_parts()["logical_camera_9"].type;
-//                    pickPartsFromConveyor(camera, gantry, prod, numPickParts);
-//                    ConveyorFlag = true;
-//                    camera.reset_conveyor_logical_camera();
-//                }
+                if(!starting) {
+                    ros::Duration(18.0).sleep();
+                    starting = true;
+                }
+                if (!ConveyorFlag && camera.get_conveyor_detected_parts().size() > 0) {
+                    ROS_INFO_STREAM("processing conveyor belt");
+//                    auto type = camera.get_conveyor_detected_parts()["logical_camera_9"].type;
+                    pickPartsFromConveyor(camera, comp, gantry, prod, numPickParts);
+                    ConveyorFlag = true;
+                    camera.reset_conveyor_logical_camera();
+                }
 
                 // TODO - make high priority order checker more robust
                 if(comp.getOrders().size() > n && !HighPriorityOrderInitiated){

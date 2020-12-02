@@ -65,7 +65,7 @@ orders:
 #          xyz: [0.1, 0.2, 0.2]
 #          rpy: ['pi', 0, 0.2]
       part_0:
-        type: disk_part_red
+        type: pulley_part_red
         pose:
           xyz: [0.0, 0.0, 0.2]
           rpy: [0, 0, 0]
@@ -98,12 +98,12 @@ orders:
 #          rpy: [0, 0, '-pi/4']
 
 
-#belt_models:
-#  pulley_part_red:
-#    15.0: #interval at which the object is spawned on the belt
-#      pose:
-#        xyz: [0.0, 4.3, 0.92]
-#        rpy: [0, 0, 'pi/2']
+belt_models:
+  pulley_part_red:
+    15.0: #interval at which the object is spawned on the belt
+      pose:
+        xyz: [0.0, 4.3, 0.92]
+        rpy: [0, 0, 'pi/2']
 
 
 models_over_bins:

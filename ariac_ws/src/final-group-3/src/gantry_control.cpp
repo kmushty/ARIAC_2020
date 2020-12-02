@@ -77,11 +77,11 @@ void GantryControl::init()
     bin13_1_.left_arm = {0, -0.63, 1.26, -0.65, PI / 2, 0};
     bin13_1_.right_arm = {PI, -PI / 4, PI / 2, -PI / 4, PI / 2, 0};
     // conveyor part deactivate gripper location - 2
-    bin13_2_.gantry = {1.95, 2.30, 0.20}; //, 2.10};
+    bin13_2_.gantry = {1.98, 2.30, 0.20}; //, 2.10};
     bin13_2_.left_arm = {0, -0.63, 1.26, -0.65, PI / 2, 0};
     bin13_2_.right_arm = {PI, -PI / 4, PI / 2, -PI / 4, PI / 2, 0};
     // conveyor part deactivate gripper location -3
-    bin13_3_.gantry = {1.95, 2.52, 0.15}; //, 2.10};
+    bin13_3_.gantry = {1.98, 2.52, 0.15}; //, 2.10};
     bin13_3_.left_arm = {0, -0.63, 1.26, -0.65, PI / 2, 0};
     bin13_3_.right_arm = {PI, -PI / 4, PI / 2, -PI / 4, PI / 2, 0};
     // conveyor part deactivate gripper location -4
@@ -428,12 +428,12 @@ void GantryControl::init()
     middle_gap_2_2_aisle1_.right_arm = {3.14, 0, 0, -1.53, 3.14, 0};
 //    middle_gap_2_2_aisle1_.right_arm = {1.49, -0.34, 1.74, -1.53, 3.14, 0};
 
-    middle_gap_2_3_aisle1_.gantry = {-10.85, 0.05, -2.64};
+    middle_gap_2_3_aisle1_.gantry = {-10.85, 0.10, -2.64};
     middle_gap_2_3_aisle1_.left_arm = {-1.48, -2.89, -1.74, -1.72, 0, 0};
     middle_gap_2_3_aisle1_.right_arm = {3.14, 0, 0, -1.53, 3.14, 0};
 //    middle_gap_2_3_aisle1_.right_arm = {1.49, -0.34, 1.74, -1.53, 3.14, 0};
 
-    middle_gap_aisle_1to2_2_.gantry = {-13.20, 2.01, -2.64};
+    middle_gap_aisle_1to2_2_.gantry = {-13.60, 1.92, -2.64};
     middle_gap_aisle_1to2_2_.left_arm = {-1.48, -2.89, -1.74, -1.72, 0, 0};
     middle_gap_aisle_1to2_2_.right_arm = {3.14, 0, 0, -1.53, 3.14, 0};
 //    middle_gap_aisle_1to2_2_.right_arm = {1.76, -3.77, -1.26, -1.53, 3.14, 0};
@@ -1325,12 +1325,6 @@ bool GantryControl::pickPulleyPart(part part)
     //    ROS_INFO_STREAM("["<< part.type<<"]= " << part.pose.position.x << ", " << part.pose.position.y << "," << part.pose.position.z << "," << part.pose.orientation.x << "," << part.pose.orientation.y << "," << part.pose.orientation.z << "," << part.pose.orientation.w);
 
     auto state = getGripperState("left_arm");
-    while (!state.enabled)
-    {
-        ROS_INFO_STREAM("Activating Gripper again");
-        activateGripper("left_arm");
-        state = getGripperState("left_arm");
-    }
     //    if (state.enabled) {
     ROS_INFO_STREAM("[Gripper] = enabled");
     //--Move arm to part
@@ -1344,14 +1338,13 @@ bool GantryControl::pickPulleyPart(part part)
         left_arm_group_.setPoseTarget(currentPose);
         left_arm_group_.move();
         /*goToPresetLocation(start_);*/
-        return true;
     }
     else
     {
         ROS_INFO_STREAM("[Gripper] = object not attached");
-        int max_attempts{5};
-        int current_attempt{0};
-        while (!state.attached)
+        int max_attempts = 2;
+        int current_attempt = 0;
+        while (!state.attached && current_attempt < max_attempts)
         {
             left_arm_group_.setPoseTarget(currentPose);
             left_arm_group_.move();
@@ -1361,13 +1354,20 @@ bool GantryControl::pickPulleyPart(part part)
             activateGripper("left_arm");
             ROS_INFO_STREAM(state.attached);
             state = getGripperState("left_arm");
+            current_attempt += 1;
+
+            //if(state.attached)
             // ros::spinOnce();
         }
         left_arm_group_.setPoseTarget(currentPose);
+        left_arm_group_.move();
     }
-    return false;
-}
 
+    if(!state.attached)
+        return false;
+    else
+        return true;
+}
 void GantryControl::placePart(part part, std::string agv, std::string arm)
 {
     auto target_pose_in_tray = getTargetWorldPose(part.pose, agv, arm);
