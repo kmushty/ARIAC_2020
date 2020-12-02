@@ -979,13 +979,13 @@ void processPart(product prod, GantryControl &gantry, Camera &camera, Competitio
     std::map<std::string,part> detected_parts;
 
     while(!foundPart) {                                                                                          // poll until we find part
-        if(!camera.isSensorBlackout()) {
-            camera.removeAllElements(prod.type);
-            camera.reset_conveyor_logical_camera();
-            camera.reset_agv_logical_camera("logical_camera_10");
-            camera.reset_agv_logical_camera("logical_camera_8");
-            ROS_INFO_STREAM("rEMOVING ALL ELEMENTS");
-        }
+        //if(!camera.isSensorBlackout()) {
+            //camera.removeAllElements(prod.type);
+            //camera.reset_conveyor_logical_camera();
+            //camera.reset_agv_logical_camera("logical_camera_10");
+            //camera.reset_agv_logical_camera("logical_camera_8");
+            //ROS_INFO_STREAM("rEMOVING ALL ELEMENTS");
+        //}
         detected_parts = camera.get_detected_parts()[prod.type];
 
         ROS_INFO_STREAM("Printing detected part(s");
@@ -1011,6 +1011,7 @@ void processPart(product prod, GantryControl &gantry, Camera &camera, Competitio
 
 //                detected_parts.erase(parts.first);
 
+                stopAdding = true;
                 int aisle_num = aisleAssociatedWithPart(my_part);
 
                 if (aisle_num != -1 && obstacleInAisle[aisle_num]) {
@@ -1023,6 +1024,7 @@ void processPart(product prod, GantryControl &gantry, Camera &camera, Competitio
                     ROS_INFO_STREAM("bEFORE" << getLocationName(my_part,aisle_num));
                     moveToLocation2(presetLoc, my_part, gantry, getLocationName(my_part,aisle_num));
                     if( gantry.pickPart(my_part)){
+                       camera.removeElement(prod.type, parts.first);
                        ROS_INFO_STREAM("successfully picked part");
                        moveFromLocationToGoal(prod, my_part, presetLoc, getLocationName(my_part,aisle_num), gantry);
                     }else{
@@ -1056,14 +1058,14 @@ void processPart(product prod, GantryControl &gantry, Camera &camera, Competitio
                 }
 
 
-                if(!camera.isSensorBlackout()) {
-                    camera.removeAllElements(prod.type);
-                    ROS_INFO_STREAM("rEMOVING ALL ELEMENTS");
-                }
-                else {
-                    camera.removeElement(prod.type, parts.first);
-                    ROS_INFO_STREAM("rEMOVING ELEMENTS");
-                }
+                //if(!camera.isSensorBlackout()) {
+                    //camera.removeAllElements(prod.type);
+                    //ROS_INFO_STREAM("rEMOVING ALL ELEMENTS");
+                //}
+                //else {
+                    //camera.removeElement(prod.type, parts.first);
+                    //ROS_INFO_STREAM("rEMOVING ELEMENTS");
+                //}
                 gantry.placePart(my_part_in_tray, prod.agv_id, prod.arm_name);                                 //place part on the tray
                 if(flipped)
                     moveToLocation(presetLoc,prod.agv_id+"_flipped",gantry);
@@ -1090,6 +1092,7 @@ void processPart(product prod, GantryControl &gantry, Camera &camera, Competitio
                     ROS_INFO_STREAM("parts .second  "<< parts.second.logicalCameraName);
                 }
 
+                stopAdding = false;
                 foundPart = true;
                 break;
             }
@@ -1489,6 +1492,7 @@ int main(int argc, char ** argv) {
    
     HighPriorityOrderInitiated  = false;                                                                     //setting up flag
     stop_processing = false;
+    stopAdding = false;
 
 
     obstacle temp;                                                                                           //Initializing obstacle

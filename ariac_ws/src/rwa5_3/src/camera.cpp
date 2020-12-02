@@ -1,6 +1,8 @@
 #include "camera.h"
 
 Competition *comp_ref; 
+bool stopAdding;
+
 
 void Camera::logical_camera_callback(
 const nist_gear::LogicalCameraImage::ConstPtr &msg, int index) {
@@ -94,7 +96,7 @@ const nist_gear::LogicalCameraImage::ConstPtr &msg, int index) {
                         }
                     }
                 }
-            } else {                                                   //logical cameras for shelfs and bins
+            } else if(!stopAdding) {                                               //logical cameras for shelfs and bins
                 if (!std::isnan(mypart.pose.position.x) && !std::isnan(mypart.pose.position.y) &&
                     !std::isnan(mypart.pose.position.z)) {
                     if (detected_parts.find(mypart.type) == detected_parts.end()) {
