@@ -2,6 +2,14 @@ Update preset location after flipping
 Conveyor - check if the parts are in the bin
 faulty gripper
 Doxygen
+if part not picked robot hits shelf
+Number of times robot should try to pick the part
+change the flip part preset location
+agv1-flipped agv2-flipped
+
+continue if part is not picked
+
+
 
 1. Hp order
 2. sensor blackout

@@ -97,7 +97,7 @@ void GantryControl::init()
     agv2_.right_arm = {PI, -PI / 4, PI / 2, -PI / 4, PI / 2, 0};
 
     //--agv1
-    agv1_.gantry = {0.6, -6.9, 0};
+    agv1_.gantry = {-0.6, -6.9, 0};
     agv1_.left_arm = {0.0, -PI / 4, PI / 2, -PI / 4, PI / 2, 0};
     agv1_.right_arm = {PI, -PI / 4, PI / 2, -PI / 4, PI / 2, 0};
 
@@ -116,12 +116,12 @@ void GantryControl::init()
     //    agv2_faultyG_.left_arm = {0.0, -1.01, 1.76, -PI/4, PI/2, 0};
     //    agv2_faultyG_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
 
-    agv2_faultyG_.gantry = {0.7, 6.9, PI};
-    agv2_faultyG_.left_arm = {0.0, -1.38, 2.14, -PI / 4, PI / 2, 0};
+    agv2_faultyG_.gantry = {0.5, 6.7, PI};
+    agv2_faultyG_.left_arm = {0.0, -PI / 4, PI / 2, -PI / 4, PI / 2, 0};
     agv2_faultyG_.right_arm = {PI, -PI / 4, PI / 2, -PI / 4, PI / 2, 0};
 
-    agv1_faultyG_.gantry = {-0.7, -6.9, 0.0};
-    agv1_faultyG_.left_arm = {0.0, -1.38, 2.14, -PI / 4, PI / 2, 0};
+    agv1_faultyG_.gantry = {-0.5, -6.7, 0.0};
+    agv1_faultyG_.left_arm = {0.0, -PI / 4, PI / 2, -PI / 4, PI / 2, 0};
     agv1_faultyG_.right_arm = {PI, -PI / 4, PI / 2, -PI / 4, PI / 2, 0};
 
     //    agv2_.gantry = {0, 6.30, 0};
@@ -231,7 +231,7 @@ void GantryControl::init()
     agv1_go_to_flipped_pulley_.left_arm = {1.84, -2.73, -1.88, -0.2, 1.63, 0};
     agv1_go_to_flipped_pulley_.right_arm = {1.75, -3.35, -1.4, 0.13, 1.51, 0};
 
-    agv2_flipped1_.gantry = {0.6, 6.9, 0};
+    agv2_flipped1_.gantry = {0.8, 6.9, 0};
     agv2_flipped1_.left_arm = {0.0, -PI / 4, PI / 2, -PI / 4, PI / 2, 0};
     // agv2_flipped1_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
     agv2_flipped1_.right_arm = {PI, -PI / 4, PI / 2, -PI / 4, PI / 2, 0};
@@ -240,7 +240,7 @@ void GantryControl::init()
     agv2_flipped_.left_arm = {0.0, -PI / 4, PI / 2, -PI / 4, PI / 2, 0};
     agv2_flipped_.right_arm = {PI, -PI / 4, PI / 2, -PI / 4, PI / 2, 0};
 
-    agv1_flipped1_.gantry = {-0.6, -6.9, 3.14};
+    agv1_flipped1_.gantry = {-0.8, -6.9, 3.14};
     agv1_flipped1_.left_arm = {0.0, -PI / 4, PI / 2, -PI / 4, PI / 2, 0};
     // agv2_flipped1_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
     agv1_flipped1_.right_arm = {PI, -PI / 4, PI / 2, -PI / 4, PI / 2, 0};
@@ -775,7 +775,7 @@ void GantryControl::init()
 
     logical_12_15_aisle_2_short_.gantry = {0, 1.54, 3.14};
     logical_12_15_aisle_2_short_.left_arm = {-1.48, -2.89, -1.74, -1.72, 0, 0};
-    logical_12_15_aisle_2_short_.right_arm = {1.76, -3.77, -1.26, -1.53, 3.14, 0};
+    logical_12_15_aisle_2_short_.right_arm = {1.49, -0.34, 1.74, -1.53, 3.14, 0};
 
     logical_12_15_aisle_2_short_1_.gantry = {-14, 1.54, 3.14};
     logical_12_15_aisle_2_short_1_.left_arm = {-1.48, -2.89, -1.74, -1.72, 0, 0};
@@ -1253,12 +1253,6 @@ bool GantryControl::pickPart(part part)
     //    ROS_INFO_STREAM("["<< part.type<<"]= " << part.pose.position.x << ", " << part.pose.position.y << "," << part.pose.position.z << "," << part.pose.orientation.x << "," << part.pose.orientation.y << "," << part.pose.orientation.z << "," << part.pose.orientation.w);
 
     auto state = getGripperState("left_arm");
-    while (!state.enabled)
-    {
-        ROS_INFO_STREAM("Activating Gripper again");
-        activateGripper("left_arm");
-        state = getGripperState("left_arm");
-    }
     //    if (state.enabled) {
     ROS_INFO_STREAM("[Gripper] = enabled");
     //--Move arm to part
@@ -1277,9 +1271,9 @@ bool GantryControl::pickPart(part part)
     else
     {
         ROS_INFO_STREAM("[Gripper] = object not attached");
-        int max_attempts{5};
-        int current_attempt{0};
-        while (!state.attached)
+        int max_attempts = 2;
+        int current_attempt = 0;
+        while (!state.attached && current_attempt < max_attempts)
         {
             left_arm_group_.setPoseTarget(currentPose);
             left_arm_group_.move();
@@ -1289,9 +1283,11 @@ bool GantryControl::pickPart(part part)
             activateGripper("left_arm");
             ROS_INFO_STREAM(state.attached);
             state = getGripperState("left_arm");
+            current_attempt += 1;
             // ros::spinOnce();
         }
         left_arm_group_.setPoseTarget(currentPose);
+        left_arm_group_.move();
     }
     return false;
 }
@@ -1577,6 +1573,7 @@ void GantryControl::moveToPart(part my_part, PresetLocation preset)
               my_part.logicalCameraName == "logical_camera_5" || my_part.logicalCameraName == "logical_camera_6")
     {
         //bin_logical cameras
+        ROS_INFO_STREAM("Part x position " << my_part.pose.position.x);
         gantryConfiguration[0] = my_part.pose.position.x - 0.4;
         gantryConfiguration[1] = -1 * my_part.pose.position.y;
 
@@ -1598,7 +1595,7 @@ void GantryControl::moveToPart(part my_part, PresetLocation preset)
     }
   else if(my_part.logicalCameraName == "logical_camera_10"){
       ROS_INFO_STREAM("MOve part logical camera 10");
-      gantryConfiguration[0] = my_part.pose.position.x + 0.4;
+      gantryConfiguration[0] = my_part.pose.position.x + 0.2;
       if(-1*my_part.pose.position.y < 6.9)
           gantryConfiguration[1] = -1*my_part.pose.position.y;
   }

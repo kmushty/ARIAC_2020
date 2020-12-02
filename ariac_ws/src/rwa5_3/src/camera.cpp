@@ -64,8 +64,8 @@ const nist_gear::LogicalCameraImage::ConstPtr &msg, int index) {
             //std::to_string((int)round(mypart.pose.orientation.w));
 
             std::string temp = mypart.type + std::to_string((int) std::round(mypart.pose.position.x * 10));
-            //std::to_string((int)std::round(mypart.pose.position.y*10)) +
-            // std::to_string((int)std::round(mypart.pose.position.z*10));
+//                                             std::to_string((int)std::round(mypart.pose.position.y*10));
+//             std::to_string((int)std::round(mypart.pose.position.z*10));
 
             if (key == "logical_camera_9") {                           // conveyor belt logical camera
                 mypart.conveyor_time = (*comp_ref).getClock();
@@ -73,7 +73,7 @@ const nist_gear::LogicalCameraImage::ConstPtr &msg, int index) {
             } else if (key == "logical_camera_8" || key == "logical_camera_10") {  // agv_logical camera
                 if (!std::isnan(mypart.pose.position.x) && !std::isnan(mypart.pose.position.y) &&
                     !std::isnan(mypart.pose.position.z)) {
-                    if (agv_detected_parts.find(mypart.type) == agv_detected_parts.end()) {
+                    if (agv_detected_parts.find(key) == agv_detected_parts.end()) {
                         mypart.count = agv_detected_parts[key].size() + 1;
                         agv_detected_parts[key][temp] = mypart;
                     } else {
@@ -97,8 +97,9 @@ const nist_gear::LogicalCameraImage::ConstPtr &msg, int index) {
             } else {                                                   //logical cameras for shelfs and bins
                 if (!std::isnan(mypart.pose.position.x) && !std::isnan(mypart.pose.position.y) &&
                     !std::isnan(mypart.pose.position.z)) {
-                    if (detected_parts.find(mypart.type) == detected_parts.end())
+                    if (detected_parts.find(mypart.type) == detected_parts.end()) {
                         detected_parts[mypart.type][temp] = mypart;
+                    }
                     else {
                         bool exist = false;
                         auto vec = detected_parts[mypart.type];
