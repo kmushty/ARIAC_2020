@@ -1015,7 +1015,7 @@ void processPart(product prod, GantryControl &gantry, Camera &camera, Competitio
                 continue;
 
 
-            
+
             if (prod.type == parts.second.type.c_str()) {
                 my_part = parts.second;
 
@@ -1086,12 +1086,12 @@ void removeReplaceFaultyProductsAndDeliver(Camera &camera,GantryControl &gantry,
     auto logicalCameraName = (agv_id == "agv1") ? "logical_camera_8" : "logical_camera_10";
     auto faulty_poses = camera.get_faulty_poses()[agv_id];
     auto parts = camera.get_agv_detected_parts()[logicalCameraName];
-    
+
     std::vector<product> productsTobeReplaced;   //
     moveToLocation(presetLoc, agv_id, gantry);
 
     // remove all faulty products
-    product prod;                                 
+    product prod;
     for(const auto & faulty_pose: faulty_poses) {
       for(const auto & part: parts) {
          if(std::max(part.second.pose.position.x,faulty_pose.second.position.x) - std::min(part.second.pose.position.x,faulty_pose.second.position.x)< 0.2 &&
@@ -1112,15 +1112,15 @@ void removeReplaceFaultyProductsAndDeliver(Camera &camera,GantryControl &gantry,
          }
       }
     }
-    
+
     //replace all faulty products
     bool delivered = false;
-    for(auto product:productsTobeReplaced){                   
+    for(auto product:productsTobeReplaced){
       if(compIsAlmostOver(TIMELIMIT_THRESHOLD, comp)){
          agvDeliveryService(agv_id,agv1Delivery,agv2Delivery,shipment_type);
          delivered = true;
          break;
-      }else 
+      }else
          processPart(product, gantry, camera, comp, true,  true);
     }
 
@@ -1183,7 +1183,7 @@ void removeProduct(Camera &camera, GantryControl &gantry, product &prod) {
 }
 
 
-void processShipment(nist_gear::Shipment &ship,Camera &camera, GantryControl &gantry,Competition &comp, 
+void processShipment(nist_gear::Shipment &ship,Camera &camera, GantryControl &gantry,Competition &comp,
                     ros::ServiceClient &agv2Delivery, ros::ServiceClient &agv1Delivery){
 
       product prod;
@@ -1194,7 +1194,7 @@ void processShipment(nist_gear::Shipment &ship,Camera &camera, GantryControl &ga
           prod.pose = product.pose;
           prod.agv_id = ship.agv_id;
           prod.arm_name = "left_arm";
-            
+
           processPart(prod, gantry, camera, comp, false, true);
 
           moveFromLocationToStart(presetLoc, "start", gantry);
@@ -1248,7 +1248,7 @@ void removeUnwatedParts(std::vector<part> &unwanted_parts,std::string agv_id, Ga
 }
 
 
-void processHPOrder(nist_gear::Order &order,Camera &camera, GantryControl &gantry,Competition &comp, 
+void processHPOrder(nist_gear::Order &order,Camera &camera, GantryControl &gantry,Competition &comp,
                     ros::ServiceClient &agv2Delivery, ros::ServiceClient &agv1Delivery, std::string previous_order_agv_id){
 
     ROS_INFO_STREAM("Processing HP order");
@@ -1259,10 +1259,10 @@ void processHPOrder(nist_gear::Order &order,Camera &camera, GantryControl &gantr
 
     for(int j=0; j<order.shipments.size(); j++){
         auto ship = order.shipments[j];
-        
+
         if (ship.agv_id == previous_order_agv_id) {
             PreviousOrderAgvChange = true;
-       
+
               for(int k=0; k< ship.products.size(); k++){
                   auto product = ship.products[k];
 
@@ -1287,13 +1287,13 @@ void processHPOrder(nist_gear::Order &order,Camera &camera, GantryControl &gantr
                      wanted_products.push_back(prod);
                   }
               }
-              unwanted_parts = processedParts; 
+              unwanted_parts = processedParts;
               processedParts = std::vector<part>{};
 
               removeUnwatedParts(unwanted_parts,ship.agv_id,gantry,camera,comp);
               repositionParts(reposition_parts,ship.agv_id,gantry,camera,comp);
               addWantedParts(wanted_products, gantry, camera, comp);
-        }else 
+        }else
              processShipment(ship,camera, gantry,comp, agv2Delivery, agv1Delivery);
    }
 }
@@ -1379,7 +1379,7 @@ void detectAislesWithObstacles(Camera &camera) {
 
 void pickPartsFromConveyor2(Camera &camera, Competition &comp, GantryControl &gantry, product prod, int numParts){
      part conveyor_part = camera.get_conveyor_detected_parts()["logical_camera_9"];
-     
+
      double conveyor_speed = 0.2;
      double location_y0 = conveyor_part.pose.position.y;
 
@@ -1464,14 +1464,14 @@ int main(int argc, char ** argv) {
 
     ROS_INFO_STREAM("TTTTTTT1");
 
-   
+
     HighPriorityOrderInitiated  = false;                                                                     //setting up flag
     stop_processing = false;
     stopAdding = false;
 
 
     obstacle temp;                                                                                           //Initializing obstacle
-    obstacleAssociatedWithAisle = std::vector<obstacle> (4,temp);                                             
+    obstacleAssociatedWithAisle = std::vector<obstacle> (4,temp);
 
 
     ROS_INFO_STREAM("TTTTTTT2");
@@ -1486,7 +1486,7 @@ int main(int argc, char ** argv) {
 
     ros::Duration(3.0).sleep();                                                                              //wait for sometime and
     detectAislesWithObstacles(camera);                                                                       //determine obstacles in Aisles
-    
+
 
     ConveyorFlag = false;
     int numPickParts = 4;
