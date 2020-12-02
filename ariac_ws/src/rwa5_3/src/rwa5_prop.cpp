@@ -778,6 +778,9 @@ std::vector<std::string> estimateLocation(int aisle_num, double t) {
    double time_stamp1 = obstacleAssociatedWithAisle[aisle_num].time_stamp1;
    double x;
   
+    
+   double correction_term = 7.0*t/43;
+
    double td = t - time_stamp1;                                                   //number of seconds from time_stamp
    double tf = move_time + wait_time;                                             // time take to go from end to end
 
@@ -978,7 +981,16 @@ void processPart(product prod, GantryControl &gantry, Camera &camera, Competitio
     nist_gear::VacuumGripperState armState;
     std::map<std::string,part> detected_parts;
 
-    while(!foundPart) {                                                                                          // poll until we find part
+
+    if(!camera.isSensorBlackout()) {                                                    //get fresh data
+        camera.removeAllElements(prod.type);
+        camera.reset_conveyor_logical_camera();
+        camera.reset_agv_logical_camera("logical_camera_10");
+        camera.reset_agv_logical_camera("logical_camera_8");
+        ROS_INFO_STREAM("rEMOVING ALL ELEMENTS");
+     }
+
+    while(!foundPart) {                                                                              // poll until we find part
         //if(!camera.isSensorBlackout()) {
             //camera.removeAllElements(prod.type);
             //camera.reset_conveyor_logical_camera();
@@ -994,9 +1006,9 @@ void processPart(product prod, GantryControl &gantry, Camera &camera, Competitio
             ROS_INFO_STREAM("parts .second  "<< parts.second.logicalCameraName);
             ROS_INFO_STREAM("Part x position " << parts.second.pose.position.x);
         }
-        for(const auto& parts: detected_parts) {                                                               // search all logical cameras for desired part
+        for(const auto& parts: detected_parts) {                                                      // search all logical cameras for desired part
             if (parts.second.logicalCameraName == "logical_camera_8" ||
-                parts.second.logicalCameraName == "logical_camera_10")                                          // Exclude agv cameras
+                parts.second.logicalCameraName == "logical_camera_10")                                // Exclude agv cameras
                 continue;
 
 
@@ -1024,9 +1036,9 @@ void processPart(product prod, GantryControl &gantry, Camera &camera, Competitio
                     ROS_INFO_STREAM("bEFORE" << getLocationName(my_part,aisle_num));
                     moveToLocation2(presetLoc, my_part, gantry, getLocationName(my_part,aisle_num));
                     if( gantry.pickPart(my_part)){
-                       camera.removeElement(prod.type, parts.first);
                        ROS_INFO_STREAM("successfully picked part");
                        moveFromLocationToGoal(prod, my_part, presetLoc, getLocationName(my_part,aisle_num), gantry);
+                       camera.removeElement(prod.type, parts.first);
                     }else{
                        ROS_INFO_STREAM("Failed to pick part up");
                        moveFromLocationToStart(presetLoc, getLocationName(my_part,aisle_num), gantry);
@@ -1402,7 +1414,6 @@ void detectAislesWithObstacles(Camera &camera) {
 }
 
 
-
 void pickPartsFromConveyor2(Camera &camera, Competition &comp, GantryControl &gantry, product prod, int numParts){
      part conveyor_part = camera.get_conveyor_detected_parts()["logical_camera_9"];
      
@@ -1415,6 +1426,7 @@ void pickPartsFromConveyor2(Camera &camera, Competition &comp, GantryControl &ga
        gantry.moveToPart(conveyor_part, gantry.start_);
      }
 }
+
 
 
 void pickPartsFromConveyor(Camera &camera, GantryControl &gantry, product prod, int numParts){
@@ -1528,28 +1540,33 @@ int main(int argc, char ** argv) {
 
 
     //}
-//    obstacleAssociatedWithAisle[2].is_valid_obstacle= true;
-//    obstacleAssociatedWithAisle[2].wait_time= 7;
-//    obstacleAssociatedWithAisle[2].move_time= 9;
-//    obstacleAssociatedWithAisle[2].time_stamp1= 9;
-//
-//    obstacleAssociatedWithAisle[3].is_valid_obstacle= true;
-//    obstacleAssociatedWithAisle[3].wait_time= 7;
-//    obstacleAssociatedWithAisle[3].move_time= 9;
-//    obstacleAssociatedWithAisle[3].time_stamp1= 9;
+    //
+    //obstacleAssociatedWithAisle[2].is_valid_obstacle= true;
+    //obstacleAssociatedWithAisle[2].wait_time= 7;
+    //obstacleAssociatedWithAisle[2].move_time= 9;
+    //obstacleAssociatedWithAisle[2].time_stamp1= 9;
+
+    //obstacleAssociatedWithAisle[3].is_valid_obstacle= true;
+    //obstacleAssociatedWithAisle[3].wait_time= 7;
+    //obstacleAssociatedWithAisle[3].move_time= 9;
+    //obstacleAssociatedWithAisle[3].time_stamp1= 9;
 
 
 
-//    auto  vec = estimateLocation(2,15);
-//    ROS_INFO_STREAM("Time at: " << 15 << " action:" << vec[0] << " location: " <<vec[1]);
-//    vec= estimateLocation(2,20);
-//    ROS_INFO_STREAM("Time at: " << 20 << " action:" << vec[0] << " location: " <<vec[1]);
-//
-//    vec = estimateLocation(2,30);
-//    ROS_INFO_STREAM("Time at: " << 25 << " action:" << vec[0] << " location: " <<vec[1]);
-//
-//    vec = estimateLocation(2,40);
-//    ROS_INFO_STREAM("Time at: " << 30 << " action:" << vec[0] << " location: " <<vec[1]);
+    //auto  vec = estimateLocation(2,82);
+    //ROS_INFO_STREAM("Time at: " << 82 << " action:" << vec[0] << " location: " <<vec[1]);
+    //vec= estimateLocation(2,75);
+    //ROS_INFO_STREAM("Time at: " << 75 << " action:" << vec[0] << " location: " <<vec[1]);
+
+    //vec = estimateLocation(2,101);
+    //ROS_INFO_STREAM("Time at: " << 101 << " action:" << vec[0] << " location: " <<vec[1]);
+
+    //vec = estimateLocation(2,134);
+    //ROS_INFO_STREAM("Time at: " << 134 << " action:" << vec[0] << " location: " <<vec[1]);
+
+    //vec = estimateLocation(2,150);
+    //ROS_INFO_STREAM("Time at: " << 150 << " action:" << vec[0] << " location: " <<vec[1]);
+
 
     std::cout << "finished estimating obstacle parameters" << std::endl;
     int n = orders.size();
