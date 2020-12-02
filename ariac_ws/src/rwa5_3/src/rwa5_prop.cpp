@@ -874,16 +874,16 @@ void estimateObstacleAttributes(Camera &camera,int aisle_num) {
        double sec3 = double((*it2)->header.stamp.sec) + double((*it2)->header.stamp.nsec)*1e-9;
 
        ROS_INFO_STREAM(sec2 - sec1);
-       double wait_time = round(sec2 - sec1);
-       double move_time = round(sec3 - sec1 - wait_time);
+       double wait_time = sec2 - sec1;
+       double move_time = sec3 - sec1 - wait_time;
        ROS_INFO_STREAM(sec3 - sec2);
 
        double velocity = LENGTH_OF_AISLE/move_time;
        double distanceBtnLastBreakBeams   = 4.462133;
 
        obstacle human;
-       human.wait_time = wait_time;
-       human.move_time = (BEGIN_LOCATION_X - END_LOCATION_X)*move_time/distanceBtnLastBreakBeams;
+       human.wait_time = round(human.wait_time);
+       human.move_time = round(((BEGIN_LOCATION_X - END_LOCATION_X)*move_time)/distanceBtnLastBreakBeams);
        human.time_stamp1 = sec1;
        human.is_valid_obstacle = true;
          
@@ -892,8 +892,8 @@ void estimateObstacleAttributes(Camera &camera,int aisle_num) {
        ROS_INFO_STREAM("sec1 is " << sec1);
        ROS_INFO_STREAM("sec2 is " << sec2);
        ROS_INFO_STREAM("sec3 is " << sec3);
-       ROS_INFO_STREAM("wait time is " << wait_time);
-       ROS_INFO_STREAM("move time is " << move_time);
+       ROS_INFO_STREAM("wait time is " << human.wait_time);
+       ROS_INFO_STREAM("move time is " << human.move_time);
        
     }
       ROS_INFO_STREAM("exited estimateObstacleAttributes method");
@@ -1027,7 +1027,7 @@ void processPart(product prod, GantryControl &gantry, Camera &camera, Competitio
                        moveFromLocationToGoal(prod, my_part, presetLoc, getLocationName(my_part,aisle_num), gantry);
                     }else{
                        ROS_INFO_STREAM("Failed to pick part up");
-                       moveFromLocationToStart(prod, my_part, presetLoc, getLocationName(my_part,aisle_num), gantry);
+                       moveFromLocationToStart(presetLoc, getLocationName(my_part,aisle_num), gantry);
                        continue;
                     }
                     ROS_INFO_STREAM("AFTER" << getLocationName(my_part,aisle_num));
