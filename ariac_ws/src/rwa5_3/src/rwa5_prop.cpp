@@ -829,7 +829,7 @@ void estimateObstacleAttributes(Camera &camera,int aisle_num) {
     auto aisle_breakbeam_msgs  = camera.get_aisle_breakbeam_msgs();
 
     auto vec = aisle_breakbeam_msgs[aisle_num];
-    if(obstacleInAisle[aisle_num] == true  &&  obstacleAssociatedWithAisle[aisle_num].is_valid_obstacle == false && vec.size() > 12) {
+    if(obstacleInAisle[aisle_num] == true  &&  obstacleAssociatedWithAisle[aisle_num].is_valid_obstacle == false && vec.size() > 8) {
        std::string str1 =  "shelf_breakbeam_" + std::to_string(aisle_num*3 + 2) + "_frame";
        std::string str2 =  "shelf_breakbeam_" + std::to_string(aisle_num*3 + 1) + "_frame";
 
@@ -851,7 +851,7 @@ void estimateObstacleAttributes(Camera &camera,int aisle_num) {
          return;
        }
 
-       auto it2 = std::find_if(vec.begin(), vec.end(),
+       auto it2 = std::find_if(it, vec.end(),
                          [&str = str2]
                          (nist_gear::Proximity::ConstPtr &msg){return (msg->header).frame_id == str && msg->object_detected; });    
 
@@ -1022,9 +1022,15 @@ void processPart(product prod, GantryControl &gantry, Camera &camera, Competitio
                 else {
                     ROS_INFO_STREAM("bEFORE" << getLocationName(my_part,aisle_num));
                     moveToLocation2(presetLoc, my_part, gantry, getLocationName(my_part,aisle_num));
-                    gantry.pickPart(my_part);
+                    if( gantry.pickPart(my_part)){
+                       ROS_INFO_STREAM("successfully picked part");
+                       moveFromLocationToGoal(prod, my_part, presetLoc, getLocationName(my_part,aisle_num), gantry);
+                    }else{
+                       ROS_INFO_STREAM("Failed to pick part up");
+                       moveFromLocationToStart(prod, my_part, presetLoc, getLocationName(my_part,aisle_num), gantry);
+                       continue;
+                    }
                     ROS_INFO_STREAM("AFTER" << getLocationName(my_part,aisle_num));
-                    moveFromLocationToGoal(prod, my_part, presetLoc, getLocationName(my_part,aisle_num), gantry);
                     ROS_INFO_STREAM("FG0");
                 }
 
@@ -1510,12 +1516,13 @@ int main(int argc, char ** argv) {
 
 
     // for debugging
-    for(int i = 0; i<4; i++) {
-      if(obstacleInAisle[i] == true){
-         while(!obstacleAssociatedWithAisle[i].is_valid_obstacle)
-              estimateObstacleAttributes(camera,i);
-       }
-    }
+    //for(int i = 0; i<4; i++) {
+      //if(obstacleInAisle[i] == true){
+         //while(!obstacleAssociatedWithAisle[i].is_valid_obstacle)
+              //estimateObstacleAttributes(camera,i);
+       //}
+    //}
+
 
     //}
     //obstacleAssociatedWithAisle[2].is_valid_obstacle= true;

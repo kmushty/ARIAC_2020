@@ -1266,7 +1266,6 @@ bool GantryControl::pickPart(part part)
         left_arm_group_.setPoseTarget(currentPose);
         left_arm_group_.move();
         /*goToPresetLocation(start_);*/
-        return true;
     }
     else
     {
@@ -1284,12 +1283,18 @@ bool GantryControl::pickPart(part part)
             ROS_INFO_STREAM(state.attached);
             state = getGripperState("left_arm");
             current_attempt += 1;
+
+            //if(state.attached)
             // ros::spinOnce();
         }
         left_arm_group_.setPoseTarget(currentPose);
         left_arm_group_.move();
     }
-    return false;
+
+    if(!state.attached)
+      return false;
+    else
+      return true;
 }
 
 
