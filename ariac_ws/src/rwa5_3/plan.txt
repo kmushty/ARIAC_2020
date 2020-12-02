@@ -8,8 +8,7 @@ change the flip part preset location
 agv1-flipped agv2-flipped
 
 continue if part is not picked
-conveyor piston, gasket part not working
-movetime waittime not correct
+flip part not working
 did not do obstacle avoidance for gaps far away from part
 middle gap 2 aisle 2 first preset location is hitting the shelf
 

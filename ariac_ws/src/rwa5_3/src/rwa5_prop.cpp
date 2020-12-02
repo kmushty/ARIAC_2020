@@ -1574,14 +1574,14 @@ int main(int argc, char ** argv) {
                 prod.arm_name = "left_arm";
 
                 //process parts on conveyor belt if parts are detected
-                ros::Duration(18.0).sleep();
-                if(!ConveyorFlag && camera.get_conveyor_detected_parts().size()>0) {
-                    ROS_INFO_STREAM("processing conveyor belt");
-//                    auto type = camera.get_conveyor_detected_parts()["logical_camera_9"].type;
-                    pickPartsFromConveyor(camera, gantry, prod, numPickParts);
-                    ConveyorFlag = true;
-                    camera.reset_conveyor_logical_camera();
-                }
+//                ros::Duration(18.0).sleep();
+//                if(!ConveyorFlag && camera.get_conveyor_detected_parts().size()>0) {
+//                    ROS_INFO_STREAM("processing conveyor belt");
+////                    auto type = camera.get_conveyor_detected_parts()["logical_camera_9"].type;
+//                    pickPartsFromConveyor(camera, gantry, prod, numPickParts);
+//                    ConveyorFlag = true;
+//                    camera.reset_conveyor_logical_camera();
+//                }
 
                 // TODO - make high priority order checker more robust
                 if(comp.getOrders().size() > n && !HighPriorityOrderInitiated){
