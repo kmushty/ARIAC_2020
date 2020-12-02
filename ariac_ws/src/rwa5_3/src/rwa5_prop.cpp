@@ -1326,7 +1326,8 @@ void conveyor(Camera &camera, GantryControl &gantry, product prod){
 //    moveToLocation(presetLoc, "movingPart", gantry);
     nist_gear::VacuumGripperState armState;
     part imgPart, my_part_in_tray;
-        imgPart.pose.orientation.x = 0;
+    imgPart.type = prod.type;
+    imgPart.pose.orientation.x = 0;
     imgPart.pose.orientation.y = 0;
     imgPart.pose.orientation.z = 0;
     imgPart.pose.orientation.w = 1;
@@ -1523,15 +1524,15 @@ int main(int argc, char ** argv) {
 
 
     //}
-    //obstacleAssociatedWithAisle[2].is_valid_obstacle= true;
-    //obstacleAssociatedWithAisle[2].wait_time= 7;
-    //obstacleAssociatedWithAisle[2].move_time= 9;
-    //obstacleAssociatedWithAisle[2].time_stamp1= 9;
+    obstacleAssociatedWithAisle[2].is_valid_obstacle= true;
+    obstacleAssociatedWithAisle[2].wait_time= 7;
+    obstacleAssociatedWithAisle[2].move_time= 9;
+    obstacleAssociatedWithAisle[2].time_stamp1= 9;
 
-    //obstacleAssociatedWithAisle[3].is_valid_obstacle= true;
-    //obstacleAssociatedWithAisle[3].wait_time= 7;
-    //obstacleAssociatedWithAisle[3].move_time= 9;
-    //obstacleAssociatedWithAisle[3].time_stamp1= 9;
+    obstacleAssociatedWithAisle[3].is_valid_obstacle= true;
+    obstacleAssociatedWithAisle[3].wait_time= 7;
+    obstacleAssociatedWithAisle[3].move_time= 9;
+    obstacleAssociatedWithAisle[3].time_stamp1= 9;
 
 
 
