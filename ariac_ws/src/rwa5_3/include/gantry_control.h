@@ -46,7 +46,7 @@ class GantryControl {
 
     void init();
     stats getStats(std::string function);
-
+    std::vector<double> move_closer();
 //    bool moveGantry(std::string waypoints);
 
 //    bool pickPart(part part, std::string arm_name);
@@ -121,6 +121,8 @@ class GantryControl {
     shelf5_5 shelf5_5_;
     agv2_go_to_flipped_pulley agv2_go_to_flipped_pulley_;
     agv1_go_to_flipped_pulley agv1_go_to_flipped_pulley_;
+    agv2_go_to_flipped_pulley_1 agv2_go_to_flipped_pulley_1_;
+    agv1_go_to_flipped_pulley_1 agv1_go_to_flipped_pulley_1_;
     agv2_flipped agv2_flipped_;
     agv2_flipped1 agv2_flipped1_;
     agv1_flipped agv1_flipped_;

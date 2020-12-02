@@ -244,8 +244,8 @@ void initWayPoints(std::map<std::string,std::vector<PresetLocation>> &presetLoc,
     presetLoc["flipped_pulley_agv1"] = {gantry.agv1_go_to_flipped_pulley_};//verified
     presetLoc["agv2_flipped_final"]  = {gantry.agv2_flipped1_};//verified
     presetLoc["agv1_flipped_final"]  = {gantry.agv1_flipped1_};//verified
-    presetLoc["agv2_right_arm_drop_flip"]  = {gantry.agv2_flipped_, gantry.agv2_flipped1_};//verified
-    presetLoc["agv1_right_arm_drop_flip"]  = {gantry.agv1_flipped_, gantry.agv1_flipped1_};//verified
+    presetLoc["agv2_right_arm_drop_flip"]  = {gantry.agv2_flipped_};//verified
+    presetLoc["agv1_right_arm_drop_flip"]  = {gantry.agv1_flipped_};//verified
     presetLoc["agv2_left_arm_drop"]  = {gantry.agv2_drop_};//verified
     presetLoc["agv1_left_arm_drop"]  = {gantry.agv1_drop_};//verified
     presetLoc["movingPart"] = {gantry.movingPart_};
@@ -512,12 +512,13 @@ void faultyGripper(GantryControl &gantry,product &prod,Camera &camera, part my_p
 void flipPart(GantryControl &gantry, Camera camera, part &my_part_in_tray, product &prod){
     moveToLocation(presetLoc,"flipped_pulley_"+prod.agv_id,gantry);                              //set arms to desired configuration to flip
     gantry.activateGripper("right_arm");                                                         //activate and deactivate gripper
+    while(gantry.getGripperState("right_arm").attached)
+        gantry.activateGripper("right_arm");
     gantry.deactivateGripper("left_arm");
     moveToLocation(presetLoc,prod.agv_id+"_right_arm_drop_flip",gantry);
     my_part_in_tray.pose.orientation.x = 0;                                                      //modify pose orientation
     my_part_in_tray.pose.orientation.w = 1;
-
-    prod.arm_name = "right_arm";
+//    prod.arm_name = "right_arm";
 }
 
 
@@ -778,6 +779,9 @@ std::vector<std::string> estimateLocation(int aisle_num, double t) {
    double time_stamp1 = obstacleAssociatedWithAisle[aisle_num].time_stamp1;
    double x;
   
+    
+   double correction_term = 7.0*t/43;
+
    double td = t - time_stamp1;                                                   //number of seconds from time_stamp
    double tf = move_time + wait_time;                                             // time take to go from end to end
 
@@ -901,7 +905,7 @@ void estimateObstacleAttributes(Camera &camera,int aisle_num) {
 
 
 
-void planAndExecutePath(product prod, part my_part,std::map<std::string, std::vector<PresetLocation>> &presetLoc, 
+bool planAndExecutePath(product prod, part my_part,std::map<std::string, std::vector<PresetLocation>> &presetLoc,
                         Camera &camera, GantryControl &gantry, Competition &comp, int aisle_num) {
 
    ROS_INFO_STREAM("Plan and execute method");
@@ -910,7 +914,8 @@ void planAndExecutePath(product prod, part my_part,std::map<std::string, std::ve
    for(int i=0;i < plan.size(); i++)
        ROS_INFO_STREAM(plan[i]);
    std::string location;
-   float threshold = 0.7; 
+   float threshold = 0.7;
+   bool success;
 
    if(plan[0] == "no_gap_needed") {
        location = my_part.logicalCameraName + "_aisle" + plan[2] + "_" + plan[3];
@@ -938,14 +943,21 @@ void planAndExecutePath(product prod, part my_part,std::map<std::string, std::ve
                   ROS_INFO_STREAM("Location is " <<  location);
                   //Move from gap to location
                   moveFromGapToLocation(presetLoc, my_part, gantry, location);
-//                  moveToLocation(presetLoc, location, gantry);
-                  gantry.pickPart(my_part);
-//                  retraceSteps(presetLoc, location, gantry);
-                  moveFromLocationToGoalAvoidingObstacles(prod, presetLoc, location, gantry);
+                  if(gantry.pickPart(my_part)) {
+                      moveFromLocationToGoalAvoidingObstacles(prod, presetLoc, location, gantry);
+                      success = true;
+                  }
+                  else{
+                      retraceSteps(presetLoc, location, gantry);
+                      moveFromLocationToStart(presetLoc, "start", gantry);
+                      success = false;
+                  }
+
                   break;
                }
          }
     }
+   return success;
 }
 
 
@@ -977,8 +989,11 @@ void processPart(product prod, GantryControl &gantry, Camera &camera, Competitio
     bool flippedPart;
     nist_gear::VacuumGripperState armState;
     std::map<std::string,part> detected_parts;
+    std::string location;
 
-    while(!foundPart) {                                                                                          // poll until we find part
+
+
+    while(!foundPart) {                                                                              // poll until we find part
         //if(!camera.isSensorBlackout()) {
             //camera.removeAllElements(prod.type);
             //camera.reset_conveyor_logical_camera();
@@ -994,9 +1009,9 @@ void processPart(product prod, GantryControl &gantry, Camera &camera, Competitio
             ROS_INFO_STREAM("parts .second  "<< parts.second.logicalCameraName);
             ROS_INFO_STREAM("Part x position " << parts.second.pose.position.x);
         }
-        for(const auto& parts: detected_parts) {                                                               // search all logical cameras for desired part
+        for(const auto& parts: detected_parts) {                                                      // search all logical cameras for desired part
             if (parts.second.logicalCameraName == "logical_camera_8" ||
-                parts.second.logicalCameraName == "logical_camera_10")                                          // Exclude agv cameras
+                parts.second.logicalCameraName == "logical_camera_10")                                // Exclude agv cameras
                 continue;
 
 
@@ -1015,81 +1030,41 @@ void processPart(product prod, GantryControl &gantry, Camera &camera, Competitio
                 int aisle_num = aisleAssociatedWithPart(my_part);
 
                 if (aisle_num != -1 && obstacleInAisle[aisle_num]) {
-                    ROS_INFO_STREAM("In process part- obstacle in aisle");
-                    ROS_INFO_STREAM(parts.second.logicalCameraName);
-                    ROS_INFO_STREAM(parts.first);
-                    planAndExecutePath( prod, my_part, presetLoc, camera, gantry, comp, aisle_num);
+                    if(!planAndExecutePath( prod, my_part, presetLoc, camera, gantry, comp, aisle_num))
+                        return;
                 }
                 else {
                     ROS_INFO_STREAM("bEFORE" << getLocationName(my_part,aisle_num));
                     moveToLocation2(presetLoc, my_part, gantry, getLocationName(my_part,aisle_num));
                     if( gantry.pickPart(my_part)){
-                       camera.removeElement(prod.type, parts.first);
                        ROS_INFO_STREAM("successfully picked part");
                        moveFromLocationToGoal(prod, my_part, presetLoc, getLocationName(my_part,aisle_num), gantry);
-                    }else{
-                       ROS_INFO_STREAM("Failed to pick part up");
-                       moveFromLocationToStart(presetLoc, getLocationName(my_part,aisle_num), gantry);
-                       continue;
                     }
-                    ROS_INFO_STREAM("AFTER" << getLocationName(my_part,aisle_num));
-                    ROS_INFO_STREAM("FG0");
+                    else{
+                       ROS_INFO_STREAM("Failed to pick part up");
+                       ROS_INFO_STREAM("AFTER" << getLocationName(my_part,aisle_num));
+                        moveFromLocationToStart(presetLoc, getLocationName(my_part, aisle_num), gantry);
+                        return;
+                    }
                 }
-
-                ROS_INFO_STREAM("FG1");
+                camera.removeElement(prod.type, parts.first);
                 if (flip_flag && int(my_part_in_tray.pose.orientation.x) == 1) {                                   //Flip part if part needs to be flipped
-                    //moveToLocation(presetLoc,prod.agv_id+"_flipped",gantry);                                       //go to location to flip pulley
                     flipped = true;
                     flipPart(gantry, camera, my_part_in_tray, prod);
-//                    moveToLocation(presetLoc,prod.agv_id+"_flipped",gantry);
                 }
                 else
                     flipped = false;
-//                else
-//                    moveToLocation(presetLoc, prod.agv_id, gantry);                                                //move to desired agv id
-                ROS_INFO_STREAM("FG2");
                 armState = gantry.getGripperState(prod.arm_name);
-                ROS_INFO_STREAM("aRM STATE" << armState.attached);
-                if (!armState.attached) {                                                                            //object accidentally fell on the tray
-                    ROS_INFO_STREAM("Inside faulty gripper");
-                    prod.arm_name = "left_arm";
-                    faultyGripper(gantry, prod, camera, my_part_in_tray);
-                    ROS_INFO_STREAM("Outside faulty gripper");
-                }
-
-
-                //if(!camera.isSensorBlackout()) {
-                    //camera.removeAllElements(prod.type);
-                    //ROS_INFO_STREAM("rEMOVING ALL ELEMENTS");
-                //}
-                //else {
-                    //camera.removeElement(prod.type, parts.first);
-                    //ROS_INFO_STREAM("rEMOVING ELEMENTS");
-                //}
-                gantry.placePart(my_part_in_tray, prod.agv_id, prod.arm_name);                                 //place part on the tray
-                if(flipped)
-                    moveToLocation(presetLoc,prod.agv_id+"_flipped",gantry);
-                ROS_INFO_STREAM("bEFORE PROCESSED PART");
-                keepTrackOfProcessedParts(my_part, prod,gantry,camera);
-
-
-                auto hx = camera.get_detected_parts()[prod.type];
-                ROS_INFO_STREAM("Printing detected part(s before");
-                for(const auto & parts: hx){
-                    ROS_INFO_STREAM("parts .firts "<< parts.first);
-                    ROS_INFO_STREAM("parts .second  "<< parts.second.logicalCameraName);
-                }
-
-                ROS_INFO_STREAM("part to key remove is " << parts.first);
-                ROS_INFO_STREAM("part to type remove is " << parts.first);
-
-
-                hx = camera.get_detected_parts()[prod.type];
-
-                ROS_INFO_STREAM("Printing detected after");
-                for(const auto & parts: hx){
-                    ROS_INFO_STREAM("parts .firts "<< parts.first);
-                    ROS_INFO_STREAM("parts .second  "<< parts.second.logicalCameraName);
+//                if (!armState.attached) {                                                                            //object accidentally fell on the tray
+//                    ROS_INFO_STREAM("Inside faulty gripper");
+//                    prod.arm_name = "left_arm";
+//                    faultyGripper(gantry, prod, camera, my_part_in_tray);
+//                }
+                if (armState.attached){
+                    gantry.placePart(my_part_in_tray, prod.agv_id, prod.arm_name);                                 //place part on the tray
+                    if(flipped)
+                        moveToLocation(presetLoc,"flipped_pulley_1_"+prod.agv_id,gantry);
+                    keepTrackOfProcessedParts(my_part, prod,gantry,camera);
                 }
 
                 stopAdding = false;
@@ -1220,7 +1195,7 @@ void processShipment(nist_gear::Shipment &ship,Camera &camera, GantryControl &ga
           prod.agv_id = ship.agv_id;
           prod.arm_name = "left_arm";
             
-          processPart(prod, gantry, camera, comp, false, false);
+          processPart(prod, gantry, camera, comp, false, true);
 
           moveFromLocationToStart(presetLoc, "start", gantry);
           ROS_INFO("HELLO1");
@@ -1402,7 +1377,6 @@ void detectAislesWithObstacles(Camera &camera) {
 }
 
 
-
 void pickPartsFromConveyor2(Camera &camera, Competition &comp, GantryControl &gantry, product prod, int numParts){
      part conveyor_part = camera.get_conveyor_detected_parts()["logical_camera_9"];
      
@@ -1415,6 +1389,7 @@ void pickPartsFromConveyor2(Camera &camera, Competition &comp, GantryControl &ga
        gantry.moveToPart(conveyor_part, gantry.start_);
      }
 }
+
 
 
 void pickPartsFromConveyor(Camera &camera, GantryControl &gantry, product prod, int numParts){
@@ -1528,28 +1503,33 @@ int main(int argc, char ** argv) {
 
 
     //}
-//    obstacleAssociatedWithAisle[2].is_valid_obstacle= true;
-//    obstacleAssociatedWithAisle[2].wait_time= 7;
-//    obstacleAssociatedWithAisle[2].move_time= 9;
-//    obstacleAssociatedWithAisle[2].time_stamp1= 9;
-//
-//    obstacleAssociatedWithAisle[3].is_valid_obstacle= true;
-//    obstacleAssociatedWithAisle[3].wait_time= 7;
-//    obstacleAssociatedWithAisle[3].move_time= 9;
-//    obstacleAssociatedWithAisle[3].time_stamp1= 9;
+    //
+    obstacleAssociatedWithAisle[2].is_valid_obstacle= true;
+    obstacleAssociatedWithAisle[2].wait_time= 7;
+    obstacleAssociatedWithAisle[2].move_time= 9;
+    obstacleAssociatedWithAisle[2].time_stamp1= 9;
+
+    obstacleAssociatedWithAisle[3].is_valid_obstacle= true;
+    obstacleAssociatedWithAisle[3].wait_time= 7;
+    obstacleAssociatedWithAisle[3].move_time= 9;
+    obstacleAssociatedWithAisle[3].time_stamp1= 9;
 
 
 
-//    auto  vec = estimateLocation(2,15);
-//    ROS_INFO_STREAM("Time at: " << 15 << " action:" << vec[0] << " location: " <<vec[1]);
-//    vec= estimateLocation(2,20);
-//    ROS_INFO_STREAM("Time at: " << 20 << " action:" << vec[0] << " location: " <<vec[1]);
-//
-//    vec = estimateLocation(2,30);
-//    ROS_INFO_STREAM("Time at: " << 25 << " action:" << vec[0] << " location: " <<vec[1]);
-//
-//    vec = estimateLocation(2,40);
-//    ROS_INFO_STREAM("Time at: " << 30 << " action:" << vec[0] << " location: " <<vec[1]);
+    //auto  vec = estimateLocation(2,82);
+    //ROS_INFO_STREAM("Time at: " << 82 << " action:" << vec[0] << " location: " <<vec[1]);
+    //vec= estimateLocation(2,75);
+    //ROS_INFO_STREAM("Time at: " << 75 << " action:" << vec[0] << " location: " <<vec[1]);
+
+    //vec = estimateLocation(2,101);
+    //ROS_INFO_STREAM("Time at: " << 101 << " action:" << vec[0] << " location: " <<vec[1]);
+
+    //vec = estimateLocation(2,134);
+    //ROS_INFO_STREAM("Time at: " << 134 << " action:" << vec[0] << " location: " <<vec[1]);
+
+    //vec = estimateLocation(2,150);
+    //ROS_INFO_STREAM("Time at: " << 150 << " action:" << vec[0] << " location: " <<vec[1]);
+
 
     std::cout << "finished estimating obstacle parameters" << std::endl;
     int n = orders.size();
@@ -1651,7 +1631,15 @@ int main(int argc, char ** argv) {
                 else
                     agvDeliveryService(prod.agv_id,agv1Delivery,agv2Delivery,order.shipments[j].shipment_type);
             }
+            if(!camera.isSensorBlackout()) {                                                    //get fresh data
+//                camera.removeAllElements(prod.type);
+//                camera.reset_conveyor_logical_camera();
+                camera.reset_agv_logical_camera("logical_camera_10");
+                camera.reset_agv_logical_camera("logical_camera_8");
+                ROS_INFO_STREAM("rEMOVING ALL ELEMENTS");
+            }
         }
+
         ROS_INFO_STREAM("here3");
     }
 

@@ -223,12 +223,20 @@ void GantryControl::init()
     shelf11_3_.right_arm = {PI, -PI / 4, PI / 2, -PI / 4, PI / 2, 0};
 
     agv2_go_to_flipped_pulley_.gantry = {0, 6.2, 0};
-    agv2_go_to_flipped_pulley_.left_arm = {1.84, -2.73, -1.88, -0.2, 1.63, 0};
+    agv2_go_to_flipped_pulley_.left_arm = {1.84, -2.71, -1.88, -0.2, 1.63, 0};
     agv2_go_to_flipped_pulley_.right_arm = {1.75, -3.35, -1.4, 0.13, 1.51, 0};
 
     agv1_go_to_flipped_pulley_.gantry = {0, -6.2, 3.14};
-    agv1_go_to_flipped_pulley_.left_arm = {1.84, -2.73, -1.88, -0.2, 1.63, 0};
+    agv1_go_to_flipped_pulley_.left_arm = {1.84, -2.71, -1.88, -0.2, 1.63, 0};
     agv1_go_to_flipped_pulley_.right_arm = {1.75, -3.35, -1.4, 0.13, 1.51, 0};
+
+    agv2_go_to_flipped_pulley_1_.gantry = {0, 5.8, 0};
+    agv2_go_to_flipped_pulley_1_.left_arm = {0.0, -PI / 4, PI / 2, -PI / 4, PI / 2, 0};
+    agv2_go_to_flipped_pulley_1_.right_arm = {PI, -PI / 4, PI / 2, -PI / 4, PI / 2, 0};
+
+    agv1_go_to_flipped_pulley_1_.gantry = {0, -5.8, 3.14};
+    agv1_go_to_flipped_pulley_1_.left_arm = {0.0, -PI / 4, PI / 2, -PI / 4, PI / 2, 0};
+    agv1_go_to_flipped_pulley_1_.right_arm = {PI, -PI / 4, PI / 2, -PI / 4, PI / 2, 0};
 
     agv2_flipped1_.gantry = {0.8, 6.9, 0};
     agv2_flipped1_.left_arm = {0.0, -PI / 4, PI / 2, -PI / 4, PI / 2, 0};
@@ -1645,4 +1653,14 @@ void GantryControl::moveToPart(part my_part, PresetLocation preset)
     //}
     //full_robot_group_.setJointValueTarget(gantryConfiguration);
     //full_robot_group_.move();
+}
+
+std::vector<double> GantryControl::move_closer(){
+    auto state = right_arm_group_.getCurrentJointValues();
+    ROS_INFO_STREAM("STATE LENGTH" << state.size());
+    for(int i=0; i< state.size(); i++)
+        ROS_INFO_STREAM(state[i]);
+    state[1] += 0.01;
+    right_arm_group_.setJointValueTarget(state);
+    right_arm_group_.move();
 }

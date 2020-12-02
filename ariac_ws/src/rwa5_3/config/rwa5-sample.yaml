@@ -59,61 +59,62 @@ orders:
     shipment_count: 1
     destinations: [agv1]
     products:
-      part_0:
-        type: pulley_part_blue
-        pose:
-          xyz: [0.1, 0.2, 0.2]
-          rpy: ['pi', 0, 0.2]
-      part_1:
-        type: gasket_part_blue
-        pose:
-          xyz: [0.0, 0.0, 0.2]
-          rpy: [0, 0, '-pi/4']
-      part_2:
-        type: gasket_part_red
-        pose:
-          xyz: [-0.15, 0.2, 0.2]
-          rpy: [0, 0, '-pi/4']
-  order_1:
-    announcement_condition: time
-    announcement_condition_value: 20.0
-    shipment_count: 1
-    destinations: [agv2]
-    products:
+#      part_0:
+#        type: pulley_part_blue
+#        pose:
+#          xyz: [0.1, 0.2, 0.2]
+#          rpy: ['pi', 0, 0.2]
       part_0:
         type: pulley_part_red
         pose:
-          xyz: [0.1, 0.2, 0.2]
-          rpy: ['pi', 0, 0]
-      part_1:
-        type: gasket_part_red
-        pose:
           xyz: [0.0, 0.0, 0.2]
-          rpy: [0, 0, '-pi/4']
-      part_2:
-        type: gasket_part_blue
-        pose:
-          xyz: [-0.15, 0.2, 0.2]
-          rpy: [0, 0, '-pi/4']
+          rpy: ['pi', 0, 0]
+#      part_1:
+#        type: gasket_part_blue
+#        pose:
+#          xyz: [-0.15, 0.2, 0.2]
+#          rpy: [0, 0, '-pi/4']
+
+#  order_1:
+#    announcement_condition: time
+#    announcement_condition_value: 20.0
+#    shipment_count: 1
+#    destinations: [agv2]
+#    products:
+##      part_0:
+##        type: pulley_part_red
+##        pose:
+##          xyz: [0.1, 0.2, 0.2]
+##          rpy: ['pi', 0, 0]
+#      part_0:
+#        type: gasket_part_red
+#        pose:
+#          xyz: [0.0, 0.0, 0.2]
+#          rpy: [0, 0, '-pi/4']
+#      part_1:
+#        type: gasket_part_blue
+#        pose:
+#          xyz: [-0.15, 0.2, 0.2]
+#          rpy: [0, 0, '-pi/4']
 
 
-belt_models:
-  pulley_part_red:
-    15.0: #interval at which the object is spawned on the belt
-      pose:
-        xyz: [0.0, 4.3, 0.92]
-        rpy: [0, 0, 'pi/2']
+#belt_models:
+#  pulley_part_red:
+#    15.0: #interval at which the object is spawned on the belt
+#      pose:
+#        xyz: [0.0, 4.3, 0.92]
+#        rpy: [0, 0, 'pi/2']
 
 
-  # models_over_bins:
-  #   bin3:
-  #     models:
-  #       disk_part_red:
-  #         xyz_start: [0.1, 0.1, 0.0]
-  #         xyz_end: [0.5, 0.5, 0.0]
-  #         rpy: [0, 0, 0]
-  #         num_models_x: 3
-  #         num_models_y: 3
+models_over_bins:
+ bin3:
+   models:
+     pulley_part_red:
+       xyz_start: [0.1, 0.1, 0.0]
+       xyz_end: [0.5, 0.5, 0.0]
+       rpy: [0, 0, 0]
+       num_models_x: 2
+       num_models_y: 1
 
   # bin2:
   #   models:
@@ -140,22 +141,22 @@ models_over_shelves:
         xyz_start: [1, -0.45, 0.0]
         xyz_end: [0., -0.45, 0.0]
         rpy: [0, 0, 'pi/4']
-        num_models_x: 4
+        num_models_x: 2
         num_models_y: 1
-  shelf11:
-    models:
-      gasket_part_blue:
-        xyz_start: [1, -0.45, 0.0]
-        xyz_end: [0., -0.45, 0.0]
-        rpy: [0, 0, 'pi/4']
-        num_models_x: 4
-        num_models_y: 1
-      pulley_part_blue:
-        xyz_start: [1, 0.45, 0.0]
-        xyz_end: [0., 0.45, 0.0]
-        rpy: [0, 0, 0]
-        num_models_x: 4
-        num_models_y: 1
+#  shelf11:
+#    models:
+#      gasket_part_blue:
+#        xyz_start: [1, -0.45, 0.0]
+#        xyz_end: [0., -0.45, 0.0]
+#        rpy: [0, 0, 'pi/4']
+#        num_models_x: 4
+#        num_models_y: 1
+#      pulley_part_blue:
+#        xyz_start: [1, 0.45, 0.0]
+#        xyz_end: [0., 0.45, 0.0]
+#        rpy: [0, 0, 0]
+#        num_models_x: 4
+#        num_models_y: 1
 
 
 #Faulty gripper
@@ -182,12 +183,13 @@ models_over_shelves:
 #        rpy: [0, 0, 0.2]
 #      product_type_to_drop: gasket_part_blue
 
-sensor_blackout:
-  product_count: 2 #sensor blackout triggered after 3rd product is placed
-  duration: 50
+#sensor_blackout:
+#  product_count: 2 #sensor blackout triggered after 3rd product is placed
+#  duration: 50
 
 
 #Faulty products
-#faulty_products:
-#  - pulley_part_red_2
+faulty_products:
+  - pulley_part_red_1
+  - pulley_part_red_2
 
