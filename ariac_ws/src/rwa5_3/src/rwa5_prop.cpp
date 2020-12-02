@@ -922,11 +922,12 @@ void planAndExecutePath(product prod, part my_part,std::map<std::string, std::ve
    else{
        location = plan[1] + "_" + my_part.logicalCameraName + "_" + plan[3];
 
-       while(!obstacleAssociatedWithAisle[aisle_num].is_valid_obstacle)
-             estimateObstacleAttributes(camera,aisle_num);
+
 
        // Move to the gap
        moveToGap(presetLoc, my_part, gantry, location);
+       while(!obstacleAssociatedWithAisle[aisle_num].is_valid_obstacle)
+           estimateObstacleAttributes(camera,aisle_num);
        while(true) {
                auto vec = estimateLocation(aisle_num, comp.getClock());                      //estimate Location
              
@@ -979,6 +980,9 @@ void processPart(product prod, GantryControl &gantry, Camera &camera, Competitio
     while(!foundPart) {                                                                                          // poll until we find part
         if(!camera.isSensorBlackout()) {
             camera.removeAllElements(prod.type);
+            camera.reset_conveyor_logical_camera();
+            camera.reset_agv_logical_camera("logical_camera_10");
+            camera.reset_agv_logical_camera("logical_camera_8");
             ROS_INFO_STREAM("rEMOVING ALL ELEMENTS");
         }
         detected_parts = camera.get_detected_parts()[prod.type];
@@ -1351,7 +1355,13 @@ void conveyor(Camera &camera, GantryControl &gantry, product prod){
 //    imgPart.pose.position.z = 0.874991;//0.864004; //0.875004;0.874988
         imgPart.pose.position.z = 0.88;// 0.879 (kinda works)//0.884991
     }
-//    else
+    else{
+        moveToLocation(presetLoc, "movingPartGear", gantry);
+        imgPart.pose.position.x = 0;
+        imgPart.pose.position.y = -0.64;//-0.5650; //-0.272441; //-0.5700
+//    imgPart.pose.position.z = 0.874991;//0.864004; //0.875004;0.874988
+        imgPart.pose.position.z = 0.88;// 0.879 (kinda works)//0.884991
+    }
 
     ROS_INFO_STREAM("Picking Part from conveynor");
     gantry.pickPart(imgPart);
@@ -1543,16 +1553,12 @@ int main(int argc, char ** argv) {
                 prod.arm_name = "left_arm";
 
                 //process parts on conveyor belt if parts are detected
-//                while(true) {
-//                    ROS_INFO_STREAM("Inside Conveyor");
-//                    ROS_INFO_STREAM(ConveyorFlag);
-//                    ROS_INFO_STREAM(camera.get_conveyor_detected_parts().size());
-//                    if(!ConveyorFlag && camera.get_conveyor_detected_parts().size()>0) {
-//                        ROS_INFO_STREAM("processing conveyor belt");
-//                        pickPartsFromConveyor(camera, gantry, prod, numPickParts);
-//                        ConveyorFlag = true;
-//                        camera.reset_conveyor_logical_camera();
-//                    }
+//                ros::Duration(18.0).sleep();
+//                if(!ConveyorFlag && camera.get_conveyor_detected_parts().size()>0) {
+//                    ROS_INFO_STREAM("processing conveyor belt");
+//                    pickPartsFromConveyor(camera, gantry, prod, numPickParts);
+//                    ConveyorFlag = true;
+//                    camera.reset_conveyor_logical_camera();
 //                }
 
 
