@@ -1509,8 +1509,13 @@ int main(int argc, char ** argv) {
 
 
 
-    while(!obstacleAssociatedWithAisle[aisle_num].is_valid_obstacle)
-        estimateObstacleAttributes(camera,aisle_num);
+    // for debugging
+    for(int i = 0; i<4; i++) {
+      if(obstacleInAisle[i] == true){
+         while(!obstacleAssociatedWithAisle[i].is_valid_obstacle)
+              estimateObstacleAttributes(camera,i);
+       }
+    }
 
     //}
     //obstacleAssociatedWithAisle[2].is_valid_obstacle= true;
@@ -1559,13 +1564,13 @@ int main(int argc, char ** argv) {
                 prod.arm_name = "left_arm";
 
                 //process parts on conveyor belt if parts are detected
-//                ros::Duration(18.0).sleep();
-//                if(!ConveyorFlag && camera.get_conveyor_detected_parts().size()>0) {
-//                    ROS_INFO_STREAM("processing conveyor belt");
-//                    pickPartsFromConveyor(camera, gantry, prod, numPickParts);
-//                    ConveyorFlag = true;
-//                    camera.reset_conveyor_logical_camera();
-//                }
+                ros::Duration(18.0).sleep();
+                if(!ConveyorFlag && camera.get_conveyor_detected_parts().size()>0) {
+                    ROS_INFO_STREAM("processing conveyor belt");
+                    pickPartsFromConveyor(camera, gantry, prod, numPickParts);
+                    ConveyorFlag = true;
+                    camera.reset_conveyor_logical_camera();
+                }
 
 
                 // TODO - make high priority order checker more robust
