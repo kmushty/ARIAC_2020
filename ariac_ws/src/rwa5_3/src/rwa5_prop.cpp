@@ -879,11 +879,11 @@ void estimateObstacleAttributes(Camera &camera,int aisle_num) {
        ROS_INFO_STREAM(sec3 - sec2);
 
        double velocity = LENGTH_OF_AISLE/move_time;
-       double distanceBtnLastBreakBeams   = 4.462133;
+       double minTriggerDistanceBtnLastBB   = 3.715;
 
        obstacle human;
-       human.wait_time = round(human.wait_time);
-       human.move_time = round(((BEGIN_LOCATION_X - END_LOCATION_X)*move_time)/distanceBtnLastBreakBeams);
+       human.wait_time = round(wait_time);
+       human.move_time = round(((BEGIN_LOCATION_X - END_LOCATION_X)*move_time)/minTriggerDistanceBtnLastBB);
        human.time_stamp1 = sec1;
        human.is_valid_obstacle = true;
          
