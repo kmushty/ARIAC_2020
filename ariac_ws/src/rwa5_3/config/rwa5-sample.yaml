@@ -60,49 +60,49 @@ orders:
     destinations: [agv1]
     products:
       part_0:
-        type: pulley_part_blue
+        type: gear_part_red
         pose:
           xyz: [0.1, 0.2, 0.2]
-          rpy: ['pi', 0, 0.2]
-      part_1:
-        type: gasket_part_blue
-        pose:
-          xyz: [0.0, 0.0, 0.2]
-          rpy: [0, 0, '-pi/4']
-      part_2:
-        type: gasket_part_red
-        pose:
-          xyz: [-0.15, 0.2, 0.2]
-          rpy: [0, 0, '-pi/4']
-  order_1:
-    announcement_condition: time
-    announcement_condition_value: 20.0
-    shipment_count: 1
-    destinations: [agv2]
-    products:
+          rpy: [0, 0, 0.2]
+#      part_1:
+#        type: gasket_part_blue
+#        pose:
+#          xyz: [0.0, 0.0, 0.2]
+#          rpy: [0, 0, '-pi/4']
+#      part_2:
+#        type: gasket_part_red
+#        pose:
+#          xyz: [-0.15, 0.2, 0.2]
+#          rpy: [0, 0, '-pi/4']
+#  order_1:
+#    announcement_condition: time
+#    announcement_condition_value: 20.0
+#    shipment_count: 1
+#    destinations: [agv2]
+#    products:
 #      part_0:
 #        type: pulley_part_red
 #        pose:
 #          xyz: [0.1, 0.2, 0.2]
 #          rpy: ['pi', 0, 0]
-      part_0:
-        type: gasket_part_red
-        pose:
-          xyz: [0.0, 0.0, 0.2]
-          rpy: [0, 0, '-pi/4']
-      part_1:
-        type: gasket_part_blue
-        pose:
-          xyz: [-0.15, 0.2, 0.2]
-          rpy: [0, 0, '-pi/4']
+#      part_0:
+#        type: gasket_part_red
+#        pose:
+#          xyz: [0.0, 0.0, 0.2]
+#          rpy: [0, 0, '-pi/4']
+#      part_1:
+#        type: gasket_part_blue
+#        pose:
+#          xyz: [-0.15, 0.2, 0.2]
+#          rpy: [0, 0, '-pi/4']
 
 
-#belt_models:
-#  pulley_part_red:
-#    15.0: #interval at which the object is spawned on the belt
-#      pose:
-#        xyz: [0.0, 4.3, 0.92]
-#        rpy: [0, 0, 'pi/2']
+belt_models:
+  gear_part_red:
+    15.0: #interval at which the object is spawned on the belt
+      pose:
+        xyz: [0.0, 4.3, 0.92]
+        rpy: [0, 0, 0]
 
 
   # models_over_bins:
