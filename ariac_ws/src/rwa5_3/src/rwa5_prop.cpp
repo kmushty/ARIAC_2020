@@ -1321,7 +1321,7 @@ void processHPOrder(nist_gear::Order &order,Camera &camera, GantryControl &gantr
 }
 
 
-void conveyor(Camera &camera, GantryControl &gantry, std::string &type){
+void conveyor(Camera &camera, GantryControl &gantry, product prod){
     ROS_INFO_STREAM("Break beam triggered");
 //    moveToLocation(presetLoc, "movingPart", gantry);
     nist_gear::VacuumGripperState armState;
@@ -1332,28 +1332,28 @@ void conveyor(Camera &camera, GantryControl &gantry, std::string &type){
     imgPart.pose.orientation.w = 1;
 
     auto part = camera.get_conveyor_detected_parts()["logical_camera_9"];
-    if(type.find("pulley_part") != -1){
+    if(prod.type.find("pulley_part") != -1){
         moveToLocation(presetLoc, "movingPart", gantry);
         imgPart.pose.position.x = 0;
         imgPart.pose.position.y = -0.46;//-0.5650; //-0.272441; //-0.5700
 //    imgPart.pose.position.z = 0.874991;//0.864004; //0.875004;0.874988
         imgPart.pose.position.z = 0.888;// 0.879 (kinda works)//0.884991
     }
-    else if(type.find("gasket_part") != -1){
+    else if(prod.type.find("gasket_part") != -1){
         moveToLocation(presetLoc, "movingPart", gantry);
         imgPart.pose.position.x = 0;
         imgPart.pose.position.y = -0.464;//-0.5650; //-0.272441; //-0.5700
 //    imgPart.pose.position.z = 0.874991;//0.864004; //0.875004;0.874988
         imgPart.pose.position.z = 0.88;// 0.879 (kinda works)//0.884991
     }
-    else if(type.find("disk_part") != -1){
+    else if(prod.type.find("disk_part") != -1){
         moveToLocation(presetLoc, "movingPartDisk", gantry);
         imgPart.pose.position.x = 0;
         imgPart.pose.position.y = -0.484;//-0.5650; //-0.272441; //-0.5700
 //    imgPart.pose.position.z = 0.874991;//0.864004; //0.875004;0.874988
         imgPart.pose.position.z = 0.88;// 0.879 (kinda works)//0.884991
     }
-    else if(type.find("gear_part") != -1){
+    else if(prod.type.find("gear_part") != -1){
         moveToLocation(presetLoc, "movingPartGear", gantry);
         imgPart.pose.position.x = 0;
         imgPart.pose.position.y = -0.64;//-0.5650; //-0.272441; //-0.5700
@@ -1413,11 +1413,11 @@ void pickPartsFromConveyor2(Camera &camera, Competition &comp, GantryControl &ga
 }
 
 
-void pickPartsFromConveyor(Camera &camera, GantryControl &gantry, std::string &type, int numParts){
+void pickPartsFromConveyor(Camera &camera, GantryControl &gantry, product prod, int numParts){
     int count = 0, count1 = 0;
     while(count < numParts){
         if(count == 0 && camera.get_break_beam()){
-            conveyor(camera, gantry, type);
+            conveyor(camera, gantry, prod);
             count += 1;
             moveToLocation(presetLoc, "conveyorPart_"+std::to_string(count), gantry);
             gantry.deactivateGripper("left_arm");
@@ -1433,7 +1433,7 @@ void pickPartsFromConveyor(Camera &camera, GantryControl &gantry, std::string &t
             }
             ROS_INFO_STREAM("HERE");
             if(count1 == 1 && camera.get_break_beam()){
-                conveyor(camera, gantry, type);
+                conveyor(camera, gantry, prod);
                 count += 1;
                 moveToLocation(presetLoc, "conveyorPart_"+std::to_string(count), gantry);
                 gantry.deactivateGripper("left_arm");
@@ -1572,8 +1572,8 @@ int main(int argc, char ** argv) {
                 ros::Duration(18.0).sleep();
                 if(!ConveyorFlag && camera.get_conveyor_detected_parts().size()>0) {
                     ROS_INFO_STREAM("processing conveyor belt");
-                    auto type = camera.get_conveyor_detected_parts()["logical_camera_9"].type;
-                    pickPartsFromConveyor(camera, gantry, type, numPickParts);
+//                    auto type = camera.get_conveyor_detected_parts()["logical_camera_9"].type;
+                    pickPartsFromConveyor(camera, gantry, prod, numPickParts);
                     ConveyorFlag = true;
                     camera.reset_conveyor_logical_camera();
                 }
