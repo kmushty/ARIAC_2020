@@ -879,10 +879,11 @@ void estimateObstacleAttributes(Camera &camera,int aisle_num) {
        ROS_INFO_STREAM(sec3 - sec2);
 
        double velocity = LENGTH_OF_AISLE/move_time;
+       double distanceBtnLastBreakBeams   = 4.462133;
 
        obstacle human;
        human.wait_time = wait_time;
-       human.move_time = move_time;
+       human.move_time = (BEGIN_LOCATION_X - END_LOCATION_X)*move_time/distanceBtnLastBreakBeams;
        human.time_stamp1 = sec1;
        human.is_valid_obstacle = true;
          
@@ -1505,6 +1506,11 @@ int main(int argc, char ** argv) {
 
     ConveyorFlag = false;
     int numPickParts = 4;
+
+
+
+    while(!obstacleAssociatedWithAisle[aisle_num].is_valid_obstacle)
+        estimateObstacleAttributes(camera,aisle_num);
 
     //}
     //obstacleAssociatedWithAisle[2].is_valid_obstacle= true;
