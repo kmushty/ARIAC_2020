@@ -1,0 +1,20 @@
+\section*{Run the folowing commands\+:}
+
+Open a terminal 
+\begin{DoxyCode}
+cd ariac\_ws/src
+git clone https://github.com/mesneym/Ariac.git
+cd ..
+catkin build
+source devel/setup.bash
+roslaunch rwa5\_3 rwa5.launch load\_moveit:=True
+\end{DoxyCode}
+
+
+In another terminal\+: 
+\begin{DoxyCode}
+cd ariac\_ws
+source devel/setup.bash
+rosrun rwa5\_3 rwa3\_node
+\end{DoxyCode}
+ 

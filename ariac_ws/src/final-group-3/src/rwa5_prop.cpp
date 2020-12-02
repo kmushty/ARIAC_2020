@@ -242,6 +242,8 @@ void initWayPoints(std::map<std::string,std::vector<PresetLocation>> &presetLoc,
     presetLoc["agv1_faultyP"] = {gantry.agv1_faultyP_};
     presetLoc["flipped_pulley_agv2"] = {gantry.agv2_go_to_flipped_pulley_};//verified
     presetLoc["flipped_pulley_agv1"] = {gantry.agv1_go_to_flipped_pulley_};//verified
+    presetLoc["flipped_pulley_1_agv2"] = {gantry.agv2_go_to_flipped_pulley_1_};//verified
+    presetLoc["flipped_pulley_1_agv1"] = {gantry.agv1_go_to_flipped_pulley_1_};//verified
     presetLoc["agv2_flipped_final"]  = {gantry.agv2_flipped1_};//verified
     presetLoc["agv1_flipped_final"]  = {gantry.agv1_flipped1_};//verified
     presetLoc["agv2_right_arm_drop_flip"]  = {gantry.agv2_flipped_};//verified
@@ -518,7 +520,7 @@ void flipPart(GantryControl &gantry, Camera camera, part &my_part_in_tray, produ
     moveToLocation(presetLoc,prod.agv_id+"_right_arm_drop_flip",gantry);
     my_part_in_tray.pose.orientation.x = 0;                                                      //modify pose orientation
     my_part_in_tray.pose.orientation.w = 1;
-//    prod.arm_name = "right_arm";
+    prod.arm_name = "right_arm";
 }
 
 
@@ -1062,6 +1064,8 @@ void processPart(product prod, GantryControl &gantry, Camera &camera, Competitio
 //                }
                 if (armState.attached){
                     gantry.placePart(my_part_in_tray, prod.agv_id, prod.arm_name);                                 //place part on the tray
+                    prod.arm_name = "left_arm";
+                    ROS_INFO_STREAM("Flipped value" << flipped);
                     if(flipped)
                         moveToLocation(presetLoc,"flipped_pulley_1_"+prod.agv_id,gantry);
                     keepTrackOfProcessedParts(my_part, prod,gantry,camera);

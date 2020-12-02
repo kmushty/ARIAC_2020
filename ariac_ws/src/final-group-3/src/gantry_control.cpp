@@ -230,11 +230,11 @@ void GantryControl::init()
     agv1_go_to_flipped_pulley_.left_arm = {1.84, -2.71, -1.88, -0.2, 1.63, 0};
     agv1_go_to_flipped_pulley_.right_arm = {1.75, -3.35, -1.4, 0.13, 1.51, 0};
 
-    agv2_go_to_flipped_pulley_1_.gantry = {0, 5.8, 0};
+    agv2_go_to_flipped_pulley_1_.gantry = {0, 5.5, 0};
     agv2_go_to_flipped_pulley_1_.left_arm = {0.0, -PI / 4, PI / 2, -PI / 4, PI / 2, 0};
     agv2_go_to_flipped_pulley_1_.right_arm = {PI, -PI / 4, PI / 2, -PI / 4, PI / 2, 0};
 
-    agv1_go_to_flipped_pulley_1_.gantry = {0, -5.8, 3.14};
+    agv1_go_to_flipped_pulley_1_.gantry = {0, -5.5, 3.14};
     agv1_go_to_flipped_pulley_1_.left_arm = {0.0, -PI / 4, PI / 2, -PI / 4, PI / 2, 0};
     agv1_go_to_flipped_pulley_1_.right_arm = {PI, -PI / 4, PI / 2, -PI / 4, PI / 2, 0};
 
@@ -1600,14 +1600,14 @@ void GantryControl::moveToPart(part my_part, PresetLocation preset)
   }
     else if(my_part.logicalCameraName == "logical_camera_8"){
       ROS_INFO_STREAM("MOve part logical camera 8");
-      gantryConfiguration[0] = my_part.pose.position.x - 0.2;
+      gantryConfiguration[0] = my_part.pose.position.x - 0.3;
       if(-1*my_part.pose.position.y > -6.9)
         gantryConfiguration[1] = -1*my_part.pose.position.y;
 
     }
   else if(my_part.logicalCameraName == "logical_camera_10"){
       ROS_INFO_STREAM("MOve part logical camera 10");
-      gantryConfiguration[0] = my_part.pose.position.x + 0.2;
+      gantryConfiguration[0] = my_part.pose.position.x + 0.3;
       if(-1*my_part.pose.position.y < 6.9)
           gantryConfiguration[1] = -1*my_part.pose.position.y;
   }
