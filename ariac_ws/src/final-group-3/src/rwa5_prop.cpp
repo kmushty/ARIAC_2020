@@ -1040,12 +1040,13 @@ void processPart(product prod, GantryControl &gantry, Camera &camera, Competitio
                 else {
                     ROS_INFO_STREAM("bEFORE" << getLocationName(my_part,aisle_num));
                     moveToLocation2(presetLoc, my_part, gantry, getLocationName(my_part,aisle_num));
+                    ROS_INFO_STREAM(my_part.pose);
                     bool state;
                     if(my_part.type.find("pulley_part") != -1)
                         state = gantry.pickPulleyPart(my_part);
                     else
                         state = gantry.pickPart(my_part);
-                    if(state){
+                    if( state){
                        ROS_INFO_STREAM("successfully picked part");
                        moveFromLocationToGoal(prod, my_part, presetLoc, getLocationName(my_part,aisle_num), gantry);
                     }
@@ -1069,14 +1070,14 @@ void processPart(product prod, GantryControl &gantry, Camera &camera, Competitio
 //                    prod.arm_name = "left_arm";
 //                    faultyGripper(gantry, prod, camera, my_part_in_tray);
 //                }
-                if (armState.attached){
-                    gantry.placePart(my_part_in_tray, prod.agv_id, prod.arm_name);                                 //place part on the tray
-                    prod.arm_name = "left_arm";
-                    ROS_INFO_STREAM("Flipped value" << flipped);
-                    if(flipped)
-                        moveToLocation(presetLoc,"flipped_pulley_1_"+prod.agv_id,gantry);
-                    keepTrackOfProcessedParts(my_part, prod,gantry,camera);
-                }
+
+                gantry.placePart(my_part_in_tray, prod.agv_id, prod.arm_name);                                 //place part on the tray
+                prod.arm_name = "left_arm";
+                ROS_INFO_STREAM("Flipped value" << flipped);
+                if(flipped)
+                    moveToLocation(presetLoc,"flipped_pulley_1_"+prod.agv_id,gantry);
+                keepTrackOfProcessedParts(my_part, prod,gantry,camera);
+
 
                 stopAdding = false;
                 foundPart = true;
@@ -1327,7 +1328,7 @@ void conveyor(Camera &camera, GantryControl &gantry, product prod){
         imgPart.pose.position.x = 0;
         imgPart.pose.position.y = -0.46;//-0.5650; //-0.272441; //-0.5700
 //    imgPart.pose.position.z = 0.874991;//0.864004; //0.875004;0.874988
-        imgPart.pose.position.z = 0.888;// 0.879 (kinda works)//0.884991
+        imgPart.pose.position.z = 0.880;// 0.879 (kinda works)//0.884991
     }
     else if(part.type.find("gasket_part") != -1){
         moveToLocation(presetLoc, "movingPart", gantry);
