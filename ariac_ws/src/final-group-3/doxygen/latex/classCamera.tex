@@ -1,0 +1,96 @@
+\hypertarget{classCamera}{}\section{Camera Class Reference}
+\label{classCamera}\index{Camera@{Camera}}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classCamera_ac714ccfafadeb2bbcb8a86ceecff3573}\label{classCamera_ac714ccfafadeb2bbcb8a86ceecff3573}} 
+void {\bfseries logical\+\_\+camera\+\_\+callback} (const nist\+\_\+gear\+::\+Logical\+Camera\+Image\+::\+Const\+Ptr \&msg, int index)
+\item 
+\mbox{\Hypertarget{classCamera_aa9c6662f99ec13ccacbf6befca8aa146}\label{classCamera_aa9c6662f99ec13ccacbf6befca8aa146}} 
+void {\bfseries break\+\_\+beam\+\_\+callback} (const nist\+\_\+gear\+::\+Proximity\+::\+Const\+Ptr \&msg)
+\item 
+\mbox{\Hypertarget{classCamera_a5cef87568b34aa96361b4d8dfd36302d}\label{classCamera_a5cef87568b34aa96361b4d8dfd36302d}} 
+void {\bfseries shelf\+\_\+breakbeam\+\_\+callback} (const nist\+\_\+gear\+::\+Proximity\+::\+Const\+Ptr \&msg, int index)
+\item 
+\mbox{\Hypertarget{classCamera_ae71b89ea4a52b51d87291aaca679eae4}\label{classCamera_ae71b89ea4a52b51d87291aaca679eae4}} 
+void {\bfseries laser\+\_\+profiler\+\_\+callback} (const sensor\+\_\+msgs\+::\+Laser\+Scan\+::\+Const\+Ptr \&msg)
+\item 
+\mbox{\Hypertarget{classCamera_a04a22f0a171e041842e7b3c0f9a1c0f9}\label{classCamera_a04a22f0a171e041842e7b3c0f9a1c0f9}} 
+void {\bfseries quality\+\_\+control\+\_\+sensor\+\_\+callback1} (const nist\+\_\+gear\+::\+Logical\+Camera\+Image \&msg)
+\item 
+\mbox{\Hypertarget{classCamera_a5397f225efceb4afeb6a70824979ef7d}\label{classCamera_a5397f225efceb4afeb6a70824979ef7d}} 
+void {\bfseries quality\+\_\+control\+\_\+sensor\+\_\+callback2} (const nist\+\_\+gear\+::\+Logical\+Camera\+Image \&msg)
+\item 
+\mbox{\Hypertarget{classCamera_aec0b4b2d6164992283767db0ee8344fc}\label{classCamera_aec0b4b2d6164992283767db0ee8344fc}} 
+void {\bfseries init} (ros\+::\+Node\+Handle \&node)
+\item 
+\mbox{\Hypertarget{classCamera_a1cca80a0e5c9f044e2d524f72ddb724c}\label{classCamera_a1cca80a0e5c9f044e2d524f72ddb724c}} 
+std\+::map$<$ std\+::string, std\+::map$<$ std\+::string, \hyperlink{structPart}{part} $>$ $>$ {\bfseries get\+\_\+detected\+\_\+parts} ()
+\item 
+\mbox{\Hypertarget{classCamera_adfe123d4dae52b8e67b283320e4326a0}\label{classCamera_adfe123d4dae52b8e67b283320e4326a0}} 
+std\+::map$<$ std\+::string, \hyperlink{structPart}{part} $>$ {\bfseries get\+\_\+conveyor\+\_\+detected\+\_\+parts} ()
+\item 
+\mbox{\Hypertarget{classCamera_a589ef283cc1abf191b9085f810889638}\label{classCamera_a589ef283cc1abf191b9085f810889638}} 
+std\+::map$<$ std\+::string, std\+::map$<$ std\+::string, \hyperlink{structPart}{part} $>$ $>$ {\bfseries get\+\_\+agv\+\_\+detected\+\_\+parts} ()
+\item 
+\mbox{\Hypertarget{classCamera_a26fa6dc4a9d248d161b1ef537684282e}\label{classCamera_a26fa6dc4a9d248d161b1ef537684282e}} 
+geometry\+\_\+msgs\+::\+Pose {\bfseries get\+\_\+faulty\+\_\+pose} (std\+::string agv)
+\item 
+\mbox{\Hypertarget{classCamera_a865ea80a87e66035fa6aab3ee5006894}\label{classCamera_a865ea80a87e66035fa6aab3ee5006894}} 
+void {\bfseries removefaulty\+Pose} (std\+::string agv\+\_\+name, std\+::string faulty\+\_\+pose)
+\item 
+\mbox{\Hypertarget{classCamera_a51b8dee3ec0df47e0df60a734fe4cc1e}\label{classCamera_a51b8dee3ec0df47e0df60a734fe4cc1e}} 
+bool {\bfseries get\+\_\+is\+\_\+faulty} (std\+::string agv)
+\item 
+\mbox{\Hypertarget{classCamera_af4b4ea6b0d5c1bd6122a320c51fd4b96}\label{classCamera_af4b4ea6b0d5c1bd6122a320c51fd4b96}} 
+bool {\bfseries get\+\_\+break\+\_\+beam} ()
+\item 
+\mbox{\Hypertarget{classCamera_a36d8018f0e3bd305830b3857a9367205}\label{classCamera_a36d8018f0e3bd305830b3857a9367205}} 
+std\+::vector$<$ bool $>$ {\bfseries get\+\_\+shelf\+\_\+breakbeams} ()
+\item 
+\mbox{\Hypertarget{classCamera_a64e313a11351ace4c18f491f9379ff3a}\label{classCamera_a64e313a11351ace4c18f491f9379ff3a}} 
+void {\bfseries reset\+\_\+is\+\_\+faulty} ()
+\item 
+\mbox{\Hypertarget{classCamera_a95207ab68c279f26e4f0a44cc705f6e8}\label{classCamera_a95207ab68c279f26e4f0a44cc705f6e8}} 
+void {\bfseries reset\+\_\+break\+\_\+beam} ()
+\item 
+\mbox{\Hypertarget{classCamera_a9925131ea60f20f755a2be92ef0a8e61}\label{classCamera_a9925131ea60f20f755a2be92ef0a8e61}} 
+void {\bfseries reset\+\_\+shelf\+\_\+breakbeams} ()
+\item 
+\mbox{\Hypertarget{classCamera_a36eeaa9398343397300f4443eaa850fd}\label{classCamera_a36eeaa9398343397300f4443eaa850fd}} 
+void {\bfseries reset\+\_\+agv\+\_\+logical\+\_\+camera} (std\+::string)
+\item 
+\mbox{\Hypertarget{classCamera_a6a9d9df383cb10f5a49f95d14ff667ce}\label{classCamera_a6a9d9df383cb10f5a49f95d14ff667ce}} 
+void {\bfseries reset\+\_\+conveyor\+\_\+logical\+\_\+camera} ()
+\item 
+\mbox{\Hypertarget{classCamera_a9fc24be02c7960fddc9c0ee9c29075c2}\label{classCamera_a9fc24be02c7960fddc9c0ee9c29075c2}} 
+std\+::map$<$ int, std\+::vector$<$ nist\+\_\+gear\+::\+Proximity\+::\+Const\+Ptr $>$ $>$ {\bfseries get\+\_\+aisle\+\_\+breakbeam\+\_\+msgs} ()
+\item 
+\mbox{\Hypertarget{classCamera_a0a973d02f3be3fd71d86097c5d1222da}\label{classCamera_a0a973d02f3be3fd71d86097c5d1222da}} 
+void {\bfseries remove\+Element} (std\+::string prod\+\_\+type, std\+::string prod)
+\item 
+\mbox{\Hypertarget{classCamera_a4acd7c3754e84c23194c98e5a2c2c9f0}\label{classCamera_a4acd7c3754e84c23194c98e5a2c2c9f0}} 
+void {\bfseries remove\+All\+Elements} (std\+::string prod\+\_\+type)
+\item 
+\mbox{\Hypertarget{classCamera_a90ccbc3963e356af6e41806141e3968c}\label{classCamera_a90ccbc3963e356af6e41806141e3968c}} 
+void {\bfseries remove\+All\+Faulty\+Elements} (std\+::string agv\+\_\+name)
+\item 
+\mbox{\Hypertarget{classCamera_a1d297c0bbc586233739732a20d6230e3}\label{classCamera_a1d297c0bbc586233739732a20d6230e3}} 
+std\+::map$<$ std\+::string, std\+::map$<$ std\+::string, geometry\+\_\+msgs\+::\+Pose $>$ $>$ {\bfseries get\+\_\+faulty\+\_\+poses} ()
+\item 
+\mbox{\Hypertarget{classCamera_a1f32f22408943c71045cb27ab8ac8a21}\label{classCamera_a1f32f22408943c71045cb27ab8ac8a21}} 
+bool {\bfseries is\+Sensor\+Blackout} ()
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+
+
+Definition at line 27 of file camera.\+h.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+include/camera.\+h\item 
+src/camera.\+cpp\end{DoxyCompactItemize}

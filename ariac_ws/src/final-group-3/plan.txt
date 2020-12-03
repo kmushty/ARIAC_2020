@@ -1,0 +1,66 @@
+Update preset location after flipping
+Conveyor - check if the parts are in the bin
+faulty gripper
+Doxygen
+if part not picked robot hits shelf
+Number of times robot should try to pick the part
+change the flip part preset location
+agv1-flipped agv2-flipped
+
+continue if part is not picked
+flip part not working
+did not do obstacle avoidance for gaps far away from part
+middle gap 2 aisle 2 first preset location is hitting the shelf
+
+
+1. Hp order
+2. sensor blackout
+3. faulty gripper
+4. faulty part
+5. pose
+6. integration
+7. testing on yaml files
+8. change code to run under 500 sim seconds 
+9. moving obstacles -- pending
+10. conveyor
+
+
+YAML files
+
+Eashwar
+Conveyor - disk-part, pulley-part
+
+
+
+Kaushik
+Conveyor - gasket-part, gear-part
+Doxygen
+high priority 1,2,3 yaml
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

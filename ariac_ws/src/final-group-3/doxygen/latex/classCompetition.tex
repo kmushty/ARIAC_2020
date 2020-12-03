@@ -1,0 +1,63 @@
+\hypertarget{classCompetition}{}\section{Competition Class Reference}
+\label{classCompetition}\index{Competition@{Competition}}
+
+
+\hyperlink{classCompetition}{Competition} class.  
+
+
+
+
+{\ttfamily \#include $<$competition.\+h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classCompetition_a3d8b50d07d2424bd18743148237da31c}\label{classCompetition_a3d8b50d07d2424bd18743148237da31c}} 
+{\bfseries Competition} (ros\+::\+Node\+Handle \&node)
+\item 
+\mbox{\Hypertarget{classCompetition_af5400538e024248fc99f83cf26ca2f23}\label{classCompetition_af5400538e024248fc99f83cf26ca2f23}} 
+void {\bfseries init} ()
+\item 
+\mbox{\Hypertarget{classCompetition_a2505fb69a74ff70530c033c144f7f024}\label{classCompetition_a2505fb69a74ff70530c033c144f7f024}} 
+void {\bfseries start\+Competition} ()
+\item 
+\mbox{\Hypertarget{classCompetition_a894a450b89f8d61d83f02f221fb1b0eb}\label{classCompetition_a894a450b89f8d61d83f02f221fb1b0eb}} 
+void {\bfseries end\+Competition} ()
+\item 
+\mbox{\Hypertarget{classCompetition_a1b9545e863fc4574b29b1e43e80ebda3}\label{classCompetition_a1b9545e863fc4574b29b1e43e80ebda3}} 
+void \hyperlink{classCompetition_a1b9545e863fc4574b29b1e43e80ebda3}{competition\+\_\+state\+\_\+callback} (const std\+\_\+msgs\+::\+String\+::\+Const\+Ptr \&msg)
+\begin{DoxyCompactList}\small\item\em Called when a new message is received. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classCompetition_ae4695e5697587f7af4aa40ebae953534}\label{classCompetition_ae4695e5697587f7af4aa40ebae953534}} 
+void \hyperlink{classCompetition_ae4695e5697587f7af4aa40ebae953534}{competition\+\_\+clock\+\_\+callback} (const rosgraph\+\_\+msgs\+::\+Clock\+::\+Const\+Ptr \&msg)
+\begin{DoxyCompactList}\small\item\em Called when a new message is received. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classCompetition_a6f51ab2e5a0da50fc53035f3ff6c9c31}\label{classCompetition_a6f51ab2e5a0da50fc53035f3ff6c9c31}} 
+void {\bfseries order\+\_\+callback} (const nist\+\_\+gear\+::\+Order\+::\+Const\+Ptr \&msg)
+\item 
+\mbox{\Hypertarget{classCompetition_a4ea6b45be32e5b0e1f8e72fc053c4550}\label{classCompetition_a4ea6b45be32e5b0e1f8e72fc053c4550}} 
+double {\bfseries get\+Clock} ()
+\item 
+\mbox{\Hypertarget{classCompetition_a9c8b79a8c4a7bcc5eaa77a327df3f98a}\label{classCompetition_a9c8b79a8c4a7bcc5eaa77a327df3f98a}} 
+double {\bfseries get\+Start\+Time} ()
+\item 
+\mbox{\Hypertarget{classCompetition_a3c553faa38b1bc1fa6efa049c8e23735}\label{classCompetition_a3c553faa38b1bc1fa6efa049c8e23735}} 
+std\+::string {\bfseries get\+Competition\+State} ()
+\item 
+\mbox{\Hypertarget{classCompetition_acb4ec20a6365fbb922bd20fc3509ddf8}\label{classCompetition_acb4ec20a6365fbb922bd20fc3509ddf8}} 
+\hyperlink{structStats}{stats} {\bfseries get\+Stats} (std\+::string function)
+\item 
+\mbox{\Hypertarget{classCompetition_a34446150f76fce624cef52b1ad26ef02}\label{classCompetition_a34446150f76fce624cef52b1ad26ef02}} 
+std\+::vector$<$ nist\+\_\+gear\+::\+Order $>$ {\bfseries get\+Orders} ()
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\hyperlink{classCompetition}{Competition} class. 
+
+Definition at line 20 of file competition.\+h.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+include/competition.\+h\item 
+src/competition.\+cpp\end{DoxyCompactItemize}
