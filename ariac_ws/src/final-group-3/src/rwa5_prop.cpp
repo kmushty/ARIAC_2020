@@ -1034,28 +1034,37 @@ void processPart(product prod, GantryControl &gantry, Camera &camera, Competitio
                 int aisle_num = aisleAssociatedWithPart(my_part);
 
                 if (aisle_num != -1 && obstacleInAisle[aisle_num]) {
-                    if(!planAndExecutePath( prod, my_part, presetLoc, camera, gantry, comp, aisle_num))
-                        return;
+                    ROS_INFO_STREAM("In plan and execute process part");
+                    planAndExecutePath( prod, my_part, presetLoc, camera, gantry, comp, aisle_num);
+//                    if(!planAndExecutePath( prod, my_part, presetLoc, camera, gantry, comp, aisle_num))
+//                        return;
                 }
                 else {
                     ROS_INFO_STREAM("bEFORE" << getLocationName(my_part,aisle_num));
+                    ROS_INFO_STREAM("IN ELSE LOOP");
                     moveToLocation2(presetLoc, my_part, gantry, getLocationName(my_part,aisle_num));
                     ROS_INFO_STREAM(my_part.pose);
                     bool state;
-                    if(my_part.type.find("pulley_part") != -1)
+                    if(my_part.type.find("pulley_part") != -1) {
                         state = gantry.pickPulleyPart(my_part);
-                    else
+                        ROS_INFO_STREAM("pickPulleyPart");
+                    }
+                    else {
                         state = gantry.pickPart(my_part);
-                    if( state){
-                       ROS_INFO_STREAM("successfully picked part");
-                       moveFromLocationToGoal(prod, my_part, presetLoc, getLocationName(my_part,aisle_num), gantry);
+                        ROS_INFO_STREAM("pICK Part");
                     }
-                    else{
-                       ROS_INFO_STREAM("Failed to pick part up");
-                       ROS_INFO_STREAM("AFTER" << getLocationName(my_part,aisle_num));
-                        moveFromLocationToStart(presetLoc, getLocationName(my_part, aisle_num), gantry);
-                        return;
-                    }
+                    ROS_INFO_STREAM("sTATE" << state);
+                    moveFromLocationToGoal(prod, my_part, presetLoc, getLocationName(my_part,aisle_num), gantry);
+//                    if( state){
+//                       ROS_INFO_STREAM("successfully picked part");
+//                       moveFromLocationToGoal(prod, my_part, presetLoc, getLocationName(my_part,aisle_num), gantry);
+//                    }
+//                    else{
+//                       ROS_INFO_STREAM("Failed to pick part up");
+//                       ROS_INFO_STREAM("AFTER" << getLocationName(my_part,aisle_num));
+//                        moveFromLocationToStart(presetLoc, getLocationName(my_part, aisle_num), gantry);
+//                        return;
+//                    }
                 }
                 camera.removeElement(prod.type, parts.first);
                 if (flip_flag && int(my_part_in_tray.pose.orientation.x) == 1) {                                   //Flip part if part needs to be flipped
@@ -1064,15 +1073,19 @@ void processPart(product prod, GantryControl &gantry, Camera &camera, Competitio
                 }
                 else
                     flipped = false;
-                armState = gantry.getGripperState(prod.arm_name);
+//                armState = gantry.getGripperState(prod.arm_name);
 //                if (!armState.attached) {                                                                            //object accidentally fell on the tray
 //                    ROS_INFO_STREAM("Inside faulty gripper");
 //                    prod.arm_name = "left_arm";
 //                    faultyGripper(gantry, prod, camera, my_part_in_tray);
 //                }
-
+                ROS_INFO_STREAM("pLACE PART");
+                ROS_INFO_STREAM("aRM NAME" << prod.arm_name);
                 gantry.placePart(my_part_in_tray, prod.agv_id, prod.arm_name);                                 //place part on the tray
+                ROS_INFO_STREAM("ARM NAME AFTER PLACE PART" << prod.arm_name);
                 prod.arm_name = "left_arm";
+                ROS_INFO_STREAM("Placed part");
+//
                 ROS_INFO_STREAM("Flipped value" << flipped);
                 if(flipped)
                     moveToLocation(presetLoc,"flipped_pulley_1_"+prod.agv_id,gantry);
@@ -1158,10 +1171,11 @@ void removeFaultyProduct(Camera &camera, GantryControl &gantry, product &prod, b
     moveToLocation(presetLoc, prod.agv_id + "_faultyP", gantry);
     gantry.moveToPart(temp, gantry.start_);
 
-    if(!flipped)
-        gantry.pickPart(temp);
-    else
-        gantry.pickPulleyPart(temp);
+    gantry.pickPart(temp);
+//    if(!flipped)
+//        gantry.pickPart(temp);
+//    else
+//        gantry.pickPulleyPart(temp);
 
     if (prod.agv_id == "agv2") {
         if (prod.arm_name == "left_arm")
@@ -1326,9 +1340,9 @@ void conveyor(Camera &camera, GantryControl &gantry, product prod){
     if(part.type.find("pulley_part") != -1){
         moveToLocation(presetLoc, "movingPart", gantry);
         imgPart.pose.position.x = 0;
-        imgPart.pose.position.y = -0.46;//-0.5650; //-0.272441; //-0.5700
+        imgPart.pose.position.y = -0.44;//-0.5650; //-0.272441; //-0.5700
 //    imgPart.pose.position.z = 0.874991;//0.864004; //0.875004;0.874988
-        imgPart.pose.position.z = 0.880;// 0.879 (kinda works)//0.884991
+        imgPart.pose.position.z = 0.890;// 0.879 (kinda works)//0.884991
     }
     else if(part.type.find("gasket_part") != -1){
         moveToLocation(presetLoc, "movingPart", gantry);

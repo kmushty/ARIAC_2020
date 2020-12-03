@@ -1300,8 +1300,7 @@ bool GantryControl::pickPart(part part)
 
     if(!state.attached)
       return false;
-    else
-      return true;
+    return true;
 }
 
 
@@ -1368,6 +1367,7 @@ bool GantryControl::pickPulleyPart(part part)
     else
         return true;
 }
+
 void GantryControl::placePart(part part, std::string agv, std::string arm)
 {
     auto target_pose_in_tray = getTargetWorldPose(part.pose, agv, arm);
@@ -1388,8 +1388,12 @@ void GantryControl::placePart(part part, std::string agv, std::string arm)
         right_arm_group_.setPoseTarget(target_pose_in_tray);
         right_arm_group_.move();
     }
-    deactivateGripper(arm);
     auto state = getGripperState(arm);
+//    while(state.attached) {
+    deactivateGripper(arm);
+//        state = getGripperState(arm);
+//    }
+//    auto state = getGripperState(arm);
 }
 
 void GantryControl::presetArmLocation(PresetLocation location)
@@ -1602,14 +1606,14 @@ void GantryControl::moveToPart(part my_part, PresetLocation preset)
       ROS_INFO_STREAM("MOve part logical camera 8");
       gantryConfiguration[0] = my_part.pose.position.x - 0.3;
       if(-1*my_part.pose.position.y > -6.9)
-        gantryConfiguration[1] = -1*my_part.pose.position.y;
+        gantryConfiguration[1] = -1*my_part.pose.position.y + 0.2;
 
     }
   else if(my_part.logicalCameraName == "logical_camera_10"){
       ROS_INFO_STREAM("MOve part logical camera 10");
       gantryConfiguration[0] = my_part.pose.position.x + 0.3;
       if(-1*my_part.pose.position.y < 6.9)
-          gantryConfiguration[1] = -1*my_part.pose.position.y;
+          gantryConfiguration[1] = -1*my_part.pose.position.y - 0.2;
   }
     else
     {

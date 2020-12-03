@@ -111,7 +111,7 @@ double Competition::getStartTime() {
 
 double Competition::getClock() {
   double time_spent = competition_clock_.toSec();
-  ROS_INFO_STREAM("[competition][getClock] competition time spent (getClock()) =" << time_spent);
+//  ROS_INFO_STREAM("[competition][getClock] competition time spent (getClock()) =" << time_spent);
   return time_spent;
 }
 
