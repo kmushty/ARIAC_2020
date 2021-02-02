@@ -37,4 +37,4 @@ In order to view the doxygen documentation open webpage using index.html present
 ### Dynamic Preset Location:
 ![](gif/dynamic_preset.gif)
 
-For more information regarding the implementation and output please read the report [here](https://github.com/mesneym/Ariac/blob/master/report/Report.pdf).
+For more information regarding the implementation and output please read the report [here](https://github.com/Eashwar-S/ARIAC/blob/master/report/Report.pdf).
