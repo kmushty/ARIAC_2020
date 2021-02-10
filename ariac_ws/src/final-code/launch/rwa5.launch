@@ -27,8 +27,8 @@
           $(arg load_moveit_args)
           $(arg fill_demo_shipment_args)
           --visualize-sensor-views
-          -f $(find final-group-3)/config/final.yaml
-          $(find final-group-3)/config/rwa2_sensor_kootbally.yaml
+          -f $(find final-code)/config/final.yaml
+          $(find final-code)/config/rwa2_sensor_kootbally.yaml
           " required="true" output="screen" />
 
 
