@@ -2,6 +2,10 @@
 ## Introduction:
 ARIAC requires completion of series of tests centered in an industrial scenario that are based around order fulfillment. More information regarding ARIAC can be found [here](https://github.com/usnistgov/ARIAC/blob/master/wiki/documentation/documentation.md). This repository highlights the completion of agility challenges.
 
+## The Environment
+
+![](gif/ariac_env.png)
+
 
 ## Run the folowing commands:
 Open a terminal
